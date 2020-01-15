@@ -1,0 +1,3949 @@
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:14:58 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord065_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord065_A_IRAF.fits[1]'star = `'
+Deltav = 2.075 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 6
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 1.063E-5
+	Fit Coefficients:
+		c[1] =   0.9880  +/- 0.4165                     # Amplitude
+		c[2] =  12.9483  +/- 79.319                     # Center
+		c[3] = 988.3181  +/- 32774.9                    # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0019966
+	Sigma of Residuals = 0.0075235
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.0718465
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 9.724104
+
+Velocity Results:
+	Shift of peak = 12.9483 pixels
+	Correlation height = 0.988
+	FWHM of peak = 153.619 Km/sec	(=74.02972 pixels)
+
+	Velocity computed from shift = 26.8707 Km/sec
+	Observed velocity = 21.3280 Km/sec
+	Heliocentric velocity = -1.2982 +/- 11.251 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:14:58 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord066_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord066_A_IRAF.fits[1]'star = `'
+Deltav = 2.076 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 5
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 3.157E-4
+	Fit Coefficients:
+		c[1] =   0.9613  +/- 0.4307                     # Amplitude
+		c[2] =  13.6211  +/- 11.060                     # Center
+		c[3] = 116.9477  +/- 552.63                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0101853
+	Sigma of Residuals = 0.0361300
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.02851528
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 23.83823
+
+Velocity Results:
+	Shift of peak = 13.6211 pixels
+	Correlation height = 0.961
+	FWHM of peak = 52.86009 Km/sec	(=25.46558 pixels)
+
+	Velocity computed from shift = 28.2748 Km/sec
+	Observed velocity = 22.7321 Km/sec
+	Heliocentric velocity = 0.1059 +/- 1.671 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:14:58 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord067_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord067_A_IRAF.fits[1]'star = `'
+Deltav = 2.076 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 5
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 1.947E-4
+	Fit Coefficients:
+		c[1] =   0.9714  +/- 0.4261                     # Amplitude
+		c[2] =  13.5904  +/- 14.472                     # Center
+		c[3] = 161.4074  +/- 987.10                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0075235
+	Sigma of Residuals = 0.0277914
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.007061747
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 97.26856
+
+Velocity Results:
+	Shift of peak = 13.5904 pixels
+	Correlation height = 0.971
+	FWHM of peak = 62.11706 Km/sec	(=29.9171 pixels)
+
+	Velocity computed from shift = 28.2192 Km/sec
+	Observed velocity = 22.6765 Km/sec
+	Heliocentric velocity = 0.0503 +/- 0.496 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:14:58 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord068_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord068_A_IRAF.fits[1]'star = `'
+Deltav = 2.077 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001863
+	Fit Coefficients:
+		c[1] =   0.8168  +/- 0.4938                     # Amplitude
+		c[2] =  13.7129  +/- 4.1086                     # Center
+		c[3] =  22.1780  +/- 48.001                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0372016
+	Sigma of Residuals = 0.0857435
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.036111
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 15.99416
+
+Velocity Results:
+	Shift of peak = 13.7129 pixels
+	Correlation height = 0.817
+	FWHM of peak = 23.03184 Km/sec	(=11.08967 pixels)
+
+	Velocity computed from shift = 28.4814 Km/sec
+	Observed velocity = 22.9387 Km/sec
+	Heliocentric velocity = 0.3125 +/- 1.064 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:14:58 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord069_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord069_A_IRAF.fits[1]'star = `'
+Deltav = 2.077 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 7.493E-4
+	Fit Coefficients:
+		c[1] =   0.8216  +/- 0.5262                     # Amplitude
+		c[2] =  -0.0058  +/- 3.3467                     # Center
+		c[3] =  14.5646  +/- 29.243                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0230189
+	Sigma of Residuals = 0.0451143
+	Maximum of cross-correlation is in bin = 0.
+	Variance of cross-correlation = 0.02498306
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 23.25477
+
+Velocity Results:
+	Shift of peak = -0.0058 pixels
+	Correlation height = 0.822
+	FWHM of peak = 18.66952 Km/sec	(=8.986833 pixels)
+
+	Velocity computed from shift = -0.0121 Km/sec
+	Observed velocity = -5.5542 Km/sec
+	Heliocentric velocity = -28.1805 +/- 0.605 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:14:58 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord070_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord070_A_IRAF.fits[1]'star = `'
+Deltav = 2.078 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001399
+	Fit Coefficients:
+		c[1] =   0.7378  +/- 0.5177                     # Amplitude
+		c[2] =   0.0274  +/- 3.8952                     # Center
+		c[3] =  16.0805  +/- 36.328                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0350182
+	Sigma of Residuals = 0.0699961
+	Maximum of cross-correlation is in bin = 0.
+	Variance of cross-correlation = 0.03850298
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 13.54919
+
+Velocity Results:
+	Shift of peak = 0.0274 pixels
+	Correlation height = 0.738
+	FWHM of peak = 19.62245 Km/sec	(=9.44296 pixels)
+
+	Velocity computed from shift = 0.0570 Km/sec
+	Observed velocity = -5.4852 Km/sec
+	Heliocentric velocity = -28.1114 +/- 1.059 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:14:58 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord071_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord071_A_IRAF.fits[1]'star = `'
+Deltav = 2.079 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 5
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001802
+	Fit Coefficients:
+		c[1] =   0.8509  +/- 0.4617                     # Amplitude
+		c[2] =  13.4845  +/- 5.4928                     # Center
+		c[3] =  39.3513  +/- 101.19                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0284812
+	Sigma of Residuals = 0.0842535
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.02978469
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 20.20023
+
+Velocity Results:
+	Shift of peak = 13.4845 pixels
+	Correlation height = 0.851
+	FWHM of peak = 30.70555 Km/sec	(=14.77192 pixels)
+
+	Velocity computed from shift = 28.0309 Km/sec
+	Observed velocity = 22.4882 Km/sec
+	Heliocentric velocity = -0.1380 +/- 1.138 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:14:59 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord072_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord072_A_IRAF.fits[1]'star = `'
+Deltav = 2.079 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 5
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001436
+	Fit Coefficients:
+		c[1] =   0.8292  +/- 0.4643                     # Amplitude
+		c[2] =  13.4099  +/- 5.4322                     # Center
+		c[3] =  37.1315  +/- 95.292                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0270511
+	Sigma of Residuals = 0.0761109
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.01832612
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 31.99359
+
+Velocity Results:
+	Shift of peak = 13.4099 pixels
+	Correlation height = 0.829
+	FWHM of peak = 29.83508 Km/sec	(=14.34923 pixels)
+
+	Velocity computed from shift = 27.8834 Km/sec
+	Observed velocity = 22.3407 Km/sec
+	Heliocentric velocity = -0.2855 +/- 0.710 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:14:59 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord073_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord073_A_IRAF.fits[1]'star = `'
+Deltav = 2.080 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001438
+	Fit Coefficients:
+		c[1] =   0.9239  +/- 0.5213                     # Amplitude
+		c[2] =  13.5482  +/- 3.0806                     # Center
+		c[3] =  15.7354  +/- 28.382                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0356668
+	Sigma of Residuals = 0.0703123
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01890963
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 34.54795
+
+Velocity Results:
+	Shift of peak = 13.5482 pixels
+	Correlation height = 0.924
+	FWHM of peak = 19.42806 Km/sec	(=9.341075 pixels)
+
+	Velocity computed from shift = 28.1793 Km/sec
+	Observed velocity = 22.6366 Km/sec
+	Heliocentric velocity = 0.0104 +/- 0.429 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:14:59 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord074_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord074_A_IRAF.fits[1]'star = `'
+Deltav = 2.080 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 8.598E-4
+	Fit Coefficients:
+		c[1] =   0.7501  +/- 0.5506                     # Amplitude
+		c[2] =  13.9548  +/- 3.3016                     # Center
+		c[3] =  11.3517  +/- 24.687                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0173590
+	Sigma of Residuals = 0.0431118
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.02788556
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 19.02133
+
+Velocity Results:
+	Shift of peak = 13.9548 pixels
+	Correlation height = 0.750
+	FWHM of peak = 16.50581 Km/sec	(=7.933909 pixels)
+
+	Velocity computed from shift = 29.0334 Km/sec
+	Observed velocity = 23.4907 Km/sec
+	Heliocentric velocity = 0.8644 +/- 0.647 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:14:59 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord075_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord075_A_IRAF.fits[1]'star = `'
+Deltav = 2.081 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 1.216E-4
+	Fit Coefficients:
+		c[1] =   0.9708  +/- 0.4373                     # Amplitude
+		c[2] =   0.0804  +/- 8.4467                     # Center
+		c[3] =  84.9845  +/- 314.18                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0086333
+	Sigma of Residuals = 0.0270123
+	Maximum of cross-correlation is in bin = 0.
+	Variance of cross-correlation = 0.02619399
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 26.20769
+
+Velocity Results:
+	Shift of peak = 0.0804 pixels
+	Correlation height = 0.971
+	FWHM of peak = 45.17459 Km/sec	(=21.70839 pixels)
+
+	Velocity computed from shift = 0.1674 Km/sec
+	Observed velocity = -5.3748 Km/sec
+	Heliocentric velocity = -28.0011 +/- 1.304 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:14:59 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord076_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord076_A_IRAF.fits[1]'star = `'
+Deltav = 2.082 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 6.080E-4
+	Fit Coefficients:
+		c[1] =   0.9598  +/- 0.5563                     # Amplitude
+		c[2] =  13.6089  +/- 2.5402                     # Center
+		c[3] =  10.9179  +/- 18.572                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0263863
+	Sigma of Residuals = 0.0432748
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.01350692
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 50.24693
+
+Velocity Results:
+	Shift of peak = 13.6089 pixels
+	Correlation height = 0.960
+	FWHM of peak = 16.1967 Km/sec	(=7.780859 pixels)
+
+	Velocity computed from shift = 28.3299 Km/sec
+	Observed velocity = 22.7872 Km/sec
+	Heliocentric velocity = 0.1609 +/- 0.248 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:14:59 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord077_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord077_A_IRAF.fits[1]'star = `'
+Deltav = 2.082 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 5.175E-4
+	Fit Coefficients:
+		c[1] =   0.9532  +/- 0.5625                     # Amplitude
+		c[2] =  13.4858  +/- 2.5020                     # Center
+		c[3] =  10.3268  +/- 17.700                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0236487
+	Sigma of Residuals = 0.0378109
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01425782
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 47.27567
+
+Velocity Results:
+	Shift of peak = 13.4858 pixels
+	Correlation height = 0.953
+	FWHM of peak = 15.75655 Km/sec	(=7.567276 pixels)
+
+	Velocity computed from shift = 28.0812 Km/sec
+	Observed velocity = 22.5385 Km/sec
+	Heliocentric velocity = -0.0877 +/- 0.256 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:14:59 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord078_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord078_A_IRAF.fits[1]'star = `'
+Deltav = 2.083 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.00106
+	Fit Coefficients:
+		c[1] =   0.5370  +/- 0.5138                     # Amplitude
+		c[2] =  13.3787  +/- 5.5065                     # Center
+		c[3] =  17.1153  +/- 53.581                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0288356
+	Sigma of Residuals = 0.0624445
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.05328402
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 7.125766
+
+Velocity Results:
+	Shift of peak = 13.3787 pixels
+	Correlation height = 0.537
+	FWHM of peak = 20.2909 Km/sec	(=9.742043 pixels)
+
+	Velocity computed from shift = 27.8669 Km/sec
+	Observed velocity = 22.3242 Km/sec
+	Heliocentric velocity = -0.3020 +/- 1.961 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:14:59 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord079_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord079_A_IRAF.fits[1]'star = `'
+Deltav = 2.083 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 7.096E-4
+	Fit Coefficients:
+		c[1] =   0.6449  +/- 0.5317                     # Amplitude
+		c[2] =  -0.0221  +/- 4.1564                     # Center
+		c[3] =  13.7309  +/- 34.972                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0196219
+	Sigma of Residuals = 0.0454395
+	Maximum of cross-correlation is in bin = 0.
+	Variance of cross-correlation = 0.04249288
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 10.73119
+
+Velocity Results:
+	Shift of peak = -0.0221 pixels
+	Correlation height = 0.645
+	FWHM of peak = 18.18001 Km/sec	(=8.725832 pixels)
+
+	Velocity computed from shift = -0.0461 Km/sec
+	Observed velocity = -5.5883 Km/sec
+	Heliocentric velocity = -28.2145 +/- 1.217 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:14:59 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord080_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord080_A_IRAF.fits[1]'star = `'
+Deltav = 2.084 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 9.892E-4
+	Fit Coefficients:
+		c[1] =   0.6945  +/- 0.5452                     # Amplitude
+		c[2] =  13.3868  +/- 3.6681                     # Center
+		c[3] =  12.1656  +/- 28.640                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0294548
+	Sigma of Residuals = 0.0612342
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.05072535
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 9.680708
+
+Velocity Results:
+	Shift of peak = 13.3868 pixels
+	Correlation height = 0.694
+	FWHM of peak = 17.11706 Km/sec	(=8.21343 pixels)
+
+	Velocity computed from shift = 27.8998 Km/sec
+	Observed velocity = 22.3571 Km/sec
+	Heliocentric velocity = -0.2691 +/- 1.259 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:14:59 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord081_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord081_A_IRAF.fits[1]'star = `'
+Deltav = 2.085 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001924
+	Fit Coefficients:
+		c[1] =   0.7701  +/- 0.5178                     # Amplitude
+		c[2] =  13.6242  +/- 3.7561                     # Center
+		c[3] =  16.3171  +/- 35.392                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0436306
+	Sigma of Residuals = 0.0874564
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.02821301
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 19.30115
+
+Velocity Results:
+	Shift of peak = 13.6242 pixels
+	Correlation height = 0.770
+	FWHM of peak = 19.8295 Km/sec	(=9.512161 pixels)
+
+	Velocity computed from shift = 28.4035 Km/sec
+	Observed velocity = 22.8608 Km/sec
+	Heliocentric velocity = 0.2346 +/- 0.767 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:00 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord082_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord082_A_IRAF.fits[1]'star = `'
+Deltav = 2.085 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001311
+	Fit Coefficients:
+		c[1] =   0.5407  +/- 0.5889                     # Amplitude
+		c[2] =  13.7147  +/- 4.0324                     # Center
+		c[3] =   8.1540  +/- 24.863                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0466407
+	Sigma of Residuals = 0.0705731
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.03572048
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 10.70344
+
+Velocity Results:
+	Shift of peak = 13.7147 pixels
+	Correlation height = 0.541
+	FWHM of peak = 14.02222 Km/sec	(=6.724252 pixels)
+
+	Velocity computed from shift = 28.6007 Km/sec
+	Observed velocity = 23.0580 Km/sec
+	Heliocentric velocity = 0.4318 +/- 0.941 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:00 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord083_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord083_A_IRAF.fits[1]'star = `'
+Deltav = 2.086 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 2
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 3.787E-4
+	Fit Coefficients:
+		c[1] =   0.9392  +/- 0.5817                     # Amplitude
+		c[2] =  -0.0505  +/- 2.3627                     # Center
+		c[3] =   8.5503  +/- 14.953                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0170161
+	Sigma of Residuals = 0.0270131
+	Maximum of cross-correlation is in bin = 0.
+	Variance of cross-correlation = 0.01150457
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 57.72853
+
+Velocity Results:
+	Shift of peak = -0.0505 pixels
+	Correlation height = 0.939
+	FWHM of peak = 14.36302 Km/sec	(=6.885712 pixels)
+
+	Velocity computed from shift = -0.1054 Km/sec
+	Observed velocity = -5.6475 Km/sec
+	Heliocentric velocity = -28.2738 +/- 0.192 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:00 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord084_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord084_A_IRAF.fits[1]'star = `'
+Deltav = 2.087 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 6.763E-4
+	Fit Coefficients:
+		c[1] =   0.7809  +/- 0.5721                     # Amplitude
+		c[2] =  13.5487  +/- 2.9521                     # Center
+		c[3] =   9.4596  +/- 19.832                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0268733
+	Sigma of Residuals = 0.0415554
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.0476743
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 11.58265
+
+Velocity Results:
+	Shift of peak = 13.5487 pixels
+	Correlation height = 0.781
+	FWHM of peak = 15.1119 Km/sec	(=7.242595 pixels)
+
+	Velocity computed from shift = 28.2710 Km/sec
+	Observed velocity = 22.7283 Km/sec
+	Heliocentric velocity = 0.1021 +/- 0.943 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:00 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord085_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord085_A_IRAF.fits[1]'star = `'
+Deltav = 2.087 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 3.639E-4
+	Fit Coefficients:
+		c[1] =   0.8956  +/- 0.5717                     # Amplitude
+		c[2] =  13.5616  +/- 2.5773                     # Center
+		c[3] =   9.4903  +/- 17.347                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0205507
+	Sigma of Residuals = 0.0314886
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.03861372
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 16.40021
+
+Velocity Results:
+	Shift of peak = 13.5616 pixels
+	Correlation height = 0.896
+	FWHM of peak = 15.141 Km/sec	(=7.254322 pixels)
+
+	Velocity computed from shift = 28.3068 Km/sec
+	Observed velocity = 22.7641 Km/sec
+	Heliocentric velocity = 0.1379 +/- 0.683 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:00 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord086_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord086_A_IRAF.fits[1]'star = `'
+Deltav = 2.088 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001938
+	Fit Coefficients:
+		c[1] =   0.8532  +/- 0.5168                     # Amplitude
+		c[2] =  13.6719  +/- 3.4079                     # Center
+		c[3] =  16.5026  +/- 32.354                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0362595
+	Sigma of Residuals = 0.0751020
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.04115375
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 14.65949
+
+Velocity Results:
+	Shift of peak = 13.6719 pixels
+	Correlation height = 0.853
+	FWHM of peak = 19.97169 Km/sec	(=9.566063 pixels)
+
+	Velocity computed from shift = 28.5448 Km/sec
+	Observed velocity = 23.0021 Km/sec
+	Heliocentric velocity = 0.3758 +/- 1.002 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:00 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord087_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord087_A_IRAF.fits[1]'star = `'
+Deltav = 2.088 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 6
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 5.402E-4
+	Fit Coefficients:
+		c[1] =   0.9447  +/- 0.4335                     # Amplitude
+		c[2] =  13.5448  +/- 9.8305                     # Center
+		c[3] =  99.5104  +/- 420.80                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0126111
+	Sigma of Residuals = 0.0446394
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.01953109
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 34.20302
+
+Velocity Results:
+	Shift of peak = 13.5448 pixels
+	Correlation height = 0.945
+	FWHM of peak = 49.05902 Km/sec	(=23.49049 pixels)
+
+	Velocity computed from shift = 28.2889 Km/sec
+	Observed velocity = 22.7462 Km/sec
+	Heliocentric velocity = 0.1200 +/- 1.095 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:00 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord088_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord088_A_IRAF.fits[1]'star = `'
+Deltav = 2.089 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 7.447E-4
+	Fit Coefficients:
+		c[1] =   0.9067  +/- 0.5815                     # Amplitude
+		c[2] =  12.9798  +/- 2.4471                     # Center
+		c[3] =   8.5464  +/- 15.480                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0335612
+	Sigma of Residuals = 0.0504270
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.02631782
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 24.36176
+
+Velocity Results:
+	Shift of peak = 12.9798 pixels
+	Correlation height = 0.907
+	FWHM of peak = 14.38165 Km/sec	(=6.88412 pixels)
+
+	Velocity computed from shift = 27.1174 Km/sec
+	Observed velocity = 21.5747 Km/sec
+	Heliocentric velocity = -1.0515 +/- 0.445 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:00 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord089_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord089_A_IRAF.fits[1]'star = `'
+Deltav = 2.090 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 6.846E-4
+	Fit Coefficients:
+		c[1] =   0.9165  +/- 0.5437                     # Amplitude
+		c[2] =  13.5682  +/- 2.7967                     # Center
+		c[3] =  12.3496  +/- 22.040                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0244575
+	Sigma of Residuals = 0.0435790
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.04135751
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 15.66995
+
+Velocity Results:
+	Shift of peak = 13.5682 pixels
+	Correlation height = 0.917
+	FWHM of peak = 17.29304 Km/sec	(=8.27532 pixels)
+
+	Velocity computed from shift = 28.3554 Km/sec
+	Observed velocity = 22.8127 Km/sec
+	Heliocentric velocity = 0.1865 +/- 0.815 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:00 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord090_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord090_A_IRAF.fits[1]'star = `'
+Deltav = 2.090 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 4.859E-4
+	Fit Coefficients:
+		c[1] =   0.9280  +/- 0.5773                     # Amplitude
+		c[2] =  13.4210  +/- 2.4417                     # Center
+		c[3] =   9.0391  +/- 15.976                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0250346
+	Sigma of Residuals = 0.0374031
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.05795412
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 11.32221
+
+Velocity Results:
+	Shift of peak = 13.4210 pixels
+	Correlation height = 0.928
+	FWHM of peak = 14.79951 Km/sec	(=7.07977 pixels)
+
+	Velocity computed from shift = 28.0565 Km/sec
+	Observed velocity = 22.5138 Km/sec
+	Heliocentric velocity = -0.1124 +/- 0.943 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:00 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord091_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord091_A_IRAF.fits[1]'star = `'
+Deltav = 2.091 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 7.163E-4
+	Fit Coefficients:
+		c[1] =   0.7916  +/- 0.5506                     # Amplitude
+		c[2] =  13.5834  +/- 3.1503                     # Center
+		c[3] =  11.5466  +/- 23.835                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0364671
+	Sigma of Residuals = 0.0667933
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.04431915
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 12.62944
+
+Velocity Results:
+	Shift of peak = 13.5834 pixels
+	Correlation height = 0.792
+	FWHM of peak = 16.73161 Km/sec	(=8.001743 pixels)
+
+	Velocity computed from shift = 28.4047 Km/sec
+	Observed velocity = 22.8620 Km/sec
+	Heliocentric velocity = 0.2358 +/- 0.964 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:00 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord092_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord092_A_IRAF.fits[1]'star = `'
+Deltav = 2.092 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001539
+	Fit Coefficients:
+		c[1] =   0.9298  +/- 0.5529                     # Amplitude
+		c[2] =  13.6038  +/- 2.6564                     # Center
+		c[3] =  11.2773  +/- 19.804                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0425733
+	Sigma of Residuals = 0.0710976
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.04118853
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 15.96256
+
+Velocity Results:
+	Shift of peak = 13.6038 pixels
+	Correlation height = 0.930
+	FWHM of peak = 16.54074 Km/sec	(=7.907882 pixels)
+
+	Velocity computed from shift = 28.4560 Km/sec
+	Observed velocity = 22.9133 Km/sec
+	Heliocentric velocity = 0.2871 +/- 0.766 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:01 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord093_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord093_A_IRAF.fits[1]'star = `'
+Deltav = 2.092 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001126
+	Fit Coefficients:
+		c[1] =   0.9503  +/- 0.5438                     # Amplitude
+		c[2] =  13.6481  +/- 2.6951                     # Center
+		c[3] =  12.3254  +/- 21.212                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0357810
+	Sigma of Residuals = 0.0624264
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.02037399
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 32.98075
+
+Velocity Results:
+	Shift of peak = 13.6481 pixels
+	Correlation height = 0.950
+	FWHM of peak = 17.29743 Km/sec	(=8.267192 pixels)
+
+	Velocity computed from shift = 28.5575 Km/sec
+	Observed velocity = 23.0148 Km/sec
+	Heliocentric velocity = 0.3885 +/- 0.400 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:01 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord094_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord094_A_IRAF.fits[1]'star = `'
+Deltav = 2.093 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001741
+	Fit Coefficients:
+		c[1] =   0.9418  +/- 0.5562                     # Amplitude
+		c[2] =  13.6321  +/- 2.5897                     # Center
+		c[3] =  10.9274  +/- 18.944                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0521006
+	Sigma of Residuals = 0.0874619
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.027378
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 24.32383
+
+Velocity Results:
+	Shift of peak = 13.6321 pixels
+	Correlation height = 0.942
+	FWHM of peak = 16.29224 Km/sec	(=7.784245 pixels)
+
+	Velocity computed from shift = 28.5328 Km/sec
+	Observed velocity = 22.9901 Km/sec
+	Heliocentric velocity = 0.3639 +/- 0.505 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:01 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord095_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord095_A_IRAF.fits[1]'star = `'
+Deltav = 2.094 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 1.160E-4
+	Fit Coefficients:
+		c[1] =   0.9693  +/- 0.5771                     # Amplitude
+		c[2] =  13.5148  +/- 2.3389                     # Center
+		c[3] =   9.0537  +/- 15.318                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0091185
+	Sigma of Residuals = 0.0150837
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.01288742
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 53.18446
+
+Velocity Results:
+	Shift of peak = 13.5148 pixels
+	Correlation height = 0.969
+	FWHM of peak = 14.83467 Km/sec	(=7.085495 pixels)
+
+	Velocity computed from shift = 28.2970 Km/sec
+	Observed velocity = 22.7543 Km/sec
+	Heliocentric velocity = 0.1281 +/- 0.215 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:01 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord096_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord096_A_IRAF.fits[1]'star = `'
+Deltav = 2.094 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001302
+	Fit Coefficients:
+		c[1] =   0.8656  +/- 0.5666                     # Amplitude
+		c[2] =  13.4827  +/- 2.7148                     # Center
+		c[3] =   9.9415  +/- 18.778                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0432152
+	Sigma of Residuals = 0.0678041
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.03410712
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 17.94594
+
+Velocity Results:
+	Shift of peak = 13.4827 pixels
+	Correlation height = 0.866
+	FWHM of peak = 15.55001 Km/sec	(=7.424764 pixels)
+
+	Velocity computed from shift = 28.2385 Km/sec
+	Observed velocity = 22.6958 Km/sec
+	Heliocentric velocity = 0.0696 +/- 0.645 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:01 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord097_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord097_A_IRAF.fits[1]'star = `'
+Deltav = 2.095 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 4.377E-4
+	Fit Coefficients:
+		c[1] =   0.9433  +/- 0.4474                     # Amplitude
+		c[2] =  13.6286  +/- 6.4042                     # Center
+		c[3] =  57.2215  +/- 163.96                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0131422
+	Sigma of Residuals = 0.0415245
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.01020858
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 65.33914
+
+Velocity Results:
+	Shift of peak = 13.6286 pixels
+	Correlation height = 0.943
+	FWHM of peak = 37.31832 Km/sec	(=17.81302 pixels)
+
+	Velocity computed from shift = 28.5529 Km/sec
+	Observed velocity = 23.0102 Km/sec
+	Heliocentric velocity = 0.3840 +/- 0.442 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:01 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord098_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord098_A_IRAF.fits[1]'star = `'
+Deltav = 2.096 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.002421
+	Fit Coefficients:
+		c[1] =   0.8820  +/- 0.5121                     # Amplitude
+		c[2] =  13.5988  +/- 3.3862                     # Center
+		c[3] =  17.4865  +/- 33.434                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0445248
+	Sigma of Residuals = 0.0924989
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.0830131
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 7.512539
+
+Velocity Results:
+	Shift of peak = 13.5988 pixels
+	Correlation height = 0.882
+	FWHM of peak = 20.63672 Km/sec	(=9.847109 pixels)
+
+	Velocity computed from shift = 28.5004 Km/sec
+	Observed velocity = 22.9577 Km/sec
+	Heliocentric velocity = 0.3314 +/- 1.904 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:01 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord099_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord099_A_IRAF.fits[1]'star = `'
+Deltav = 2.096 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.002794
+	Fit Coefficients:
+		c[1] =   0.9031  +/- 0.5280                     # Amplitude
+		c[2] =  13.5279  +/- 3.0438                     # Center
+		c[3] =  14.5586  +/- 26.614                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0519880
+	Sigma of Residuals = 0.0986208
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.06180976
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 10.3319
+
+Velocity Results:
+	Shift of peak = 13.5279 pixels
+	Correlation height = 0.903
+	FWHM of peak = 18.8362 Km/sec	(=8.984996 pixels)
+
+	Velocity computed from shift = 28.3616 Km/sec
+	Observed velocity = 22.8189 Km/sec
+	Heliocentric velocity = 0.1927 +/- 1.306 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:01 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord100_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord100_A_IRAF.fits[1]'star = `'
+Deltav = 2.097 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 4.828E-4
+	Fit Coefficients:
+		c[1] =   0.9464  +/- 0.5686                     # Amplitude
+		c[2] =  13.3765  +/- 2.4644                     # Center
+		c[3] =   9.7506  +/- 16.851                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0207440
+	Sigma of Residuals = 0.0329139
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.02546926
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 26.27608
+
+Velocity Results:
+	Shift of peak = 13.3765 pixels
+	Correlation height = 0.946
+	FWHM of peak = 15.42013 Km/sec	(=7.353132 pixels)
+
+	Velocity computed from shift = 28.0527 Km/sec
+	Observed velocity = 22.5100 Km/sec
+	Heliocentric velocity = -0.1162 +/- 0.444 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:01 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord101_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord101_A_IRAF.fits[1]'star = `'
+Deltav = 2.098 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.002822
+	Fit Coefficients:
+		c[1] =   0.9277  +/- 0.5491                     # Amplitude
+		c[2] =  13.5371  +/- 2.7038                     # Center
+		c[3] =  11.7163  +/- 20.632                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0574556
+	Sigma of Residuals = 0.0976094
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.02354867
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 27.85686
+
+Velocity Results:
+	Shift of peak = 13.5371 pixels
+	Correlation height = 0.928
+	FWHM of peak = 16.90884 Km/sec	(=8.060336 pixels)
+
+	Velocity computed from shift = 28.3994 Km/sec
+	Observed velocity = 22.8567 Km/sec
+	Heliocentric velocity = 0.2304 +/- 0.460 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:01 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord102_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord102_A_IRAF.fits[1]'star = `'
+Deltav = 2.098 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 5.560E-4
+	Fit Coefficients:
+		c[1] =   0.9540  +/- 0.5093                     # Amplitude
+		c[2] =  13.4245  +/- 3.1869                     # Center
+		c[3] =  18.1483  +/- 32.337                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0191276
+	Sigma of Residuals = 0.0405819
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.02715098
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 24.84588
+
+Velocity Results:
+	Shift of peak = 13.4245 pixels
+	Correlation height = 0.954
+	FWHM of peak = 21.0511 Km/sec	(=10.03173 pixels)
+
+	Velocity computed from shift = 28.1717 Km/sec
+	Observed velocity = 22.6290 Km/sec
+	Heliocentric velocity = 0.0028 +/- 0.640 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:02 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord103_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord103_A_IRAF.fits[1]'star = `'
+Deltav = 2.099 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 7.352E-4
+	Fit Coefficients:
+		c[1] =   0.9541  +/- 0.5338                     # Amplitude
+		c[2] =  13.5993  +/- 2.8044                     # Center
+		c[3] =  13.6753  +/- 23.556                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0275069
+	Sigma of Residuals = 0.0505765
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.03384352
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 19.93364
+
+Velocity Results:
+	Shift of peak = 13.5993 pixels
+	Correlation height = 0.954
+	FWHM of peak = 18.27949 Km/sec	(=8.708161 pixels)
+
+	Velocity computed from shift = 28.5484 Km/sec
+	Observed velocity = 23.0057 Km/sec
+	Heliocentric velocity = 0.3795 +/- 0.686 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:02 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord104_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord104_A_IRAF.fits[1]'star = `'
+Deltav = 2.100 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.0018
+	Fit Coefficients:
+		c[1] =   0.9190  +/- 0.5373                     # Amplitude
+		c[2] =  13.4896  +/- 2.8682                     # Center
+		c[3] =  13.2002  +/- 23.577                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0434187
+	Sigma of Residuals = 0.0778256
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.06275398
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 10.35518
+
+Velocity Results:
+	Shift of peak = 13.4896 pixels
+	Correlation height = 0.919
+	FWHM of peak = 17.96547 Km/sec	(=8.555557 pixels)
+
+	Velocity computed from shift = 28.3277 Km/sec
+	Observed velocity = 22.7850 Km/sec
+	Heliocentric velocity = 0.1588 +/- 1.243 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:02 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord105_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord105_A_IRAF.fits[1]'star = `'
+Deltav = 2.101 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.00134
+	Fit Coefficients:
+		c[1] =   0.9460  +/- 0.4931                     # Amplitude
+		c[2] =  13.4256  +/- 3.5875                     # Center
+		c[3] =  22.6351  +/- 42.685                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0320096
+	Sigma of Residuals = 0.0727154
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01426511
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 46.89417
+
+Velocity Results:
+	Shift of peak = 13.4256 pixels
+	Correlation height = 0.946
+	FWHM of peak = 23.5333 Km/sec	(=11.20337 pixels)
+
+	Velocity computed from shift = 28.2021 Km/sec
+	Observed velocity = 22.6594 Km/sec
+	Heliocentric velocity = 0.0332 +/- 0.386 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:02 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord106_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord106_A_IRAF.fits[1]'star = `'
+Deltav = 2.101 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 4.864E-4
+	Fit Coefficients:
+		c[1] =   0.9586  +/- 0.5299                     # Amplitude
+		c[2] =  13.5267  +/- 2.8417                     # Center
+		c[3] =  14.2574  +/- 24.514                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0212498
+	Sigma of Residuals = 0.0399877
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.03225139
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 21.01724
+
+Velocity Results:
+	Shift of peak = 13.5267 pixels
+	Correlation height = 0.959
+	FWHM of peak = 18.68349 Km/sec	(=8.891546 pixels)
+
+	Velocity computed from shift = 28.4243 Km/sec
+	Observed velocity = 22.8816 Km/sec
+	Heliocentric velocity = 0.2554 +/- 0.666 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:02 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord107_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord107_A_IRAF.fits[1]'star = `'
+Deltav = 2.102 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 9.545E-4
+	Fit Coefficients:
+		c[1] =   0.9298  +/- 0.5199                     # Amplitude
+		c[2] =  13.4413  +/- 3.0822                     # Center
+		c[3] =  15.9810  +/- 28.680                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0258407
+	Sigma of Residuals = 0.0519255
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.03683412
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 17.84985
+
+Velocity Results:
+	Shift of peak = 13.4413 pixels
+	Correlation height = 0.930
+	FWHM of peak = 19.78765 Km/sec	(=9.413692 pixels)
+
+	Velocity computed from shift = 28.2545 Km/sec
+	Observed velocity = 22.7118 Km/sec
+	Heliocentric velocity = 0.0856 +/- 0.824 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:02 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord108_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord108_A_IRAF.fits[1]'star = `'
+Deltav = 2.103 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001788
+	Fit Coefficients:
+		c[1] =   0.9317  +/- 0.4863                     # Amplitude
+		c[2] =  13.3852  +/- 3.8480                     # Center
+		c[3] =  25.0989  +/- 49.495                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0329976
+	Sigma of Residuals = 0.0790885
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01317292
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 50.01426
+
+Velocity Results:
+	Shift of peak = 13.3852 pixels
+	Correlation height = 0.932
+	FWHM of peak = 24.80681 Km/sec	(=11.79736 pixels)
+
+	Velocity computed from shift = 28.1474 Km/sec
+	Observed velocity = 22.6047 Km/sec
+	Heliocentric velocity = -0.0215 +/- 0.382 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:02 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord109_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord109_A_IRAF.fits[1]'star = `'
+Deltav = 2.103 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.002497
+	Fit Coefficients:
+		c[1] =   0.9323  +/- 0.5193                     # Amplitude
+		c[2] =  13.5173  +/- 3.0804                     # Center
+		c[3] =  16.0602  +/- 28.722                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0495650
+	Sigma of Residuals = 0.0985470
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.01852193
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 35.59083
+
+Velocity Results:
+	Shift of peak = 13.5173 pixels
+	Correlation height = 0.932
+	FWHM of peak = 19.85003 Km/sec	(=9.436975 pixels)
+
+	Velocity computed from shift = 28.4339 Km/sec
+	Observed velocity = 22.8912 Km/sec
+	Heliocentric velocity = 0.2649 +/- 0.426 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:02 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord110_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord110_A_IRAF.fits[1]'star = `'
+Deltav = 2.104 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001327
+	Fit Coefficients:
+		c[1] =   0.9491  +/- 0.4857                     # Amplitude
+		c[2] =  13.5305  +/- 3.7789                     # Center
+		c[3] =  25.1590  +/- 48.511                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0311669
+	Sigma of Residuals = 0.0755102
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.007582621
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 88.50714
+
+Velocity Results:
+	Shift of peak = 13.5305 pixels
+	Correlation height = 0.949
+	FWHM of peak = 24.85304 Km/sec	(=11.81148 pixels)
+
+	Velocity computed from shift = 28.4714 Km/sec
+	Observed velocity = 22.9287 Km/sec
+	Heliocentric velocity = 0.3025 +/- 0.218 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:02 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord111_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord111_A_IRAF.fits[1]'star = `'
+Deltav = 2.105 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.002132
+	Fit Coefficients:
+		c[1] =   0.9273  +/- 0.4820                     # Amplitude
+		c[2] =  13.4453  +/- 4.0249                     # Center
+		c[3] =  26.9854  +/- 54.805                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0350254
+	Sigma of Residuals = 0.0859489
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01706406
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 38.4253
+
+Velocity Results:
+	Shift of peak = 13.4453 pixels
+	Correlation height = 0.927
+	FWHM of peak = 25.74856 Km/sec	(=12.23271 pixels)
+
+	Velocity computed from shift = 28.3019 Km/sec
+	Observed velocity = 22.7592 Km/sec
+	Heliocentric velocity = 0.1330 +/- 0.513 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:02 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord112_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord112_A_IRAF.fits[1]'star = `'
+Deltav = 2.106 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 9.293E-4
+	Fit Coefficients:
+		c[1] =   0.9574  +/- 0.5481                     # Amplitude
+		c[2] =  13.4859  +/- 2.6310                     # Center
+		c[3] =  11.8363  +/- 20.209                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0302822
+	Sigma of Residuals = 0.0517504
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01030924
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 65.66734
+
+Velocity Results:
+	Shift of peak = 13.4859 pixels
+	Correlation height = 0.957
+	FWHM of peak = 17.05896 Km/sec	(=8.101506 pixels)
+
+	Velocity computed from shift = 28.3983 Km/sec
+	Observed velocity = 22.8556 Km/sec
+	Heliocentric velocity = 0.2294 +/- 0.201 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:02 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord113_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord113_A_IRAF.fits[1]'star = `'
+Deltav = 2.106 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001866
+	Fit Coefficients:
+		c[1] =   0.9417  +/- 0.5161                     # Amplitude
+		c[2] =  13.4278  +/- 3.1059                     # Center
+		c[3] =  16.7094  +/- 29.778                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0414218
+	Sigma of Residuals = 0.0829996
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01313346
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 50.70306
+
+Velocity Results:
+	Shift of peak = 13.4278 pixels
+	Correlation height = 0.942
+	FWHM of peak = 20.27599 Km/sec	(=9.625832 pixels)
+
+	Velocity computed from shift = 28.2855 Km/sec
+	Observed velocity = 22.7428 Km/sec
+	Heliocentric velocity = 0.1165 +/- 0.308 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:03 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord114_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord114_A_IRAF.fits[1]'star = `'
+Deltav = 2.107 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 2
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 1.603E-4
+	Fit Coefficients:
+		c[1] =   0.9837  +/- 0.5981                     # Amplitude
+		c[2] =  13.4972  +/- 2.1595                     # Center
+		c[3] =   7.5947  +/- 12.796                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0146070
+	Sigma of Residuals = 0.0201920
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01410612
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 49.30859
+
+Velocity Results:
+	Shift of peak = 13.4972 pixels
+	Correlation height = 0.984
+	FWHM of peak = 13.67397 Km/sec	(=6.489528 pixels)
+
+	Velocity computed from shift = 28.4417 Km/sec
+	Observed velocity = 22.8990 Km/sec
+	Heliocentric velocity = 0.2727 +/- 0.213 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:03 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord115_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord115_A_IRAF.fits[1]'star = `'
+Deltav = 2.108 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.002376
+	Fit Coefficients:
+		c[1] =   0.9314  +/- 0.4933                     # Amplitude
+		c[2] =  13.5630  +/- 3.6239                     # Center
+		c[3] =  22.4306  +/- 42.689                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0399440
+	Sigma of Residuals = 0.0930304
+	Maximum of cross-correlation is in bin = 14.
+	Variance of cross-correlation = 0.01172588
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 56.16723
+
+Velocity Results:
+	Shift of peak = 13.5630 pixels
+	Correlation height = 0.931
+	FWHM of peak = 23.50821 Km/sec	(=11.15266 pixels)
+
+	Velocity computed from shift = 28.5901 Km/sec
+	Observed velocity = 23.0474 Km/sec
+	Heliocentric velocity = 0.4211 +/- 0.323 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:03 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord116_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord116_A_IRAF.fits[1]'star = `'
+Deltav = 2.109 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 8.768E-4
+	Fit Coefficients:
+		c[1] =   0.9443  +/- 0.5465                     # Amplitude
+		c[2] =  13.4785  +/- 2.6845                     # Center
+		c[3] =  12.0223  +/- 20.818                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0341064
+	Sigma of Residuals = 0.0587617
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.02154831
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 30.98868
+
+Velocity Results:
+	Shift of peak = 13.4785 pixels
+	Correlation height = 0.944
+	FWHM of peak = 17.21661 Km/sec	(=8.164924 pixels)
+
+	Velocity computed from shift = 28.4216 Km/sec
+	Observed velocity = 22.8789 Km/sec
+	Heliocentric velocity = 0.2527 +/- 0.423 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:03 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord117_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord117_A_IRAF.fits[1]'star = `'
+Deltav = 2.109 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001702
+	Fit Coefficients:
+		c[1] =   0.9440  +/- 0.5039                     # Amplitude
+		c[2] =  13.4358  +/- 3.3325                     # Center
+		c[3] =  19.4788  +/- 35.543                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0404103
+	Sigma of Residuals = 0.0863390
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01403226
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 47.57205
+
+Velocity Results:
+	Shift of peak = 13.4358 pixels
+	Correlation height = 0.944
+	FWHM of peak = 21.92286 Km/sec	(=10.39295 pixels)
+
+	Velocity computed from shift = 28.3424 Km/sec
+	Observed velocity = 22.7997 Km/sec
+	Heliocentric velocity = 0.1735 +/- 0.354 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:03 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord118_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord118_A_IRAF.fits[1]'star = `'
+Deltav = 2.110 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 5
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.003141
+	Fit Coefficients:
+		c[1] =   0.9132  +/- 0.4631                     # Amplitude
+		c[2] =  13.3872  +/- 5.0923                     # Center
+		c[3] =  38.8923  +/- 93.582                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0427078
+	Sigma of Residuals = 0.1155795
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.03672986
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 17.58013
+
+Velocity Results:
+	Shift of peak = 13.3872 pixels
+	Correlation height = 0.913
+	FWHM of peak = 30.98926 Km/sec	(=14.68553 pixels)
+
+	Velocity computed from shift = 28.2508 Km/sec
+	Observed velocity = 22.7081 Km/sec
+	Heliocentric velocity = 0.0819 +/- 1.310 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:03 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord119_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord119_A_IRAF.fits[1]'star = `'
+Deltav = 2.111 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.002717
+	Fit Coefficients:
+		c[1] =   0.9446  +/- 0.5636                     # Amplitude
+		c[2] =  13.4625  +/- 2.5148                     # Center
+		c[3] =  10.2206  +/- 17.681                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0621413
+	Sigma of Residuals = 0.0987885
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01510944
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 44.2058
+
+Velocity Results:
+	Shift of peak = 13.4625 pixels
+	Correlation height = 0.945
+	FWHM of peak = 15.89136 Km/sec	(=7.52827 pixels)
+
+	Velocity computed from shift = 28.4193 Km/sec
+	Observed velocity = 22.8766 Km/sec
+	Heliocentric velocity = 0.2504 +/- 0.276 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:03 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord120_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord120_A_IRAF.fits[1]'star = `'
+Deltav = 2.112 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001023
+	Fit Coefficients:
+		c[1] =   0.9696  +/- 0.5879                     # Amplitude
+		c[2] =  13.3989  +/- 2.2583                     # Center
+		c[3] =   8.2508  +/- 14.022                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0418673
+	Sigma of Residuals = 0.0608350
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01040404
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 65.90157
+
+Velocity Results:
+	Shift of peak = 13.3989 pixels
+	Correlation height = 0.970
+	FWHM of peak = 14.28384 Km/sec	(=6.764022 pixels)
+
+	Velocity computed from shift = 28.2960 Km/sec
+	Observed velocity = 22.7533 Km/sec
+	Heliocentric velocity = 0.1271 +/- 0.168 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:03 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord121_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord121_A_IRAF.fits[1]'star = `'
+Deltav = 2.112 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.002135
+	Fit Coefficients:
+		c[1] =   0.9345  +/- 0.5270                     # Amplitude
+		c[2] =  13.4725  +/- 2.9587                     # Center
+		c[3] =  14.7461  +/- 26.110                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0484752
+	Sigma of Residuals = 0.0915660
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01597119
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 41.37318
+
+Velocity Results:
+	Shift of peak = 13.4725 pixels
+	Correlation height = 0.934
+	FWHM of peak = 19.10239 Km/sec	(=9.042669 pixels)
+
+	Velocity computed from shift = 28.4621 Km/sec
+	Observed velocity = 22.9194 Km/sec
+	Heliocentric velocity = 0.2931 +/- 0.354 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:03 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord122_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord122_A_IRAF.fits[1]'star = `'
+Deltav = 2.113 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.002649
+	Fit Coefficients:
+		c[1] =   0.9263  +/- 0.5094                     # Amplitude
+		c[2] =  13.4517  +/- 3.2816                     # Center
+		c[3] =  18.1398  +/- 33.292                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0455029
+	Sigma of Residuals = 0.0950991
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01386079
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 47.25432
+
+Velocity Results:
+	Shift of peak = 13.4517 pixels
+	Correlation height = 0.926
+	FWHM of peak = 21.19435 Km/sec	(=10.02938 pixels)
+
+	Velocity computed from shift = 28.4279 Km/sec
+	Observed velocity = 22.8852 Km/sec
+	Heliocentric velocity = 0.2590 +/- 0.345 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:03 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord123_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord123_A_IRAF.fits[1]'star = `'
+Deltav = 2.114 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001828
+	Fit Coefficients:
+		c[1] =   0.9440  +/- 0.5429                     # Amplitude
+		c[2] =  13.4684  +/- 2.7260                     # Center
+		c[3] =  12.4665  +/- 21.619                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0424967
+	Sigma of Residuals = 0.0743640
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01994425
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 33.46909
+
+Velocity Results:
+	Shift of peak = 13.4684 pixels
+	Correlation height = 0.944
+	FWHM of peak = 17.57694 Km/sec	(=8.314398 pixels)
+
+	Velocity computed from shift = 28.4741 Km/sec
+	Observed velocity = 22.9314 Km/sec
+	Heliocentric velocity = 0.3052 +/- 0.401 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:04 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord124_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord124_A_IRAF.fits[1]'star = `'
+Deltav = 2.115 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 8.046E-4
+	Fit Coefficients:
+		c[1] =   0.9679  +/- 0.5788                     # Amplitude
+		c[2] =  13.3872  +/- 2.3285                     # Center
+		c[3] =   8.9137  +/- 15.113                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0330396
+	Sigma of Residuals = 0.0488112
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01143433
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 59.85812
+
+Velocity Results:
+	Shift of peak = 13.3872 pixels
+	Correlation height = 0.968
+	FWHM of peak = 14.86868 Km/sec	(=7.030516 pixels)
+
+	Velocity computed from shift = 28.3132 Km/sec
+	Observed velocity = 22.7705 Km/sec
+	Heliocentric velocity = 0.1443 +/- 0.192 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:04 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord125_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord125_A_IRAF.fits[1]'star = `'
+Deltav = 2.116 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001379
+	Fit Coefficients:
+		c[1] =   0.9492  +/- 0.5221                     # Amplitude
+		c[2] =  13.4310  +/- 2.9848                     # Center
+		c[3] =  15.5807  +/- 27.308                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0348319
+	Sigma of Residuals = 0.0677962
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.0135199
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 49.64622
+
+Velocity Results:
+	Shift of peak = 13.4310 pixels
+	Correlation height = 0.949
+	FWHM of peak = 19.66517 Km/sec	(=9.295028 pixels)
+
+	Velocity computed from shift = 28.4165 Km/sec
+	Observed velocity = 22.8738 Km/sec
+	Heliocentric velocity = 0.2475 +/- 0.305 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:04 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord126_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord126_A_IRAF.fits[1]'star = `'
+Deltav = 2.116 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001272
+	Fit Coefficients:
+		c[1] =   0.9466  +/- 0.5267                     # Amplitude
+		c[2] =  13.4384  +/- 2.9240                     # Center
+		c[3] =  14.7834  +/- 25.844                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0269609
+	Sigma of Residuals = 0.0543236
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01148688
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 58.27156
+
+Velocity Results:
+	Shift of peak = 13.4384 pixels
+	Correlation height = 0.947
+	FWHM of peak = 19.16253 Km/sec	(=9.054096 pixels)
+
+	Velocity computed from shift = 28.4430 Km/sec
+	Observed velocity = 22.9003 Km/sec
+	Heliocentric velocity = 0.2741 +/- 0.254 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:04 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord127_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord127_A_IRAF.fits[1]'star = `'
+Deltav = 2.117 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.00204
+	Fit Coefficients:
+		c[1] =   0.9370  +/- 0.5454                     # Amplitude
+		c[2] =  13.3741  +/- 2.7166                     # Center
+		c[3] =  12.1437  +/- 21.193                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0458819
+	Sigma of Residuals = 0.0791990
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.02014698
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 32.88718
+
+Velocity Results:
+	Shift of peak = 13.3741 pixels
+	Correlation height = 0.937
+	FWHM of peak = 17.37448 Km/sec	(=8.206043 pixels)
+
+	Velocity computed from shift = 28.3177 Km/sec
+	Observed velocity = 22.7750 Km/sec
+	Heliocentric velocity = 0.1488 +/- 0.403 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:04 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord128_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord128_A_IRAF.fits[1]'star = `'
+Deltav = 2.118 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 7.695E-4
+	Fit Coefficients:
+		c[1] =   0.9707  +/- 0.5752                     # Amplitude
+		c[2] =  13.3662  +/- 2.3497                     # Center
+		c[3] =   9.1974  +/- 15.528                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0341122
+	Sigma of Residuals = 0.0516427
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01109194
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 61.88085
+
+Velocity Results:
+	Shift of peak = 13.3662 pixels
+	Correlation height = 0.971
+	FWHM of peak = 15.12656 Km/sec	(=7.141508 pixels)
+
+	Velocity computed from shift = 28.3127 Km/sec
+	Observed velocity = 22.7700 Km/sec
+	Heliocentric velocity = 0.1438 +/- 0.189 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:04 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord129_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord129_A_IRAF.fits[1]'star = `'
+Deltav = 2.119 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001173
+	Fit Coefficients:
+		c[1] =   0.9513  +/- 0.5365                     # Amplitude
+		c[2] =  13.4381  +/- 2.7798                     # Center
+		c[3] =  13.3013  +/- 22.958                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0322268
+	Sigma of Residuals = 0.0585500
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01857264
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 36.2171
+
+Velocity Results:
+	Shift of peak = 13.4381 pixels
+	Correlation height = 0.951
+	FWHM of peak = 18.19767 Km/sec	(=8.588258 pixels)
+
+	Velocity computed from shift = 28.4749 Km/sec
+	Observed velocity = 22.9322 Km/sec
+	Heliocentric velocity = 0.3060 +/- 0.384 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:04 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord130_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord130_A_IRAF.fits[1]'star = `'
+Deltav = 2.120 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.002574
+	Fit Coefficients:
+		c[1] =   0.9202  +/- 0.4806                     # Amplitude
+		c[2] =  13.4477  +/- 4.1091                     # Center
+		c[3] =  27.6152  +/- 56.980                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0381780
+	Sigma of Residuals = 0.0944807
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.008041478
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 80.91266
+
+Velocity Results:
+	Shift of peak = 13.4477 pixels
+	Correlation height = 0.920
+	FWHM of peak = 26.23065 Km/sec	(=12.37461 pixels)
+
+	Velocity computed from shift = 28.5071 Km/sec
+	Observed velocity = 22.9644 Km/sec
+	Heliocentric velocity = 0.3381 +/- 0.252 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:04 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord131_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord131_A_IRAF.fits[1]'star = `'
+Deltav = 2.121 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 5
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.002576
+	Fit Coefficients:
+		c[1] =   0.9220  +/- 0.4698                     # Amplitude
+		c[2] =  13.4746  +/- 4.6264                     # Center
+		c[3] =  33.8783  +/- 75.768                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0416440
+	Sigma of Residuals = 0.1074307
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.02109128
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 30.91169
+
+Velocity Results:
+	Shift of peak = 13.4746 pixels
+	Correlation height = 0.922
+	FWHM of peak = 29.0644 Km/sec	(=13.70624 pixels)
+
+	Velocity computed from shift = 28.5749 Km/sec
+	Observed velocity = 23.0322 Km/sec
+	Heliocentric velocity = 0.4060 +/- 0.715 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:04 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord132_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord132_A_IRAF.fits[1]'star = `'
+Deltav = 2.121 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 5
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001386
+	Fit Coefficients:
+		c[1] =   0.9297  +/- 0.4420                     # Amplitude
+		c[2] =  13.3257  +/- 7.7818                     # Center
+		c[3] =  72.3662  +/- 249.66                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0234006
+	Sigma of Residuals = 0.0731632
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01897825
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 34.63948
+
+Velocity Results:
+	Shift of peak = 13.3257 pixels
+	Correlation height = 0.930
+	FWHM of peak = 42.49487 Km/sec	(=20.03206 pixels)
+
+	Velocity computed from shift = 28.2700 Km/sec
+	Observed velocity = 22.7273 Km/sec
+	Heliocentric velocity = 0.1011 +/- 0.936 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:04 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord133_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord133_A_IRAF.fits[1]'star = `'
+Deltav = 2.122 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.002002
+	Fit Coefficients:
+		c[1] =   0.9358  +/- 0.4991                     # Amplitude
+		c[2] =  13.3675  +/- 3.4689                     # Center
+		c[3] =  20.7536  +/- 38.704                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0370034
+	Sigma of Residuals = 0.0822636
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.02476528
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 26.71981
+
+Velocity Results:
+	Shift of peak = 13.3675 pixels
+	Correlation height = 0.936
+	FWHM of peak = 22.76644 Km/sec	(=10.72766 pixels)
+
+	Velocity computed from shift = 28.3704 Km/sec
+	Observed velocity = 22.8277 Km/sec
+	Heliocentric velocity = 0.2015 +/- 0.645 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:05 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord134_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord134_A_IRAF.fits[1]'star = `'
+Deltav = 2.123 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.002238
+	Fit Coefficients:
+		c[1] =   0.9272  +/- 0.4808                     # Amplitude
+		c[2] =  12.9582  +/- 4.0092                     # Center
+		c[3] =  26.8345  +/- 54.148                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0382979
+	Sigma of Residuals = 0.0945510
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01093208
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 59.97617
+
+Velocity Results:
+	Shift of peak = 12.9582 pixels
+	Correlation height = 0.927
+	FWHM of peak = 25.89859 Km/sec	(=12.19845 pixels)
+
+	Velocity computed from shift = 27.5128 Km/sec
+	Observed velocity = 21.9701 Km/sec
+	Heliocentric velocity = -0.6561 +/- 0.334 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:05 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord135_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord135_A_IRAF.fits[1]'star = `'
+Deltav = 2.124 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001033
+	Fit Coefficients:
+		c[1] =   0.9482  +/- 0.5052                     # Amplitude
+		c[2] =  13.4271  +/- 3.2900                     # Center
+		c[3] =  19.1448  +/- 34.660                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0296468
+	Sigma of Residuals = 0.0630809
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01417759
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 47.29029
+
+Velocity Results:
+	Shift of peak = 13.4271 pixels
+	Correlation height = 0.948
+	FWHM of peak = 21.88383 Km/sec	(=10.30345 pixels)
+
+	Velocity computed from shift = 28.5196 Km/sec
+	Observed velocity = 22.9769 Km/sec
+	Heliocentric velocity = 0.3507 +/- 0.356 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:05 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord136_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord136_A_IRAF.fits[1]'star = `'
+Deltav = 2.125 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 6.943E-4
+	Fit Coefficients:
+		c[1] =   0.9582  +/- 0.5477                     # Amplitude
+		c[2] =  13.3703  +/- 2.6319                     # Center
+		c[3] =  11.8705  +/- 20.247                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0283129
+	Sigma of Residuals = 0.0483078
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01712391
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 39.56716
+
+Velocity Results:
+	Shift of peak = 13.3703 pixels
+	Correlation height = 0.958
+	FWHM of peak = 17.23915 Km/sec	(=8.113214 pixels)
+
+	Velocity computed from shift = 28.4102 Km/sec
+	Observed velocity = 22.8675 Km/sec
+	Heliocentric velocity = 0.2413 +/- 0.334 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:05 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord137_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord137_A_IRAF.fits[1]'star = `'
+Deltav = 2.126 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001144
+	Fit Coefficients:
+		c[1] =   0.9503  +/- 0.5162                     # Amplitude
+		c[2] =  13.3756  +/- 3.0746                     # Center
+		c[3] =  16.6736  +/- 29.429                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0309914
+	Sigma of Residuals = 0.0624028
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.009511434
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 70.65071
+
+Velocity Results:
+	Shift of peak = 13.3756 pixels
+	Correlation height = 0.950
+	FWHM of peak = 20.43935 Km/sec	(=9.615524 pixels)
+
+	Velocity computed from shift = 28.4330 Km/sec
+	Observed velocity = 22.8903 Km/sec
+	Heliocentric velocity = 0.2640 +/- 0.224 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:05 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord138_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord138_A_IRAF.fits[1]'star = `'
+Deltav = 2.126 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.002497
+	Fit Coefficients:
+		c[1] =   0.8727  +/- 0.4759                     # Amplitude
+		c[2] =  12.8464  +/- 4.4813                     # Center
+		c[3] =  29.3593  +/- 64.932                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0381662
+	Sigma of Residuals = 0.0983293
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.06306703
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 9.785012
+
+Velocity Results:
+	Shift of peak = 12.8464 pixels
+	Correlation height = 0.873
+	FWHM of peak = 27.13254 Km/sec	(=12.75941 pixels)
+
+	Velocity computed from shift = 27.3189 Km/sec
+	Observed velocity = 21.7762 Km/sec
+	Heliocentric velocity = -0.8501 +/- 1.976 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:05 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord139_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord139_A_IRAF.fits[1]'star = `'
+Deltav = 2.127 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 3
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.003205
+	Fit Coefficients:
+		c[1] =   0.9268  +/- 0.5184                     # Amplitude
+		c[2] =  13.0032  +/- 3.0863                     # Center
+		c[3] =  15.9155  +/- 28.584                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0549245
+	Sigma of Residuals = 0.1082391
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.009291672
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 70.52987
+
+Velocity Results:
+	Shift of peak = 13.0032 pixels
+	Correlation height = 0.927
+	FWHM of peak = 19.98513 Km/sec	(=9.394384 pixels)
+
+	Velocity computed from shift = 27.6636 Km/sec
+	Observed velocity = 22.1209 Km/sec
+	Heliocentric velocity = -0.5053 +/- 0.219 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:05 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord140_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord140_A_IRAF.fits[1]'star = `'
+Deltav = 2.128 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.002059
+	Fit Coefficients:
+		c[1] =   0.9307  +/- 0.4804                     # Amplitude
+		c[2] =  13.3214  +/- 4.0573                     # Center
+		c[3] =  27.5722  +/- 56.116                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0388075
+	Sigma of Residuals = 0.0949558
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01572232
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 41.85873
+
+Velocity Results:
+	Shift of peak = 13.3214 pixels
+	Correlation height = 0.931
+	FWHM of peak = 26.316 Km/sec	(=12.36498 pixels)
+
+	Velocity computed from shift = 28.3525 Km/sec
+	Observed velocity = 22.8098 Km/sec
+	Heliocentric velocity = 0.1836 +/- 0.482 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:05 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord141_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord141_A_IRAF.fits[1]'star = `'
+Deltav = 2.129 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.003135
+	Fit Coefficients:
+		c[1] =   0.8998  +/- 0.4846                     # Amplitude
+		c[2] =  13.4284  +/- 4.0488                     # Center
+		c[3] =  25.8394  +/- 53.284                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0456200
+	Sigma of Residuals = 0.1092957
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.03193438
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 19.92434
+
+Velocity Results:
+	Shift of peak = 13.4284 pixels
+	Correlation height = 0.900
+	FWHM of peak = 25.48533 Km/sec	(=11.97012 pixels)
+
+	Velocity computed from shift = 28.5914 Km/sec
+	Observed velocity = 23.0487 Km/sec
+	Heliocentric velocity = 0.4225 +/- 0.957 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:05 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord142_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord142_A_IRAF.fits[1]'star = `'
+Deltav = 2.130 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.002231
+	Fit Coefficients:
+		c[1] =   0.9253  +/- 0.4991                     # Amplitude
+		c[2] =  13.4384  +/- 3.5115                     # Center
+		c[3] =  20.7879  +/- 39.246                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0441979
+	Sigma of Residuals = 0.0969278
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.02221894
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 29.44817
+
+Velocity Results:
+	Shift of peak = 13.4384 pixels
+	Correlation height = 0.925
+	FWHM of peak = 22.86833 Km/sec	(=10.73652 pixels)
+
+	Velocity computed from shift = 28.6246 Km/sec
+	Observed velocity = 23.0819 Km/sec
+	Heliocentric velocity = 0.4557 +/- 0.590 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:05 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord143_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord143_A_IRAF.fits[1]'star = `'
+Deltav = 2.131 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001765
+	Fit Coefficients:
+		c[1] =   0.9220  +/- 0.5138                     # Amplitude
+		c[2] =  13.3837  +/- 3.2108                     # Center
+		c[3] =  17.1524  +/- 31.330                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0352024
+	Sigma of Residuals = 0.0726427
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.02129593
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 30.61538
+
+Velocity Results:
+	Shift of peak = 13.3837 pixels
+	Correlation height = 0.922
+	FWHM of peak = 20.78152 Km/sec	(=9.752597 pixels)
+
+	Velocity computed from shift = 28.5200 Km/sec
+	Observed velocity = 22.9773 Km/sec
+	Heliocentric velocity = 0.3511 +/- 0.516 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:05 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord144_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord144_A_IRAF.fits[1]'star = `'
+Deltav = 2.132 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 5
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.00143
+	Fit Coefficients:
+		c[1] =   0.8781  +/- 0.4473                     # Amplitude
+		c[2] =  13.4351  +/- 7.1933                     # Center
+		c[3] =  60.4213  +/- 195.72                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0261540
+	Sigma of Residuals = 0.0777073
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.0317569
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 19.55234
+
+Velocity Results:
+	Shift of peak = 13.4351 pixels
+	Correlation height = 0.878
+	FWHM of peak = 39.02141 Km/sec	(=18.30429 pixels)
+
+	Velocity computed from shift = 28.6420 Km/sec
+	Observed velocity = 23.0992 Km/sec
+	Heliocentric velocity = 0.4730 +/- 1.491 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:06 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord145_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord145_A_IRAF.fits[1]'star = `'
+Deltav = 2.133 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 5
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.001107
+	Fit Coefficients:
+		c[1] =   0.8917  +/- 0.4448                     # Amplitude
+		c[2] =  13.4672  +/- 7.6001                     # Center
+		c[3] =  66.3223  +/- 225.49                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0247155
+	Sigma of Residuals = 0.0733413
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.01248844
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 50.48778
+
+Velocity Results:
+	Shift of peak = 13.4672 pixels
+	Correlation height = 0.892
+	FWHM of peak = 40.89951 Km/sec	(=19.17731 pixels)
+
+	Velocity computed from shift = 28.7228 Km/sec
+	Observed velocity = 23.1801 Km/sec
+	Heliocentric velocity = 0.5539 +/- 0.624 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:06 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord146_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord146_A_IRAF.fits[1]'star = `'
+Deltav = 2.134 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 5
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 5.711E-4
+	Fit Coefficients:
+		c[1] =   0.9190  +/- 0.4347                     # Amplitude
+		c[2] =  13.3608  +/- 10.413                     # Center
+		c[3] = 102.3886  +/- 464.20                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0149408
+	Sigma of Residuals = 0.0484045
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.02663143
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 24.40069
+
+Velocity Results:
+	Shift of peak = 13.3608 pixels
+	Correlation height = 0.919
+	FWHM of peak = 50.83854 Km/sec	(=23.82777 pixels)
+
+	Velocity computed from shift = 28.5078 Km/sec
+	Observed velocity = 22.9651 Km/sec
+	Heliocentric velocity = 0.3389 +/- 1.572 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:06 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord147_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord147_A_IRAF.fits[1]'star = `'
+Deltav = 2.135 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 4
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 9.128E-4
+	Fit Coefficients:
+		c[1] =   0.7083  +/- 0.4672                     # Amplitude
+		c[2] =  13.3376  +/- 6.1901                     # Center
+		c[3] =  35.4575  +/- 105.11                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0254492
+	Sigma of Residuals = 0.0669990
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.03580271
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 13.98871
+
+Velocity Results:
+	Shift of peak = 13.3376 pixels
+	Correlation height = 0.708
+	FWHM of peak = 29.93075 Km/sec	(=14.02206 pixels)
+
+	Velocity computed from shift = 28.4709 Km/sec
+	Observed velocity = 22.9282 Km/sec
+	Heliocentric velocity = 0.3020 +/- 1.568 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
+             Description of Fit to CCF Peak and Cross-Correlation
+	   NOAO/IRAF V2.16.1 fahrenschon@Kaetzchen-Kiste Thu 10:15:06 12-Dec-2019
+
+Obj  = `20191110_0083_FOC1903_SCI0_ods_ord148_A_IRAF.fits[1]'star = `'
+Temp = `20190903_0104_FOC1903_SCC2_ods_ord148_A_IRAF.fits[1]'star = `'
+Deltav = 2.135 Km/sec                  Tempvel = INDEF Km/sec
+
+Fit Parameters:
+         Function = `gaussian'               Width = 20.
+           Height = 0.                    Minwidth = 3.
+             Peak = no                    Maxwidth = 20.
+          Weights = YES                 Background = 0.
+        Wincenter = INDEF                   Window = INDEF
+
+	Number of points fit = 20
+	Number of iterations = 5
+	Number of coeffs fit = 1 - 3
+	Chi Squared of fit = 0.002004
+	Fit Coefficients:
+		c[1] =   0.7787  +/- 0.4536                     # Amplitude
+		c[2] =  13.1813  +/- 6.9069                     # Center
+		c[3] =  48.4151  +/- 153.25                     # Sigma^2
+		c[4] =   0.0000  (fixed)                        # Background
+
+	Mean Residual = 0.0294279
+	Sigma of Residuals = 0.0865628
+	Maximum of cross-correlation is in bin = 13.
+	Variance of cross-correlation = 0.03938846
+	HJD of observation = 2458799.41875       MJD = 58798.91576
+	Object sample used in correlation = `*'
+	Template sample used in correlation = `*'
+	Tonry&Davis R value = 13.97996
+
+Velocity Results:
+	Shift of peak = 13.1813 pixels
+	Correlation height = 0.779
+	FWHM of peak = 34.98923 Km/sec	(=16.38507 pixels)
+
+	Velocity computed from shift = 28.1489 Km/sec
+	Observed velocity = 22.6062 Km/sec
+	Heliocentric velocity = -0.0200 +/- 1.834 Km/sec
+
+Comments:
+	WARNING: Using template velocity of 0 km/s.
+	
+
+
