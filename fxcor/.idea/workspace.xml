@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9770a932-ade1-4a35-af4f-6de4f987c494" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gamse_to_iraf_converter_with_interpol.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/rv_extractor.py" beforeDir="false" afterPath="$PROJECT_DIR$/work/rv_extractor.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -89,6 +86,9 @@
       <module name="fxcor_iraf" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -108,6 +108,9 @@
       <module name="fxcor_iraf" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/data" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -127,6 +130,9 @@
       <module name="fxcor_iraf" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/work" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -164,6 +170,10 @@
       <workItem from="1576147012287" duration="10250000" />
       <workItem from="1576230648075" duration="4442000" />
       <workItem from="1579171365995" duration="10507000" />
+      <workItem from="1579185157924" duration="1161000" />
+      <workItem from="1579248947497" duration="607000" />
+      <workItem from="1579269995881" duration="766000" />
+      <workItem from="1579539684458" duration="1323000" />
     </task>
     <servers />
   </component>
@@ -175,7 +185,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
