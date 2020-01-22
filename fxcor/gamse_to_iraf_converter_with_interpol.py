@@ -9,6 +9,8 @@ import configparser
 import numpy as np
 import astropy.io.fits as fits
 from pathlib import Path
+from datetime import datetime
+import datetime as dt
 import matplotlib.pyplot as plt
 import matplotlib.ticker as tck
 
@@ -19,7 +21,7 @@ import matplotlib.ticker as tck
 
 ###############################
 path_to_infiles = "data/51Peg/"
-path_to_outfiles = 'data/51Peg_for_iraf_lin/'
+path_to_outfiles = 'data/51Peg_lin/'
 # # for quick tests:
 # path_to_infiles = "../file_parser/testfiles/"
 # path_to_outfiles = '../file_parser/testfiles/testout/'
@@ -84,6 +86,9 @@ for fname in fname_lst:
                 wave_lin = np.linspace(wave[0], wave[-1], len(wave))
                 flux_interpol = np.interp(wave_lin, wave, flux)
 
+                # calculate the midtime of observation
+                exp_starttime = datetime.strptime(headyyy['FRAME'], '%Y-%m-%dT%H:%M:%S.%f')
+                exp_midtime = exp_starttime + 0.5*dt.timedelta(seconds=headyyy['EXPOSURE'])
 
                 # make a header for the new fits file
                 new_headyyy = headyyy
@@ -102,7 +107,7 @@ for fname in fname_lst:
                 new_headyyy["RA"] = (objcoord_ra, "Right ascension coordinate")
                 new_headyyy["DEC"] = (objcoord_dec, "Declination coordinate")
                 new_headyyy["EQUINOX"] = (2000.0, "Epoch of observation")
-                # new_headyyy["UTMID"] = (, "UT of midpoint of observation")
+                new_headyyy["UTMID"] = (datetime.isoformat(exp_midtime), "UT of midpoint of observation")
 
                 # # convert the header to a (primary) HDU object
                 # new_headyyy_HDU = fits.PrimaryHDU(header=new_headyyy)
