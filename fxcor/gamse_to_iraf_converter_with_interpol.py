@@ -20,7 +20,8 @@ import matplotlib.ticker as tck
 
 
 ###############################
-path_to_infiles = "data/51Peg/"
+# give the path to the input and output files as relative path
+path_to_infiles = 'data/51Peg/'
 path_to_outfiles = 'data/51Peg_lin/'
 # # for quick tests:
 # path_to_infiles = "../file_parser/testfiles/"
@@ -29,6 +30,10 @@ path_to_outfiles = 'data/51Peg_lin/'
 location = Path(__file__).parent
 path = (location / path_to_infiles).resolve()
 pathout = (location / path_to_outfiles).resolve()
+
+# check if the output directory exists, create if it does not
+if not os.path.exists(pathout):
+    os.makedirs(pathout)
 
 objcoord_ra = '22:57:28.00'
 objcoord_dec = '+20:46:07.82'
