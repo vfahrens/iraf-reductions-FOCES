@@ -1,3 +1,4 @@
+#!/bin/bash
 for i in {060..150..1}
 do
   echo $i
