@@ -1,0 +1,9 @@
+
+- copy the file "/mnt/e/IRAF/"
+- execute "dos2unix recipe_make_orderlists.sh"
+- execute "./recipe_make_orderlists.sh" in the folder with the data (with new header and separated by order)
+
+- after starting IRAF, execute "reset obsdb=home$obsdb.dat"
+- in IRAF make a list of all the spectra used as templates: "files 20190903_0104_*_A_*.fits > templates_51Peg.lis"
+- in IRAF do the heliocentric correction for the template spectra: "rvcorrect images=@templates_51Peg.lis" (or open "epar rvcorrect" and put the template list as entry for "images": "images = @templates_51Peg.lis")
+- in IRAF do the correlation: "fxcor @fxcor_ord115.lis nameoftemplatespectrum.fits"
