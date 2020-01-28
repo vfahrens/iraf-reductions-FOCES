@@ -15,8 +15,10 @@ yn_update = input('Do you want to update the data and logfile directories? ')
 # if update is needed, execute shell scripts
 # regular expressions: check if string starts with y/j (re.I = ignore case)
 if re.match(r'^y', yn_update, re.I) or re.match(r'^j', yn_update, re.I):
-    date_restrict = input('Do you want to specify a date? (options: start-end, a = after, b = before)\n')
-    # subprocess.call('bash', 'whateverscript.sh')
+    date_restrict = input('Do you want to specify a date? (format: yyyymmdd; options: -a = after, -o = only)\n')
+    if re.match(r'^a', date_restrict, re.I):
+
+    subprocess.call('bash', 'whateverscript.sh')
     print('Working...')
 else:
     print('No files were updated.')
