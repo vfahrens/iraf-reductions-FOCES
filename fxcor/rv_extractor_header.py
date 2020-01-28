@@ -16,7 +16,7 @@ filename_weighted = 'RVs_lin_weighted.txt'
 location = Path(__file__).parent
 pathin = (location / path).resolve()
 pathout = (location / path_to_outfiles).resolve()
-fxcor_output = os.path.join(pathout, filename_fxcortxt)
+fxcor_output = os.path.join(path, filename_fxcortxt)
 out1_filepath = os.path.join(pathout, filename_all_single_orders)
 out2_filepath = os.path.join(pathout, filename_weighted)
 
@@ -35,31 +35,37 @@ out2_filepath = os.path.join(pathout, filename_weighted)
 
 alldates = []
 
+
+fname_lst = sorted(os.listdir(path))
+prev_frameid = 0
+for fname in fname_lst:
+    if fname[-16:] != '_A_lin_IRAF.fits':
+        continue
+    #else:
+        #print(fname)
+
+    open_filepath = os.path.join(pathin, fname)
+    with fits.open(open_filepath) as datei:
+        header = datei[0].header
+        date = header['HJD']
+        rv_value = header['VHELIO']*1000.0
+        phys_ord = fname[34:37]
+
+    with open(fxcor_output, 'r') as fxfile:
+        for line in fxfile:
+            line = line.split()
+            if fname in line:
+                rv_err = floatline[-1] * 1000.0
+
+    with open(out1_filepath, 'a') as outfile:
+        output_singleorders = str(date) + ' ' + str(rv_value) + ' ' + str(rv_err) + ' ' + str(phys_ord) + '\n'
+        print(output_singleorders)
+        outfile.write(output_singleorders)
+
 with open(out1_filepath, 'r') as infile:
     for line in infile:
         line = line.split()
         alldates.append(line[0])
-
-# fname_lst = sorted(os.listdir(path))
-# prev_frameid = 0
-# for fname in fname_lst:
-#     if fname[-16:] != '_A_lin_IRAF.fits':
-#         continue
-#     #else:
-#         #print(fname)
-#
-#     open_filepath = os.path.join(pathin, fname)
-#     with fits.open(open_filepath) as datei:
-#         header = datei[0].header
-#         date = header['HJD']
-#         alldates.append(date)
-#         rv_value = header['VHELIO']*1000
-#         phys_ord = fname[34:37]
-#
-#         with open(out1_filepath, 'a') as outfile:
-#             output_singleorders = str(date) + ' ' + str(rv_value) + ' 0.0001 ' + str(phys_ord) + '\n'
-#             outfile.write(output_singleorders)
-
 dates_list = set(alldates)
 
 for i in dates_list:
