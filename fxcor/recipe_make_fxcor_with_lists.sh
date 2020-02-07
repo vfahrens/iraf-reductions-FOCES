@@ -1,7 +1,7 @@
 #!/bin/bash
 name1="fxcor_ord"
 name2=".lis"
-for i in {060..150..1}
+for i in {065..148..1}
 do
   echo $i
   for j in `ls $name1$i$name2`

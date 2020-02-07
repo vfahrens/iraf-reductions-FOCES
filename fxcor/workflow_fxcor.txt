@@ -1,9 +1,22 @@
-
-- copy the file "/mnt/e/IRAF/"
-- execute "dos2unix recipe_make_orderlists.sh"
+PYCHARM:
+- open the file "/mnt/e/IRAF/iraf-reductions-FOCES/fxcor/gamse_to_iraf_converter_with_interpol.py"
+- change the data input and output folders as needed (not existing folders will be created automatically)
+- put the correct object coordinates and maybe readout time of the camera
+- run the script
+TERMINAL:
+- copy the file "/mnt/e/IRAF/iraf-reductions-FOCES/fxcor/recipe_make_orderlists.sh" to the folder where the data frames are located
+- copy the file "/mnt/e/IRAF/iraf-reductions-FOCES/fxcor/recipe_make_fxcor_with_lists.sh" to the folder where the data frames are located
+- execute "dos2unix recipe_make_*.sh"
 - execute "./recipe_make_orderlists.sh" in the folder with the data (with new header and separated by order)
-
+- execute "./recipe_make_fxcor_with_lists.sh" in the folder with the data (with new header and separated by order)
+IRAF:
 - after starting IRAF, execute "reset obsdb=home$obsdb.dat"
-- in IRAF make a list of all the spectra used as templates: "files 20190903_0104_*_A_*.fits > templates_51Peg.lis"
-- in IRAF do the heliocentric correction for the template spectra: "rvcorrect images=@templates_51Peg.lis" (or open "epar rvcorrect" and put the template list as entry for "images": "images = @templates_51Peg.lis")
-- in IRAF do the correlation: "fxcor @fxcor_ord115.lis nameoftemplatespectrum.fits"
+- make a list of all the spectra used as templates: "files 20190903_0104_*_A_*.fits > templates_51Peg.lis"
+- do the heliocentric correction for the template spectra: "rvcorrect images=@templates_51Peg.lis" (or open "epar rvcorrect" and put the template list as entry for "images": "images = @templates_51Peg.lis")
+- in IRAF do the correlation: "cl < fxcor_with_lists.cl"
+PYCHARM:
+- open the file "/mnt/e/IRAF/iraf-reductions-FOCES/fxcor/rv_extractor_header.py"
+- change the data input and output folders as needed
+- change the filename of the fxcor output file and the filenames of the files where the RVs should be saved
+- check if in the output folder files with the same name as the desired output already exist, if yes rename or delete them (else the new results will only be appended)
+- run the script
