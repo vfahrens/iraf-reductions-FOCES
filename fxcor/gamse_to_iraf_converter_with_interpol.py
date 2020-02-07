@@ -22,7 +22,7 @@ import matplotlib.ticker as tck
 ###############################
 # give the path to the input and output files as relative path
 path_to_infiles = 'data/51Peg/'
-path_to_outfiles = 'data/51Peg_lin/'
+path_to_outfiles = 'data/51Peg_time/'
 # # for quick tests:
 # path_to_infiles = "../file_parser/testfiles/"
 # path_to_outfiles = '../file_parser/testfiles/testout/'
@@ -37,6 +37,7 @@ if not os.path.exists(pathout):
 
 objcoord_ra = '22:57:28.00'
 objcoord_dec = '+20:46:07.82'
+CCD_readtime = 89.0
 
 
 fname_lst = sorted(os.listdir(path))
@@ -92,8 +93,9 @@ for fname in fname_lst:
                 flux_interpol = np.interp(wave_lin, wave, flux)
 
                 # calculate the midtime of observation
-                exp_starttime = datetime.strptime(headyyy['FRAME'], '%Y-%m-%dT%H:%M:%S.%f')
-                exp_midtime = exp_starttime + 0.5*dt.timedelta(seconds=headyyy['EXPOSURE'])
+                # ATTENTION: the timestamp iin the header is the time when the file is saved, after exposure and readout
+                exp_endtime = datetime.strptime(headyyy['FRAME'], '%Y-%m-%dT%H:%M:%S.%f')
+                exp_midtime = exp_endtime - 0.5*dt.timedelta(seconds=headyyy['EXPOSURE']) - dt.timedelta(seconds=CCD_readtime)
 
                 # make a header for the new fits file
                 new_headyyy = headyyy
