@@ -39,34 +39,32 @@ out2_filepath = os.path.join(pathout, filename_weighted)
 
 alldates = []
 
-#
-# fname_lst = sorted(os.listdir(path))
-# prev_frameid = 0
-# for fname in fname_lst:
-#     if fname[-16:] != '_A_lin_IRAF.fits':
-#         continue
-#     #else:
-#         #print(fname)
-#
-#     open_filepath = os.path.join(pathin, fname)
-#     with fits.open(open_filepath) as datei:
-#         header = datei[0].header
-#         if 'HJD' in header:
-#             date = header['HJD']
-#             rv_value = header['VHELIO']*1000.0
-#         phys_ord = fname[34:37]
-#
-#     with open(fxcor_output, 'r') as fxfile:
-#         for line in fxfile:
-#             line = line.split()
-#             if fname in line and line[-1] != 'INDEF':
-#                 rv_err = float(line[-1]) * 1000.0
-#
-#     with open(out1_filepath, 'a') as outfile:
-#         if 'HJD' in header:
-#             output_singleorders = str(date) + ' ' + str(rv_value) + ' ' + str(rv_err) + ' ' + str(phys_ord) + '\n'
-#             print(output_singleorders)
-#             outfile.write(output_singleorders)
+
+fname_lst = sorted(os.listdir(path))
+prev_frameid = 0
+for fname in fname_lst:
+    if fname[-16:] != '_A_lin_IRAF.fits':
+        continue
+
+    open_filepath = os.path.join(pathin, fname)
+    with fits.open(open_filepath) as datei:
+        header = datei[0].header
+        if 'HJD' in header:
+            date = header['HJD']
+            rv_value = header['VHELIO']*1000.0
+        phys_ord = fname[34:37]
+
+    with open(fxcor_output, 'r') as fxfile:
+        for line in fxfile:
+            line = line.split()
+            if fname in line and line[-1] != 'INDEF':
+                rv_err = float(line[-1]) * 1000.0
+
+    with open(out1_filepath, 'a') as outfile:
+        if 'HJD' in header:
+            output_singleorders = str(date) + ' ' + str(rv_value) + ' ' + str(rv_err) + ' ' + str(phys_ord) + '\n'
+            print(output_singleorders)
+            outfile.write(output_singleorders)
 
 with open(out1_filepath, 'r') as infile:
     for line in infile:

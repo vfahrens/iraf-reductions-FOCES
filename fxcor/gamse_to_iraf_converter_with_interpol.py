@@ -99,6 +99,7 @@ for fname in fname_lst:
 
                 # make a header for the new fits file
                 new_headyyy = headyyy
+                new_headyyy["PHYSORD"] = (order, "Physical order of aperture")
                 new_headyyy["CRPIX1"] = ("1.", "Reference pixel")
                 # get the starting wavelength of the current order
                 start_wl = wave_lin[0]
