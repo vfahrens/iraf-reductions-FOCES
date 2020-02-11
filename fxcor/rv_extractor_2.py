@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 ###############################
 # User definitions
-path = "51Peg_for_iraf_lin/"
+path = "data/51Peg_time/" 
 ###############################
 
 outname_lst = []
