@@ -30,12 +30,16 @@ def script_update(date, option):
             # check whether to use the log or comments year list
             if cat == 'log':
                 years_list = years_log
+                dir = 'log'
+                file1 = 'logfile'
             if cat == 'comments':
                 years_list = years_comm
+                dir = 'comments'
+                file1 = 'comments'
             # make logfile syncing script for single date
             if option == '-o':
                 yr = str(date)[:4]
-                rsync_cmd1_usm = cmd1.format(cat) + '{0}/{1}.{2} ~/copy_logs/obslog\n'.format(yr, cat, str(date))
+                rsync_cmd1_usm = cmd1.format(dir) + '{0}/{1}.{2} ~/copy_logs/obslog\n'.format(yr, file1, str(date))
                 scriptout1.write(rsync_cmd1_usm)
 
             # make logfile syncing script starting with specific date
@@ -59,7 +63,7 @@ def script_update(date, option):
                         # add a rsync command for all individual days of the starting month
                         for single_day in days:
                             expl_date = (startmonth[2:] + '{:02d}'.format(single_day))
-                            rsync_cmd1_usm = cmd1.format(cat) + '{0}/{1}.{2} ~/copy_logs/obslog\n'.format(yr, cat, expl_date)
+                            rsync_cmd1_usm = cmd1.format(dir) + '{0}/{1}.{2} ~/copy_logs/obslog\n'.format(yr, file1, expl_date)
                             scriptout1.write(rsync_cmd1_usm)
 
                         # handle the other months of the starting year
@@ -69,17 +73,17 @@ def script_update(date, option):
                             months = list(range(startdate.month + 1, now.month + 1))
                         for single_month in months:
                             cur_month = str(startdate.year)[2:] + '{:02d}'.format(single_month)
-                            rsync_cmd1_usm = cmd1.format(cat) + '{0}/{1}.{2} ~/copy_logs/obslog\n'.format(yr, cat, (cur_month + '*'))
+                            rsync_cmd1_usm = cmd1.format(dir) + '{0}/{1}.{2} ~/copy_logs/obslog\n'.format(yr, file1, (cur_month + '*'))
                             scriptout1.write(rsync_cmd1_usm)
                     # for all years after that, copy the complete folder of each year
                     if yr > startdate.year:
-                        rsync_cmd1_usm = cmd1.format(cat) + '{0}/ ~/copy_logs/obslog\n'.format(yr)
+                        rsync_cmd1_usm = cmd1.format(dir) + '{0}/ ~/copy_logs/obslog\n'.format(yr)
                         scriptout1.write(rsync_cmd1_usm)
 
             if option == '-e':
                 # copy the complete folders of all years
                 for yr in years_list:
-                    rsync_cmd1_usm = cmd1.format(cat) + '{0}/ ~/copy_logs/obslog\n'.format(yr)
+                    rsync_cmd1_usm = cmd1.format(dir) + '{0}/ ~/copy_logs/obslog\n'.format(yr)
                     scriptout1.write(rsync_cmd1_usm)
 
         # add a nice message to indicate the regular end of the sync process
@@ -90,7 +94,7 @@ def script_update(date, option):
     return file_script_USM
 
 
-# script_update(20180324, '-a')
+script_update(20180324, '-a')
 
 
 #
