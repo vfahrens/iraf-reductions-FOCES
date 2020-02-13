@@ -7,11 +7,13 @@ import calendar
 # define the required paths and filenames
 path_scripts = 'scripts/'
 file_script_USM = 'sync_obslogfiles_USM.sh'
+data_script_USM = 'sync_datafiles_USM.sh'
 
 # initialize all paths and filenames and make them platform independent
 location = Path(__file__).parent
 abs_path_scripts = (location / path_scripts).resolve()
 script_USM = os.path.join(abs_path_scripts, file_script_USM)
+script2_USM = os.path.join(abs_path_scripts, data_script_USM)
 
 # create a list with all years from when FOCES data exist
 now = dt.datetime.now()
@@ -19,7 +21,16 @@ years_log = list(range(2016, now.year + 1))
 years_comm = list(range(2018, now.year + 1))
 # standard command for rsync from ohiaai to USM PC
 cmd1 = 'rsync -av wstobserver@195.37.68.19:/data/3kk/{}/'
+cmd2 = 'rsync -av foces@195.37.68.140:/data/fcs_links/'
 dif_files = ['log', 'comments']
+
+
+def script_data_update(date, option):
+    with open(script2_USM, 'w') as scriptout2:
+        if option == '-o':
+            rsync_cmd2_usm = cmd2 + '{0}/{0}_*.fits'.format(str(date))
+            scriptout2.write(rsync_cmd2_usm)
+
 
 
 def script_update(date, option):
