@@ -7,7 +7,7 @@ import subprocess
 import re  # module for regular expressions
 
 # import other scripts and stuff
-from shell_script_maker import script_update
+from shell_script_maker import script_logs_update, script_data_update
 
 
 # Welcome message for the user
@@ -22,11 +22,13 @@ if re.match(r'^y', yn_update, re.I) or re.match(r'^j', yn_update, re.I):
     # ask the user for the desired date and options
     date_restrict = input('Please specify a date: (yyyymmdd; options: -a = after, -o = only, -e = everything)\n')
     # create a script for syncing the desired dates
-    file_script_USM = script_update(date_restrict[:8], date_restrict[-2:])
+    file_script_USM = script_logs_update(date_restrict[:8], date_restrict[-2:])
+    data_script_USM = script_data_update(date_restrict[:8], date_restrict[-2:])
     scp_copy_location = 'fahrenschon@ltsp01.usm.uni-muenchen.de:~/scripts/'
-    # securely copy the script tp ltsp01
+    # securely copy the scripts to ltsp01
     print('Please provide your password for ltsp01:')
     subprocess.call(['scp', 'scripts/' + file_script_USM, scp_copy_location + file_script_USM])
+    subprocess.call(['scp', 'scripts/' + data_script_USM, scp_copy_location + data_script_USM])
     print('Success!')
 
     # # regular expressions: search the whole string if an option is present
