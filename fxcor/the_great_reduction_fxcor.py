@@ -48,16 +48,14 @@ if re.match(r'^y', yn_update, re.I) or re.match(r'^j', yn_update, re.I):
 
     subprocess.call(['bash', str(shesm.script_local)])
 
-    # # scp to remote machine not needed with new ssh syntax
-    # scp_copy_location = 'fahrenschon@ltsp01.usm.uni-muenchen.de:~/scripts/'
-    # # securely copy the scripts to ltsp01
-    # print('Please provide your password for ltsp01:')
-    # subprocess.call(['scp', 'scripts/' + file_script_USM, scp_copy_location + file_script_USM])
-    # subprocess.call(['scp', 'scripts/' + data_script_USM, scp_copy_location + data_script_USM])
+    # check whether an update of the data file headers is needed
+    yn_header = input('Do you also want to update the data file headers? ')
+    if re.match(r'^y', yn_header, re.I) or re.match(r'^j', yn_header, re.I):
+        script_add = shesm.script_add_radec(in_date, in_opt1)
+        subprocess.call(['dos2unix', str(shesm.script_add)])
+        print('Starting to update the headers now...')
+        subprocess.call(['bash', str(shesm.script_add)])
 
-    # # regular expressions: search the whole string if an option is present
-    # if re.search(r'-a', date_restrict, re.I):
-    #     #subprocess.call('bash', 'whateverscript.sh')
-    #     print('Working...')
+
 else:
     print('No files were updated.')

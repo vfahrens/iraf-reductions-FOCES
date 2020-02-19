@@ -12,6 +12,7 @@ file_script_USM = 'sync_obslogfiles_USM.sh'
 data_script_USM = 'sync_datafiles_USM.sh'
 file_script_local = 'sync_obslogfiles_local.sh'
 data_script_local = 'sync_datafiles_local.sh'
+add_header_script = 'add_header_entries.sh'
 
 # initialize all paths and filenames and make them platform independent
 location = Path(__file__).parent
@@ -21,6 +22,7 @@ abs_path_data = (location / path_data_local).resolve()
 script_USM = os.path.join(abs_path_scripts, file_script_USM)
 script2_USM = os.path.join(abs_path_scripts, data_script_USM)
 script_local = os.path.join(abs_path_scripts, file_script_local)
+script_add = os.path.join(abs_path_scripts, add_header_script)
 
 now = dt.datetime.now()
 # create a list with all years from when FOCES data exist
@@ -37,6 +39,8 @@ cmd2 = 'rsync -av foces@195.37.68.140:/data/fcs_links/'
 cmd3 = 'rsync -av fahrenschon@ltsp01.usm.uni-muenchen.de:/home/moon/fahrenschon/{}'
 # standard command for executing remote sync scripts via ssh
 cmd4 = 'ssh fahrenschon@ltsp01.usm.uni-muenchen.de "bash -s" < {}\n'
+# standard command for adding header entries from obslog files
+cmd5 = 'bash /mnt/e/FOCES_data/add_radec.sh {}\n'
 
 dif_files = ['log', 'comments']
 dif_folders = ['copy_logs/obslog', 'temp_frames']
@@ -211,7 +215,56 @@ def script_local_update(option2):
     # return the file name of the script that was created for copying etc.
     return file_script_local
 
-script_local_update('-ld')
+
+# make script to automatically add the project ID etc. to the FITS header
+def script_add_radec(date, option):
+    startdate = dt.datetime.strptime(str(date), '%Y%m%d')
+    if startdate < dt.datetime.strptime(str(20190430), '%Y%m%d'):
+        print('Warning: The date you chose is before the start of automatic data collection (20190430).')
+        startdate = dt.datetime.strptime(str(20190430), '%Y%m%d')
+    with open(script_add, 'w') as scriptout4:
+        scriptout4.write('#!/usr/bin/bash\n')
+        scriptout4.write('\n')
+
+        # make script for header editing for single date
+        if option == '-o':
+            str_expl_date = dt.datetime.strftime(startdate, '%Y%m%d')
+            add_cmd = cmd5.format(str_expl_date)
+            scriptout4.write(add_cmd)
+
+        # make script for header editing starting with specific date
+        if option == '-a':
+            if startdate <= now:
+                # look at all the dates between startdate and now
+                dates_delta = now - startdate
+                for each_date in range(dates_delta.days + 1):
+                    expl_date = startdate + dt.timedelta(days=each_date)
+                    str_expl_date = dt.datetime.strftime(expl_date, '%Y%m%d')
+                    date_path = os.path.join(abs_path_data, str_expl_date)
+                    # check if a data directory exists for that date and add a command to the script
+                    if os.path.exists(str(date_path)):
+                        add_cmd = cmd5.format(str_expl_date)
+                        scriptout4.write(add_cmd)
+
+        # make script for all the available data
+        if option == '-e':
+            startdate = dt.datetime.strptime(str(20190430), '%Y%m%d')
+            # look at all the dates between startdate and now
+            dates_delta = now - startdate
+            for each_date in range(dates_delta.days + 1):
+                expl_date = startdate + dt.timedelta(days=each_date)
+                str_expl_date = dt.datetime.strftime(expl_date, '%Y%m%d')
+                date_path = os.path.join(abs_path_data, str_expl_date)
+                # check if a data directory exists for that date and add a command to the script
+                if os.path.exists(str(date_path)):
+                    add_cmd = cmd5.format(str_expl_date)
+                    scriptout4.write(add_cmd)
+
+
+
+
+
+# script_add_radec(20200125, '-e')
 
 
 #
