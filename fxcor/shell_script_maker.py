@@ -4,25 +4,27 @@ import sys
 import datetime as dt
 import calendar
 
-# define the required paths and filenames
-path_scripts = 'scripts/'
-path_obslog_local = '../../../logfiles/observations'
-path_data_local = '../../../FOCES_data'
-file_script_USM = 'sync_obslogfiles_USM.sh'
-data_script_USM = 'sync_datafiles_USM.sh'
-file_script_local = 'sync_obslogfiles_local.sh'
-data_script_local = 'sync_datafiles_local.sh'
-add_header_script = 'add_header_entries.sh'
+# import statements for other python scripts
+import paths_and_files as pf
 
-# initialize all paths and filenames and make them platform independent
-location = Path(__file__).parent
-abs_path_scripts = (location / path_scripts).resolve()
-abs_path_obslog = (location / path_obslog_local).resolve()
-abs_path_data = (location / path_data_local).resolve()
-script_USM = os.path.join(abs_path_scripts, file_script_USM)
-script2_USM = os.path.join(abs_path_scripts, data_script_USM)
-script_local = os.path.join(abs_path_scripts, file_script_local)
-script_add = os.path.join(abs_path_scripts, add_header_script)
+# # define the required paths and filenames
+# path_scripts = 'scripts/'
+# path_obslog_local = '../../../logfiles/observations'
+# path_data_local = '../../../FOCES_data'
+# file_script_USM = 'sync_obslogfiles_USM.sh'
+# data_script_USM = 'sync_datafiles_USM.sh'
+# file_script_local = 'sync_obslogfiles_local.sh'
+# add_header_script = 'add_header_entries.sh'
+#
+# # initialize all paths and filenames and make them platform independent
+# location = Path(__file__).parent
+# abs_path_scripts = (location / path_scripts).resolve()
+# abs_path_obslog = (location / path_obslog_local).resolve()
+# abs_path_data = (location / path_data_local).resolve()
+# script_USM = os.path.join(abs_path_scripts, file_script_USM)
+# script2_USM = os.path.join(abs_path_scripts, data_script_USM)
+# script_local = os.path.join(abs_path_scripts, file_script_local)
+# script_add = os.path.join(abs_path_scripts, add_header_script)
 
 now = dt.datetime.now()
 # create a list with all years from when FOCES data exist
@@ -48,7 +50,7 @@ dif_folders = ['copy_logs/obslog', 'temp_frames']
 
 # function to create script for syncing all requested log and comment files to USM PC
 def script_logs_update(date, option):
-    with open(script_USM, 'w') as scriptout1:
+    with open(pf.script_USM, 'w') as scriptout1:
         scriptout1.write('#!/usr/bin/bash\n')
         scriptout1.write('\n')
         scriptout1.write('mkdir -p ~/copy_logs/obslog\n')
@@ -116,7 +118,7 @@ def script_logs_update(date, option):
         print('Sync script for logfiles successfully created!')
 
     # return the file name of the script that was created for copying etc.
-    return file_script_USM
+    return pf.file_script_USM
 
 
 # function to create script for syncing all requested data files (FITS frames) to USM PC
@@ -124,7 +126,7 @@ def script_data_update(date, option):
     startdate = dt.datetime.strptime(str(date), '%Y%m%d')
     if startdate < dt.datetime.strptime(str(20190430), '%Y%m%d'):
         print('Warning: The date you chose is before the start of automatic data collection (20190430).')
-    with open(script2_USM, 'w') as scriptout2:
+    with open(pf.script2_USM, 'w') as scriptout2:
         scriptout2.write('#!/usr/bin/bash\n')
         scriptout2.write('\n')
         # make data syncing script for single date
@@ -177,7 +179,7 @@ def script_data_update(date, option):
         print('Sync script for data successfully created!')
 
     # return the file name of the script that was created for copying etc.
-    return data_script_USM
+    return pf.data_script_USM
 
 
 # function for executing sync to USM PC and sync to local machine
@@ -185,25 +187,25 @@ def script_local_update(option2):
     msg_pw_USM = 'echo "Please provide the password for the USM machine (ltsp01):"\n'
     msg_sync_to_USM = 'echo "Syncing the {} files to USM HOST machine..."\n'
     msg_sync_to_local = 'echo "Syncing the {} files to the LOCAL machine..."\n'
-    with open(script_local, 'w') as scriptout3:
+    with open(pf.script_local, 'w') as scriptout3:
         scriptout3.write('#!/usr/bin/bash\n')
         scriptout3.write('\n')
 
         if option2 == '-lo' or option2 == '-ld':
             scriptout3.write(msg_sync_to_USM.format('log'))
             scriptout3.write(msg_pw_USM)
-            scriptout3.write(cmd4.format(script_USM))
+            scriptout3.write(cmd4.format(pf.script_USM))
             scriptout3.write(msg_sync_to_local.format('log'))
             scriptout3.write(msg_pw_USM)
-            scriptout3.write(cmd3.format('copy_logs/obslog/') + ' ' + str(abs_path_obslog) + '\n')
+            scriptout3.write(cmd3.format('copy_logs/obslog/') + ' ' + str(pf.abs_path_obslog) + '\n')
 
         if option2 == '-do' or option2 == '-ld':
             scriptout3.write(msg_sync_to_USM.format('data'))
             scriptout3.write(msg_pw_USM)
-            scriptout3.write(cmd4.format(script2_USM))
+            scriptout3.write(cmd4.format(pf.script2_USM))
             scriptout3.write(msg_sync_to_local.format('data'))
             scriptout3.write(msg_pw_USM)
-            scriptout3.write(cmd3.format('temp_frames/') + ' ' + str(abs_path_data) + '\n')
+            scriptout3.write(cmd3.format('temp_frames/') + ' ' + str(pf.abs_path_data) + '\n')
 
         # # make data syncing script for single date
         # if option == '-o':
@@ -213,7 +215,7 @@ def script_local_update(option2):
         scriptout3.write('echo "Finished syncing to local machine!"\n')
 
     # return the file name of the script that was created for copying etc.
-    return file_script_local
+    return pf.file_script_local
 
 
 # make script to automatically add the project ID etc. to the FITS header
@@ -222,7 +224,7 @@ def script_add_radec(date, option):
     if startdate < dt.datetime.strptime(str(20190430), '%Y%m%d'):
         print('Warning: The date you chose is before the start of automatic data collection (20190430).')
         startdate = dt.datetime.strptime(str(20190430), '%Y%m%d')
-    with open(script_add, 'w') as scriptout4:
+    with open(pf.script_add, 'w') as scriptout4:
         scriptout4.write('#!/usr/bin/bash\n')
         scriptout4.write('\n')
 
@@ -240,7 +242,7 @@ def script_add_radec(date, option):
                 for each_date in range(dates_delta.days + 1):
                     expl_date = startdate + dt.timedelta(days=each_date)
                     str_expl_date = dt.datetime.strftime(expl_date, '%Y%m%d')
-                    date_path = os.path.join(abs_path_data, str_expl_date)
+                    date_path = os.path.join(pf.abs_path_data, str_expl_date)
                     # check if a data directory exists for that date and add a command to the script
                     if os.path.exists(str(date_path)):
                         add_cmd = cmd5.format(str_expl_date)
@@ -254,7 +256,7 @@ def script_add_radec(date, option):
             for each_date in range(dates_delta.days + 1):
                 expl_date = startdate + dt.timedelta(days=each_date)
                 str_expl_date = dt.datetime.strftime(expl_date, '%Y%m%d')
-                date_path = os.path.join(abs_path_data, str_expl_date)
+                date_path = os.path.join(pf.abs_path_data, str_expl_date)
                 # check if a data directory exists for that date and add a command to the script
                 if os.path.exists(str(date_path)):
                     add_cmd = cmd5.format(str_expl_date)
