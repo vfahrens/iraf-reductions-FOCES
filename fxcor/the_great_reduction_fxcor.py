@@ -18,7 +18,6 @@ in_opt2 = '-ld'
 
 # Welcome message for the user
 print('Hello! I see you want to reduce some data.')
-print(str(pf.abs_path_scripts))
 
 # check whether an update of the data and logfiles is needed
 print('\n')
@@ -75,5 +74,5 @@ yn_sortproject = input('Do you want to get the data of a specific redmine projec
 if re.match(r'^y', yn_sortproject, re.I) or re.match(r'^j', yn_sortproject, re.I):
     print('\n')
     redmine_id = input('Please provide the desired redmine project ID: ')
-    print('grep', '-l', '-R', '"PROJECT[[:blank:]]*=[[:blank:]]*{}"'.format(str(redmine_id)), str(os.path.join(pf.abs_path_data, '20200122/20200122_*.fits')), '|', 'tee', str(pf.grep_redID_out))
-    subprocess.call(['grep', '-l', '-R', '"PROJECT[[:blank:]]*=[[:blank:]]*{}"'.format(str(redmine_id)), str(os.path.join(pf.abs_path_data, '20200122/20200122_*.fits')), '|', 'tee', str(pf.grep_redID_out)])
+    shesm.script_grep_redmineID(redmine_id)
+

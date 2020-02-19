@@ -43,6 +43,8 @@ cmd3 = 'rsync -av fahrenschon@ltsp01.usm.uni-muenchen.de:/home/moon/fahrenschon/
 cmd4 = 'ssh fahrenschon@ltsp01.usm.uni-muenchen.de "bash -s" < {}\n'
 # standard command for adding header entries from obslog files
 cmd5 = 'bash /mnt/e/FOCES_data/add_radec.sh {}\n'
+# standard command for grepping the redmine ID of a project
+cmd6 = 'grep -l -R "PROJECT[[:blank:]]*=[[:blank:]]*{}" '
 
 dif_files = ['log', 'comments']
 dif_folders = ['copy_logs/obslog', 'temp_frames']
@@ -263,10 +265,14 @@ def script_add_radec(date, option):
                     scriptout4.write(add_cmd)
 
 
+def script_grep_redmineID(redmine_ID):
+    with open(pf.grep_redID_cmd, 'w') as scriptout5:
+        grep_cmd = cmd6.format(redmine_ID) + '{0} | tee {1}'.format(str(os.path.join(pf.abs_path_data, '20200122/') + '20200122_*.fits'), str(pf.grep_redID_out))
+        scriptout5.write(grep_cmd)
+    # print('grep -l -R "PROJECT[[:blank:]]*=[[:blank:]]*{0}" {1} | tee {2}'.format(str(redmine_id), str(os.path.join(pf.abs_path_data, '20200122/') + '20200122_*.fits'), str(pf.grep_redID_out)))
 
 
-
-# script_add_radec(20200125, '-e')
+script_grep_redmineID('2894')
 
 
 #
