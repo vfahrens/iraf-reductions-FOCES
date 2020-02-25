@@ -1,37 +1,7 @@
 #!/usr/bin/bash
 
-cat /mnt/e/logfiles/observations/logfile.191212 | grep "object" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191212 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191213 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191214 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191215 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191216 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191217 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191218 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191219 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191220 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191221 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191222 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191223 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191224 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191225 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191226 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191227 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191228 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191229 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191230 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.191231 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.200101 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.200103 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.200104 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.200105 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.200106 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.200107 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.200108 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.200109 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.200110 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.200111 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
-cat /mnt/e/logfiles/observations/logfile.200112 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
+rm /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
+cat /mnt/e/logfiles/observations/logfile.200111 | grep "object" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
 cat /mnt/e/logfiles/observations/logfile.200113 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
 cat /mnt/e/logfiles/observations/logfile.200114 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
 cat /mnt/e/logfiles/observations/logfile.200115 | grep "2998" >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt

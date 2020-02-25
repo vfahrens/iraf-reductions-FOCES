@@ -1,30 +1,11 @@
 import os
-from pathlib import Path
-import sys
 import datetime as dt
 import calendar
+import re  # module for regular expressions
 
 # import statements for other python scripts
 import paths_and_files as pf
 
-# # define the required paths and filenames
-# path_scripts = 'scripts/'
-# path_obslog_local = '../../../logfiles/observations'
-# path_data_local = '../../../FOCES_data'
-# file_script_USM = 'sync_obslogfiles_USM.sh'
-# data_script_USM = 'sync_datafiles_USM.sh'
-# file_script_local = 'sync_obslogfiles_local.sh'
-# add_header_script = 'add_header_entries.sh'
-#
-# # initialize all paths and filenames and make them platform independent
-# location = Path(__file__).parent
-# abs_path_scripts = (location / path_scripts).resolve()
-# abs_path_obslog = (location / path_obslog_local).resolve()
-# abs_path_data = (location / path_data_local).resolve()
-# script_USM = os.path.join(abs_path_scripts, file_script_USM)
-# script2_USM = os.path.join(abs_path_scripts, data_script_USM)
-# script_local = os.path.join(abs_path_scripts, file_script_local)
-# script_add = os.path.join(abs_path_scripts, add_header_script)
 
 now = dt.datetime.now()
 # create a list with all years from when FOCES data exist
@@ -47,6 +28,8 @@ cmd5 = 'bash /mnt/e/FOCES_data/add_radec.sh {}\n'
 # cmd6 = 'grep -l -R "PROJECT[[:blank:]]*=[[:blank:]]*{}" '  # for grepping in the FITS headers
 cmd6 = 'cat {0}/logfile.{1} | grep "{2}" >> {3}\n'  # prints the output only to the file
 # cmd6 = '(cat {0}/logfile.{1} | grep "{2}") | tee {3}\n'  # prints the output also to console
+# standard commands for preparing the GAMSE reduction
+cmd7 = 'mkdir {}\n'
 
 dif_files = ['log', 'comments']
 dif_folders = ['copy_logs/obslog', 'temp_frames']
@@ -276,6 +259,7 @@ def script_grep_redmineID(redmine_ID, date, option):
     with open(pf.grep_redID_cmd, 'w') as scriptout5:
         scriptout5.write('#!/usr/bin/bash\n')
         scriptout5.write('\n')
+        scriptout5.write('rm {}\n'.format(str(pf.grep_redID_out)))
         # get the first line with the column titles of the obslogfiles
         grep_title_cmd = cmd6.format(str(pf.abs_path_obslog), dt.datetime.strftime(startdate, '%Y%m%d')[2:], 'object', str(pf.grep_redID_out))
         scriptout5.write(grep_title_cmd)
@@ -317,7 +301,53 @@ def script_grep_redmineID(redmine_ID, date, option):
                     scriptout5.write(grep_cmd)
 
 
-# script_grep_redmineID('2894', 20200124, '-e')
+# make script to automatically copy the folders containing data of one specific project
+def script_sort_for_reduction():
+    dates_for_red = []
+    # read the results from the grep command
+    with open(pf.grep_redID_out, 'r') as grepfile:
+        for line in grepfile:
+            # remove whitespaces in the beginning and end of the string
+            line = line.strip()
+            # remove whitespaces inside the string
+            line = line.replace(' ', '')
+            # split the string into its single entries
+            line = line.split('|')
+            if line[0][0] != '#':
+                # extract the individual observation dates from the grep results
+                folder_date = line[0][4:12]
+                if folder_date not in dates_for_red:
+                    dates_for_red.append(folder_date)
+
+    with open(pf.sort_copy_cmd, 'w') as scriptout6:
+        for single_date in dates_for_red:
+            new_folder = os.path.join(pf.abs_path_red_gamse, 'red_{}'.format(str(single_date)))
+            orig_data_links = os.path.join(pf.abs_path_data, str(single_date))
+            # make a new folder if a reduction folder does not already exist
+            if os.path.exists(str(new_folder)):
+                print('\n')
+                yn_overwrite_old = input('Data were already reduced for the date {}. '
+                                         'Do you want to discard and overwrite those? '.format(single_date))
+                # discard old reduction data if needed
+                if re.match(r'^y', yn_overwrite_old, re.I) or re.match(r'^j', yn_overwrite_old, re.I):
+                    scriptout6.write('rm -r {}/*\n'.format(new_folder))
+                    scriptout6.write(cmd7.format(str(new_folder) + '/rawdata'))
+                    # copy the symbolic links to the rawdata folder
+                    cmd8 = 'cp -s {0}/{1}_*.fits {2}/rawdata/.\n'.format(str(orig_data_links), str(single_date), str(new_folder))
+                    scriptout6.write(cmd8)
+                else:
+                    print('Did not copy rawdata for {}.\n'.format(single_date))
+            else:
+                scriptout6.write(cmd7.format(str(new_folder)))
+                scriptout6.write(cmd7.format(str(new_folder) + '/rawdata'))
+                # copy the symbolic links to the rawdata folder
+                cmd8 = 'cp -s {0}/{1}_*.fits {2}/rawdata/.\n'.format(str(orig_data_links), str(single_date), str(new_folder))
+                scriptout6.write(cmd8)
+
+    return dates_for_red
+
+
+# script_sort_for_reduction()
 
 
 #

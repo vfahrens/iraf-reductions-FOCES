@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # makes file executable from shell without the "python3" command in front
 
-import os
-import sys
 import subprocess
 import re  # module for regular expressions
 import datetime as dt
@@ -91,6 +89,17 @@ if re.match(r'^y', yn_sortproject, re.I) or re.match(r'^j', yn_sortproject, re.I
     print('\n')
     print('Successfully created bash script for grep. Starting to search now...')
     subprocess.call(['bash', str(pf.grep_redID_cmd)])
+
+    # create and execute a script for copying the required raw data to the reduction folders
+    all_reduction_dates = shesm.script_sort_for_reduction()
+    subprocess.call(['dos2unix', str(pf.sort_copy_cmd)])
+    print('\n')
+    print('Successfully created bash script for copy. Starting to copy now...')
+    subprocess.call(['bash', str(pf.sort_copy_cmd)])
+    print('\n')
+    print('Finished copying the files to the reduction folders.')
+    print(all_reduction_dates)
+
 
 else:
     print('\n')
