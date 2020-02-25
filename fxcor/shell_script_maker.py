@@ -304,6 +304,7 @@ def script_grep_redmineID(redmine_ID, date, option):
 # make script to automatically copy the folders containing data of one specific project
 def script_sort_for_reduction():
     dates_for_red = []
+    dates_for_red_with_discard = []
     # read the results from the grep command
     with open(pf.grep_redID_out, 'r') as grepfile:
         for line in grepfile:
@@ -330,6 +331,7 @@ def script_sort_for_reduction():
                                          'Do you want to discard and overwrite those? '.format(single_date))
                 # discard old reduction data if needed
                 if re.match(r'^y', yn_overwrite_old, re.I) or re.match(r'^j', yn_overwrite_old, re.I):
+                    dates_for_red_with_discard.append(single_date)
                     scriptout6.write('rm -r {}/*\n'.format(new_folder))
                     scriptout6.write(cmd7.format(str(new_folder) + '/rawdata'))
                     # copy the symbolic links to the rawdata folder
@@ -338,13 +340,14 @@ def script_sort_for_reduction():
                 else:
                     print('Did not copy rawdata for {}.\n'.format(single_date))
             else:
+                dates_for_red_with_discard.append(single_date)
                 scriptout6.write(cmd7.format(str(new_folder)))
                 scriptout6.write(cmd7.format(str(new_folder) + '/rawdata'))
                 # copy the symbolic links to the rawdata folder
                 cmd8 = 'cp -s {0}/{1}_*.fits {2}/rawdata/.\n'.format(str(orig_data_links), str(single_date), str(new_folder))
                 scriptout6.write(cmd8)
 
-    return dates_for_red
+    return dates_for_red, dates_for_red_with_discard
 
 
 # script_sort_for_reduction()

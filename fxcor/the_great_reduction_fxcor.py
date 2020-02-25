@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # makes file executable from shell without the "python3" command in front
 
+import os
 import subprocess
 import re  # module for regular expressions
 import datetime as dt
@@ -91,14 +92,14 @@ if re.match(r'^y', yn_sortproject, re.I) or re.match(r'^j', yn_sortproject, re.I
     subprocess.call(['bash', str(pf.grep_redID_cmd)])
 
     # create and execute a script for copying the required raw data to the reduction folders
-    all_reduction_dates = shesm.script_sort_for_reduction()
+    all_reduction_dates, use_only_these_reduction_dates = shesm.script_sort_for_reduction()
     subprocess.call(['dos2unix', str(pf.sort_copy_cmd)])
     print('\n')
     print('Successfully created bash script for copy. Starting to copy now...')
     subprocess.call(['bash', str(pf.sort_copy_cmd)])
     print('\n')
     print('Finished copying the files to the reduction folders.')
-    print(all_reduction_dates)
+    print(all_reduction_dates, use_only_these_reduction_dates)
 
 
 else:
@@ -106,4 +107,22 @@ else:
     print('No files were searched.')
     print('\n')
 
+
+use_only_these_reduction_dates = ['20190823', '20190830', '20190831', '20190922', '20191001', '20191012', '20191118',
+                                  '20191120', '20200123']
+
+use_only_these_reduction_dates2 = ['20190822', '20190823', '20190830', '20190831',
+                                   '20190904', '20190909', '20190910', '20190911', '20190912', '20190913',
+                                   '20190914', '20190915', '20190918', '20190919', '20190920', '20190921', '20190922',
+                                   '20191001', '20191012', '20191013', '20191015', '20191023', '20191118',
+                                   '20191120', '20200123']
+
+use_only_these_reduction_dates.sort(reverse=True)
+
+for i in use_only_these_reduction_dates:
+    red_folder_path = os.path.join(pf.abs_path_red_gamse, 'red_{}'.format(str(i)))
+    os.chdir(str(red_folder_path))
+    print('Data reduction started for : {}'.format(i))
+    subprocess.call(['gamse', 'config'])
+    subprocess.call(['gamse', 'list'])
 
