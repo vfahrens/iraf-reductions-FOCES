@@ -51,6 +51,7 @@ if re.match(r'^y', yn_update, re.I) or re.match(r'^j', yn_update, re.I):
         subprocess.call(['dos2unix', str(pf.script2_USM)])
     file_script_local = shesm.script_local_update(in_opt2)
     subprocess.call(['dos2unix', str(pf.script_local)])
+    print('\n')
     print('Successfully created bash scripts. Starting to sync now...')
 
     subprocess.call(['bash', str(pf.script_local)])
@@ -61,11 +62,14 @@ if re.match(r'^y', yn_update, re.I) or re.match(r'^j', yn_update, re.I):
     if re.match(r'^y', yn_header, re.I) or re.match(r'^j', yn_header, re.I):
         script_add = shesm.script_add_radec(in_date, in_opt1)
         subprocess.call(['dos2unix', str(pf.script_add)])
+        print('\n')
         print('Starting to update the headers now...')
         subprocess.call(['bash', str(pf.script_add)])
 
 else:
+    print('\n')
     print('No files were updated.')
+    print('\n')
 
 # ask if the data should be sorted for a specific observation project
 print('\n')
@@ -74,5 +78,23 @@ yn_sortproject = input('Do you want to get the data of a specific redmine projec
 if re.match(r'^y', yn_sortproject, re.I) or re.match(r'^j', yn_sortproject, re.I):
     print('\n')
     redmine_id = input('Please provide the desired redmine project ID: ')
-    shesm.script_grep_redmineID(redmine_id)
+    print('\n')
+    print('Please enter a date and option:')
+    date_restrict_redID = input('(yyyymmdd; option: -a = after, -o = only, -e = everything)\n')
+    # split the input into its parts
+    in_date_red = date_restrict_redID[:8]
+    in_opt_red = date_restrict_redID[-2:]
+
+    # create and execute a script for searching the redmine ID
+    shesm.script_grep_redmineID(redmine_id, in_date_red, in_opt_red)
+    subprocess.call(['dos2unix', str(pf.grep_redID_cmd)])
+    print('\n')
+    print('Successfully created bash script for grep. Starting to search now...')
+    subprocess.call(['bash', str(pf.grep_redID_cmd)])
+
+else:
+    print('\n')
+    print('No files were searched.')
+    print('\n')
+
 

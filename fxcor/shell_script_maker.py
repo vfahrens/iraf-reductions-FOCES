@@ -44,7 +44,9 @@ cmd4 = 'ssh fahrenschon@ltsp01.usm.uni-muenchen.de "bash -s" < {}\n'
 # standard command for adding header entries from obslog files
 cmd5 = 'bash /mnt/e/FOCES_data/add_radec.sh {}\n'
 # standard command for grepping the redmine ID of a project
-cmd6 = 'grep -l -R "PROJECT[[:blank:]]*=[[:blank:]]*{}" '
+# cmd6 = 'grep -l -R "PROJECT[[:blank:]]*=[[:blank:]]*{}" '  # for grepping in the FITS headers
+cmd6 = 'cat {0}/logfile.{1} | grep "{2}" >> {3}\n'  # prints the output only to the file
+# cmd6 = '(cat {0}/logfile.{1} | grep "{2}") | tee {3}\n'  # prints the output also to console
 
 dif_files = ['log', 'comments']
 dif_folders = ['copy_logs/obslog', 'temp_frames']
@@ -265,14 +267,57 @@ def script_add_radec(date, option):
                     scriptout4.write(add_cmd)
 
 
-def script_grep_redmineID(redmine_ID):
+# make script to automatically search the project ID of one specific project
+def script_grep_redmineID(redmine_ID, date, option):
+    startdate = dt.datetime.strptime(str(date), '%Y%m%d')
+    if startdate < dt.datetime.strptime(str(20190430), '%Y%m%d'):
+        print('Warning: The date you chose is before the start of automatic data collection (20190430).')
+        startdate = dt.datetime.strptime(str(20190430), '%Y%m%d')
     with open(pf.grep_redID_cmd, 'w') as scriptout5:
-        grep_cmd = cmd6.format(redmine_ID) + '{0} | tee {1}'.format(str(os.path.join(pf.abs_path_data, '20200122/') + '20200122_*.fits'), str(pf.grep_redID_out))
-        scriptout5.write(grep_cmd)
-    # print('grep -l -R "PROJECT[[:blank:]]*=[[:blank:]]*{0}" {1} | tee {2}'.format(str(redmine_id), str(os.path.join(pf.abs_path_data, '20200122/') + '20200122_*.fits'), str(pf.grep_redID_out)))
+        scriptout5.write('#!/usr/bin/bash\n')
+        scriptout5.write('\n')
+        # get the first line with the column titles of the obslogfiles
+        grep_title_cmd = cmd6.format(str(pf.abs_path_obslog), dt.datetime.strftime(startdate, '%Y%m%d')[2:], 'object', str(pf.grep_redID_out))
+        scriptout5.write(grep_title_cmd)
+
+        # make script for searching in a single date
+        if option == '-o':
+            str_expl_date = dt.datetime.strftime(startdate, '%Y%m%d')
+            grep_cmd = cmd6.format(str(pf.abs_path_obslog), str_expl_date[2:], redmine_ID, str(pf.grep_redID_out))
+            scriptout5.write(grep_cmd)
+
+        # make script for search starting with specific date
+        if option == '-a':
+            if startdate <= now:
+                # look at all the dates between startdate and now
+                dates_delta = now - startdate
+                for each_date in range(dates_delta.days + 1):
+                    expl_date = startdate + dt.timedelta(days=each_date)
+                    str_expl_date = dt.datetime.strftime(expl_date, '%Y%m%d')
+                    logfile_path = os.path.join(pf.abs_path_obslog, 'logfile.{}'.format(str_expl_date[2:]))
+                    # check if a logfile exists for that date and add a command to the script
+                    if os.path.exists(str(logfile_path)):
+                        grep_cmd = cmd6.format(str(pf.abs_path_obslog), str_expl_date[2:], redmine_ID,
+                                               str(pf.grep_redID_out))
+                        scriptout5.write(grep_cmd)
+
+        # make script for all the available data
+        if option == '-e':
+            startdate = dt.datetime.strptime(str(20190430), '%Y%m%d')
+            # look at all the dates between startdate and now
+            dates_delta = now - startdate
+            for each_date in range(dates_delta.days + 1):
+                expl_date = startdate + dt.timedelta(days=each_date)
+                str_expl_date = dt.datetime.strftime(expl_date, '%Y%m%d')
+                logfile_path = os.path.join(pf.abs_path_obslog, 'logfile.{}'.format(str_expl_date[2:]))
+                # check if a logfile exists for that date and add a command to the script
+                if os.path.exists(str(logfile_path)):
+                    grep_cmd = cmd6.format(str(pf.abs_path_obslog), str_expl_date[2:], redmine_ID,
+                                           str(pf.grep_redID_out))
+                    scriptout5.write(grep_cmd)
 
 
-script_grep_redmineID('2894')
+# script_grep_redmineID('2894', 20200124, '-e')
 
 
 #
