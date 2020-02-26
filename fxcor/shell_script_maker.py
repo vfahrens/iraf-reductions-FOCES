@@ -26,7 +26,7 @@ cmd4 = 'ssh fahrenschon@ltsp01.usm.uni-muenchen.de "bash -s" < {}\n'
 cmd5 = 'bash /mnt/e/FOCES_data/add_radec.sh {}\n'
 # standard command for grepping the redmine ID of a project
 # cmd6 = 'grep -l -R "PROJECT[[:blank:]]*=[[:blank:]]*{}" '  # for grepping in the FITS headers
-cmd6 = 'cat {0}/logfile.{1} | grep "{2}" >> {3}\n'  # prints the output only to the file
+cmd6 = 'cat {0}/logfile.{1} | awk \'{{if($24=="{2}|"){{print $0}}}}\' >> {3}\n'  # prints the output only to the file
 # cmd6 = '(cat {0}/logfile.{1} | grep "{2}") | tee {3}\n'  # prints the output also to console
 # standard commands for preparing the GAMSE reduction
 cmd7 = 'mkdir {}\n'
@@ -316,9 +316,14 @@ def script_sort_for_reduction():
             line = line.split('|')
             if line[0][0] != '#':
                 # extract the individual observation dates from the grep results
-                folder_date = line[0][4:12]
-                if folder_date not in dates_for_red:
+                file_time = dt.datetime.strptime(line[0][4:18], '%Y%m%d%H%M%S')
+                folder_date = dt.datetime.strftime(file_time, '%Y%m%d')
+                day_before = file_time - dt.timedelta(days=1)
+                str_day_before = dt.datetime.strftime(day_before, '%Y%m%d')
+                if file_time.hour > 12 and folder_date not in dates_for_red:
                     dates_for_red.append(folder_date)
+                elif file_time.hour <= 12 and str_day_before not in dates_for_red:
+                    dates_for_red.append(str_day_before)
 
     with open(pf.sort_copy_cmd, 'w') as scriptout6:
         for single_date in dates_for_red:

@@ -55,20 +55,34 @@ if re.match(r'^y', yn_update, re.I) or re.match(r'^j', yn_update, re.I):
 
     subprocess.call(['bash', str(pf.script_local)])
 
-    # check whether an update of the data file headers is needed
-    print('\n')
-    yn_header = input('Do you also want to update the data file headers? ')
-    if re.match(r'^y', yn_header, re.I) or re.match(r'^j', yn_header, re.I):
-        script_add = shesm.script_add_radec(in_date, in_opt1)
-        subprocess.call(['dos2unix', str(pf.script_add)])
-        print('\n')
-        print('Starting to update the headers now...')
-        subprocess.call(['bash', str(pf.script_add)])
-
 else:
     print('\n')
     print('No files were updated.')
     print('\n')
+
+
+# check whether an update of the data file headers is needed
+print('\n')
+yn_header = input('Do you also want to update the data file headers? ')
+if re.match(r'^y', yn_header, re.I) or re.match(r'^j', yn_header, re.I):
+    print('\n')
+    print('Please enter a date and option:')
+    date_restrict_head = input('(yyyymmdd; option: -a = after, -o = only, -e = everything)\n')
+    # split the input into its parts
+    in_date_head = date_restrict_head[:8]
+    in_opt_head = date_restrict_head[-2:]
+
+    script_add = shesm.script_add_radec(in_date_head, in_opt_head)
+    subprocess.call(['dos2unix', str(pf.script_add)])
+    print('\n')
+    print('Starting to update the headers now...')
+    subprocess.call(['bash', str(pf.script_add)])
+
+else:
+    print('\n')
+    print('No headers were updated.')
+    print('\n')
+
 
 # ask if the data should be sorted for a specific observation project
 print('\n')
@@ -107,15 +121,6 @@ else:
     print('No files were searched.')
     print('\n')
 
-
-use_only_these_reduction_dates = ['20190823', '20190830', '20190831', '20190922', '20191001', '20191012', '20191118',
-                                  '20191120', '20200123']
-
-use_only_these_reduction_dates2 = ['20190822', '20190823', '20190830', '20190831',
-                                   '20190904', '20190909', '20190910', '20190911', '20190912', '20190913',
-                                   '20190914', '20190915', '20190918', '20190919', '20190920', '20190921', '20190922',
-                                   '20191001', '20191012', '20191013', '20191015', '20191023', '20191118',
-                                   '20191120', '20200123']
 
 use_only_these_reduction_dates.sort(reverse=True)
 

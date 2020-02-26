@@ -1,9 +1,5 @@
 #!/usr/bin/bash
 
-bash /mnt/e/FOCES_data/add_radec.sh 20190520
-bash /mnt/e/FOCES_data/add_radec.sh 20190527
-bash /mnt/e/FOCES_data/add_radec.sh 20190528
-bash /mnt/e/FOCES_data/add_radec.sh 20190604
 bash /mnt/e/FOCES_data/add_radec.sh 20190813
 bash /mnt/e/FOCES_data/add_radec.sh 20190814
 bash /mnt/e/FOCES_data/add_radec.sh 20190815
@@ -173,3 +169,11 @@ bash /mnt/e/FOCES_data/add_radec.sh 20200214
 bash /mnt/e/FOCES_data/add_radec.sh 20200215
 bash /mnt/e/FOCES_data/add_radec.sh 20200216
 bash /mnt/e/FOCES_data/add_radec.sh 20200217
+bash /mnt/e/FOCES_data/add_radec.sh 20200218
+bash /mnt/e/FOCES_data/add_radec.sh 20200219
+bash /mnt/e/FOCES_data/add_radec.sh 20200220
+bash /mnt/e/FOCES_data/add_radec.sh 20200221
+bash /mnt/e/FOCES_data/add_radec.sh 20200222
+bash /mnt/e/FOCES_data/add_radec.sh 20200223
+bash /mnt/e/FOCES_data/add_radec.sh 20200224
+bash /mnt/e/FOCES_data/add_radec.sh 20200225
