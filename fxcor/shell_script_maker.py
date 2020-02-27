@@ -19,7 +19,7 @@ cmd1 = 'rsync -av wstobserver@195.37.68.19:/data/3kk/{}/'
 # standard command for rsync from FOCES PC to USM PC
 cmd2 = 'rsync -av foces@195.37.68.140:/data/fcs_links/'
 # standard command for rsync from USM PC to local machine
-cmd3 = 'rsync -av fahrenschon@ltsp01.usm.uni-muenchen.de:/home/moon/fahrenschon/{}'
+cmd3 = 'rsync -avu fahrenschon@ltsp01.usm.uni-muenchen.de:/home/moon/fahrenschon/{}'
 # standard command for executing remote sync scripts via ssh
 cmd4 = 'ssh fahrenschon@ltsp01.usm.uni-muenchen.de "bash -s" < {}\n'
 # standard command for adding header entries from obslog files
@@ -46,17 +46,17 @@ def script_logs_update(date, option):
             # check whether to use the log or comments year list
             if cat == 'log':
                 years_list = years_log
-                dir = 'log'
+                directory = 'log'
                 file1 = 'logfile'
             if cat == 'comments':
                 years_list = years_comm
-                dir = 'comments'
+                directory = 'comments'
                 file1 = 'comments'
 
             # make logfile syncing script for single date
             if option == '-o':
                 yr = str(date)[:4]
-                rsync_cmd1_usm = cmd1.format(dir) + '{0}/{1}.{2} ~/copy_logs/obslog\n'.format(yr, file1, str(date))
+                rsync_cmd1_usm = cmd1.format(directory) + '{0}/{1}.{2} ~/copy_logs/obslog\n'.format(yr, file1, str(date))
                 scriptout1.write(rsync_cmd1_usm)
 
             # make logfile syncing script starting with specific date
@@ -77,7 +77,7 @@ def script_logs_update(date, option):
                         # add a rsync command for all individual days of the starting month
                         for single_day in days:
                             expl_date = (startmonth[2:] + '{:02d}'.format(single_day))
-                            rsync_cmd1_usm = cmd1.format(dir) + '{0}/{1}.{2} ~/copy_logs/obslog\n'.format(yr, file1, expl_date)
+                            rsync_cmd1_usm = cmd1.format(directory) + '{0}/{1}.{2} ~/copy_logs/obslog\n'.format(yr, file1, expl_date)
                             scriptout1.write(rsync_cmd1_usm)
 
                         # handle the other months of the starting year
@@ -87,17 +87,17 @@ def script_logs_update(date, option):
                             months = list(range(startdate.month + 1, now.month + 1))
                         for single_month in months:
                             cur_month = str(startdate.year)[2:] + '{:02d}'.format(single_month)
-                            rsync_cmd1_usm = cmd1.format(dir) + '{0}/{1}.{2} ~/copy_logs/obslog\n'.format(yr, file1, (cur_month + '*'))
+                            rsync_cmd1_usm = cmd1.format(directory) + '{0}/{1}.{2} ~/copy_logs/obslog\n'.format(yr, file1, (cur_month + '*'))
                             scriptout1.write(rsync_cmd1_usm)
                     # for all years after that, copy the complete folder of each year
                     if yr > startdate.year:
-                        rsync_cmd1_usm = cmd1.format(dir) + '{0}/ ~/copy_logs/obslog\n'.format(yr)
+                        rsync_cmd1_usm = cmd1.format(directory) + '{0}/ ~/copy_logs/obslog\n'.format(yr)
                         scriptout1.write(rsync_cmd1_usm)
 
             if option == '-e':
                 # copy the complete folders of all years
                 for yr in years_list:
-                    rsync_cmd1_usm = cmd1.format(dir) + '{0}/ ~/copy_logs/obslog\n'.format(yr)
+                    rsync_cmd1_usm = cmd1.format(directory) + '{0}/ ~/copy_logs/obslog\n'.format(yr)
                     scriptout1.write(rsync_cmd1_usm)
 
         # add a nice message to indicate the regular end of the sync process
@@ -171,27 +171,27 @@ def script_data_update(date, option):
 
 # function for executing sync to USM PC and sync to local machine
 def script_local_update(option2):
-    msg_pw_USM = 'echo "Please provide the password for the USM machine (ltsp01):"\n'
-    msg_sync_to_USM = 'echo "Syncing the {} files to USM HOST machine..."\n'
+    msg_pw_usm = 'echo "Please provide the password for the USM machine (ltsp01):"\n'
+    msg_sync_to_usm = 'echo "Syncing the {} files to USM HOST machine..."\n'
     msg_sync_to_local = 'echo "Syncing the {} files to the LOCAL machine..."\n'
     with open(pf.script_local, 'w') as scriptout3:
         scriptout3.write('#!/usr/bin/bash\n')
         scriptout3.write('\n')
 
         if option2 == '-lo' or option2 == '-ld':
-            scriptout3.write(msg_sync_to_USM.format('log'))
-            scriptout3.write(msg_pw_USM)
+            scriptout3.write(msg_sync_to_usm.format('log'))
+            scriptout3.write(msg_pw_usm)
             scriptout3.write(cmd4.format(pf.script_USM))
             scriptout3.write(msg_sync_to_local.format('log'))
-            scriptout3.write(msg_pw_USM)
+            scriptout3.write(msg_pw_usm)
             scriptout3.write(cmd3.format('copy_logs/obslog/') + ' ' + str(pf.abs_path_obslog) + '\n')
 
         if option2 == '-do' or option2 == '-ld':
-            scriptout3.write(msg_sync_to_USM.format('data'))
-            scriptout3.write(msg_pw_USM)
+            scriptout3.write(msg_sync_to_usm.format('data'))
+            scriptout3.write(msg_pw_usm)
             scriptout3.write(cmd4.format(pf.script2_USM))
             scriptout3.write(msg_sync_to_local.format('data'))
-            scriptout3.write(msg_pw_USM)
+            scriptout3.write(msg_pw_usm)
             scriptout3.write(cmd3.format('temp_frames/') + ' ' + str(pf.abs_path_data) + '\n')
 
         # # make data syncing script for single date
@@ -251,7 +251,7 @@ def script_add_radec(date, option):
 
 
 # make script to automatically search the project ID of one specific project
-def script_grep_redmineID(redmine_ID, date, option):
+def script_grep_redmineid(redmine_id, date, option):
     startdate = dt.datetime.strptime(str(date), '%Y%m%d')
     if startdate < dt.datetime.strptime(str(20190430), '%Y%m%d'):
         print('Warning: The date you chose is before the start of automatic data collection (20190430).')
@@ -267,7 +267,7 @@ def script_grep_redmineID(redmine_ID, date, option):
         # make script for searching in a single date
         if option == '-o':
             str_expl_date = dt.datetime.strftime(startdate, '%Y%m%d')
-            grep_cmd = cmd6.format(str(pf.abs_path_obslog), str_expl_date[2:], redmine_ID, str(pf.grep_redID_out))
+            grep_cmd = cmd6.format(str(pf.abs_path_obslog), str_expl_date[2:], redmine_id, str(pf.grep_redID_out))
             scriptout5.write(grep_cmd)
 
         # make script for search starting with specific date
@@ -281,7 +281,7 @@ def script_grep_redmineID(redmine_ID, date, option):
                     logfile_path = os.path.join(pf.abs_path_obslog, 'logfile.{}'.format(str_expl_date[2:]))
                     # check if a logfile exists for that date and add a command to the script
                     if os.path.exists(str(logfile_path)):
-                        grep_cmd = cmd6.format(str(pf.abs_path_obslog), str_expl_date[2:], redmine_ID,
+                        grep_cmd = cmd6.format(str(pf.abs_path_obslog), str_expl_date[2:], redmine_id,
                                                str(pf.grep_redID_out))
                         scriptout5.write(grep_cmd)
 
@@ -296,7 +296,7 @@ def script_grep_redmineID(redmine_ID, date, option):
                 logfile_path = os.path.join(pf.abs_path_obslog, 'logfile.{}'.format(str_expl_date[2:]))
                 # check if a logfile exists for that date and add a command to the script
                 if os.path.exists(str(logfile_path)):
-                    grep_cmd = cmd6.format(str(pf.abs_path_obslog), str_expl_date[2:], redmine_ID,
+                    grep_cmd = cmd6.format(str(pf.abs_path_obslog), str_expl_date[2:], redmine_id,
                                            str(pf.grep_redID_out))
                     scriptout5.write(grep_cmd)
 
@@ -355,10 +355,23 @@ def script_sort_for_reduction():
     return dates_for_red, dates_for_red_with_discard
 
 
+# # make script to automatically copy the wavelength calibrated data to the IRAF folder
+# def script_copy_reduced_data(dates_for_red):
+#     # read the results from the grep command
+#     with open(pf.grep_redID_out, 'r') as grepfile:
+#         for line in grepfile:
+#             # remove whitespaces in the beginning and end of the string
+#             line = line.strip()
+#             # remove whitespaces inside the string
+#             line = line.replace(' ', '')
+#             # split the string into its single entries
+#             line = line.split('|')
+#             if line[0][0] != '#':
+#                 # extract the name of each file from the grep results
+#                 file_name = line[0]
+#                 with open(pf.copy_reduced_cmd, 'w') as scriptout7:
+#                     for single_date in dates_for_red:
+
+
+
 # script_sort_for_reduction()
-
-
-#
-#
-# echo
-# "copying is done"

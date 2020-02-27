@@ -99,7 +99,7 @@ if re.match(r'^y', yn_sortproject, re.I) or re.match(r'^j', yn_sortproject, re.I
     in_opt_red = date_restrict_redID[-2:]
 
     # create and execute a script for searching the redmine ID
-    shesm.script_grep_redmineID(redmine_id, in_date_red, in_opt_red)
+    shesm.script_grep_redmineid(redmine_id, in_date_red, in_opt_red)
     subprocess.call(['dos2unix', str(pf.grep_redID_cmd)])
     print('\n')
     print('Successfully created bash script for grep. Starting to search now...')
@@ -122,12 +122,35 @@ else:
     print('\n')
 
 
-use_only_these_reduction_dates.sort(reverse=True)
+# ask if the data should be wavelength calibrated with GAMSE
+print('\n')
+yn_wvcal = input('Do you want to do the wavelength calibration with GAMSE? ')
 
-for i in use_only_these_reduction_dates:
-    red_folder_path = os.path.join(pf.abs_path_red_gamse, 'red_{}'.format(str(i)))
-    os.chdir(str(red_folder_path))
-    print('Data reduction started for : {}'.format(i))
-    subprocess.call(['gamse', 'config'])
-    subprocess.call(['gamse', 'list'])
+if re.match(r'^y', yn_wvcal, re.I) or re.match(r'^j', yn_wvcal, re.I):
+    print('\n')
+    print('Started wavelength calibration...')
 
+    # start the wavelength calibration with the newest data folder
+    use_only_these_reduction_dates.sort(reverse=True)
+    for i in use_only_these_reduction_dates:
+        red_folder_path = os.path.join(pf.abs_path_red_gamse, 'red_{}'.format(str(i)))
+        # change the working directory to the data reduction folder, needed for GAMSE calls to work properly
+        os.chdir(str(red_folder_path))
+        print('\n')
+        print('Data reduction started for : {}'.format(i))
+        subprocess.call(['gamse', 'config'])
+        subprocess.call(['gamse', 'list'])
+        subprocess.call(['gamse', 'reduce'])
+
+
+# # ask if the data with wavelength calibration should be copied to the IRAF folder
+# print('\n')
+# yn_wvcal_copy = input('Do you want to copy the wavelength calibrated data to the IRAF folder? ')
+#
+# if re.match(r'^y', yn_sortproject, re.I) or re.match(r'^j', yn_sortproject, re.I):
+#     print('\n')
+#
+# else:
+#     print('\n')
+#     print('No files were copied to the IRAF folder.')
+#     print('\n')

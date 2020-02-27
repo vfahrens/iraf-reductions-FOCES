@@ -177,3 +177,4 @@ bash /mnt/e/FOCES_data/add_radec.sh 20200222
 bash /mnt/e/FOCES_data/add_radec.sh 20200223
 bash /mnt/e/FOCES_data/add_radec.sh 20200224
 bash /mnt/e/FOCES_data/add_radec.sh 20200225
+bash /mnt/e/FOCES_data/add_radec.sh 20200226
