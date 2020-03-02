@@ -185,3 +185,7 @@ cat /mnt/e/logfiles/observations/logfile.200223 | awk '{if($24=="2894|"){print $
 cat /mnt/e/logfiles/observations/logfile.200224 | awk '{if($24=="2894|"){print $0}}' >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
 cat /mnt/e/logfiles/observations/logfile.200225 | awk '{if($24=="2894|"){print $0}}' >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
 cat /mnt/e/logfiles/observations/logfile.200226 | awk '{if($24=="2894|"){print $0}}' >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
+cat /mnt/e/logfiles/observations/logfile.200227 | awk '{if($24=="2894|"){print $0}}' >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
+cat /mnt/e/logfiles/observations/logfile.200228 | awk '{if($24=="2894|"){print $0}}' >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
+cat /mnt/e/logfiles/observations/logfile.200229 | awk '{if($24=="2894|"){print $0}}' >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt
+cat /mnt/e/logfiles/observations/logfile.200301 | awk '{if($24=="2894|"){print $0}}' >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_redID_out.txt

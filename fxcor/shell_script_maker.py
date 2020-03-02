@@ -307,23 +307,26 @@ def script_sort_for_reduction():
     dates_for_red_with_discard = []
     # read the results from the grep command
     with open(pf.grep_redID_out, 'r') as grepfile:
-        for line in grepfile:
-            # remove whitespaces in the beginning and end of the string
-            line = line.strip()
-            # remove whitespaces inside the string
-            line = line.replace(' ', '')
-            # split the string into its single entries
-            line = line.split('|')
-            if line[0][0] != '#':
-                # extract the individual observation dates from the grep results
-                file_time = dt.datetime.strptime(line[0][4:18], '%Y%m%d%H%M%S')
-                folder_date = dt.datetime.strftime(file_time, '%Y%m%d')
-                day_before = file_time - dt.timedelta(days=1)
-                str_day_before = dt.datetime.strftime(day_before, '%Y%m%d')
-                if file_time.hour > 12 and folder_date not in dates_for_red:
-                    dates_for_red.append(folder_date)
-                elif file_time.hour <= 12 and str_day_before not in dates_for_red:
-                    dates_for_red.append(str_day_before)
+        with open(pf.out_gamse_sorted, 'w') as datefile:
+            for line in grepfile:
+                # remove whitespaces in the beginning and end of the string
+                line = line.strip()
+                # remove whitespaces inside the string
+                line = line.replace(' ', '')
+                # split the string into its single entries
+                line = line.split('|')
+                if line[0][0] != '#':
+                    # extract the individual observation dates from the grep results
+                    file_time = dt.datetime.strptime(line[0][4:18], '%Y%m%d%H%M%S')
+                    folder_date = dt.datetime.strftime(file_time, '%Y%m%d')
+                    day_before = file_time - dt.timedelta(days=1)
+                    str_day_before = dt.datetime.strftime(day_before, '%Y%m%d')
+                    if file_time.hour > 12 and folder_date not in dates_for_red:
+                        dates_for_red.append(folder_date)
+                        datefile.write(folder_date + '\n')
+                    elif file_time.hour <= 12 and str_day_before not in dates_for_red:
+                        dates_for_red.append(str_day_before)
+                        datefile.write(str_day_before + '\n')
 
     with open(pf.sort_copy_cmd, 'w') as scriptout6:
         for single_date in dates_for_red:
@@ -379,4 +382,4 @@ def script_copy_reduced_data():
 
 
 
-script_copy_reduced_data()
+script_sort_for_reduction()
