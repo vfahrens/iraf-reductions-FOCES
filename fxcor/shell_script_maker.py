@@ -239,37 +239,6 @@ def script_data_update(date, option):
     return pf.data_script_USM, pf.data_script_local
 
 
-# function for executing sync to USM PC and sync to local machine
-def script_local_update(option2):
-    msg_pw_usm = 'echo "Please provide the password for the USM machine (ltsp01):"\n'
-    msg_sync_to_usm = 'echo "Syncing the {} files to USM HOST machine..."\n'
-    msg_sync_to_local = 'echo "Syncing the {} files to the LOCAL machine..."\n'
-    with open(pf.script_local, 'w') as scriptout3:
-        scriptout3.write('#!/usr/bin/bash\n')
-        scriptout3.write('\n')
-
-        if option2 == '-lo' or option2 == '-ld':
-            scriptout3.write(msg_sync_to_usm.format('log'))
-            scriptout3.write(msg_pw_usm)
-            scriptout3.write(cmd4.format(pf.script_USM))
-            scriptout3.write(msg_sync_to_local.format('log'))
-            scriptout3.write(msg_pw_usm)
-            scriptout3.write(cmd3.format('copy_logs/obslog/') + ' ' + str(pf.abs_path_obslog) + '\n')
-
-        if option2 == '-do' or option2 == '-ld':
-            scriptout3.write(msg_sync_to_usm.format('data'))
-            scriptout3.write(msg_pw_usm)
-            scriptout3.write(cmd4.format(pf.script2_USM))
-            scriptout3.write(msg_sync_to_local.format('data'))
-            scriptout3.write(msg_pw_usm)
-            scriptout3.write(cmd3.format('temp_frames/') + ' ' + str(pf.abs_path_data) + '\n')
-
-        scriptout3.write('echo "Finished syncing to local machine!"\n')
-
-    # return the file name of the script that was created for copying etc.
-    return pf.file_script_local
-
-
 # make script to automatically add the project ID etc. to the FITS header
 def script_add_radec(date, option):
     startdate = dt.datetime.strptime(str(date), '%Y%m%d')
@@ -324,15 +293,17 @@ def script_grep_redmineid(redmine_id, date, option):
     with open(pf.grep_redID_cmd.format(redmine_id), 'w') as scriptout5:
         scriptout5.write('#!/usr/bin/bash\n')
         scriptout5.write('\n')
-        scriptout5.write('rm {}\n'.format(str(pf.grep_redID_out)))
+        scriptout5.write('rm {}\n'.format(str(pf.grep_redID_out.format(redmine_id))))
         # get the first line with the column titles of the obslogfiles
-        grep_title_cmd = cmd6.format(str(pf.abs_path_obslog), dt.datetime.strftime(startdate, '%Y%m%d')[2:], 'object', str(pf.grep_redID_out))
+        grep_title_cmd = cmd6.format(str(pf.abs_path_obslog), dt.datetime.strftime(startdate, '%Y%m%d')[2:],
+                                     'object', str(pf.grep_redID_out.format(redmine_id)))
         scriptout5.write(grep_title_cmd)
 
         # make script for searching in a single date
         if option == '-o':
             str_expl_date = dt.datetime.strftime(startdate, '%Y%m%d')
-            grep_cmd = cmd6.format(str(pf.abs_path_obslog), str_expl_date[2:], redmine_id, str(pf.grep_redID_out))
+            grep_cmd = cmd6.format(str(pf.abs_path_obslog), str_expl_date[2:], redmine_id,
+                                   str(pf.grep_redID_out.format(redmine_id)))
             scriptout5.write(grep_cmd)
 
         # make script for search starting with specific date
@@ -347,7 +318,7 @@ def script_grep_redmineid(redmine_id, date, option):
                     # check if a logfile exists for that date and add a command to the script
                     if os.path.exists(str(logfile_path)):
                         grep_cmd = cmd6.format(str(pf.abs_path_obslog), str_expl_date[2:], redmine_id,
-                                               str(pf.grep_redID_out))
+                                               str(pf.grep_redID_out.format(redmine_id)))
                         scriptout5.write(grep_cmd)
 
         # make script for all the available data
@@ -362,39 +333,46 @@ def script_grep_redmineid(redmine_id, date, option):
                 # check if a logfile exists for that date and add a command to the script
                 if os.path.exists(str(logfile_path)):
                     grep_cmd = cmd6.format(str(pf.abs_path_obslog), str_expl_date[2:], redmine_id,
-                                           str(pf.grep_redID_out))
+                                           str(pf.grep_redID_out.format(redmine_id)))
                     scriptout5.write(grep_cmd)
+
+    return pf.grep_redID_cmd.format(redmine_id)
 
 
 # make script to automatically copy the folders containing data of one specific project
-def script_sort_for_reduction():
+def script_sort_for_reduction(redmine_id, date, option):
     dates_for_red = []
-    dates_for_red_with_discard = []
-    # read the results from the grep command
-    with open(pf.grep_redID_out, 'r') as grepfile:
-        with open(pf.out_gamse_sorted, 'w') as datefile:
-            for line in grepfile:
-                # remove whitespaces in the beginning and end of the string
-                line = line.strip()
-                # remove whitespaces inside the string
-                line = line.replace(' ', '')
-                # split the string into its single entries
-                line = line.split('|')
-                if line[0][0] != '#':
-                    # extract the individual observation dates from the grep results
-                    file_time = dt.datetime.strptime(line[0][4:18], '%Y%m%d%H%M%S')
-                    folder_date = dt.datetime.strftime(file_time, '%Y%m%d')
-                    day_before = file_time - dt.timedelta(days=1)
-                    str_day_before = dt.datetime.strftime(day_before, '%Y%m%d')
-                    if file_time.hour > 12 and folder_date not in dates_for_red:
-                        dates_for_red.append(folder_date)
-                        datefile.write(folder_date + '\n')
-                    elif file_time.hour <= 12 and str_day_before not in dates_for_red:
-                        dates_for_red.append(str_day_before)
-                        datefile.write(str_day_before + '\n')
+    dates_for_red_lim = []
 
-    with open(pf.sort_copy_cmd, 'w') as scriptout6:
-        for single_date in dates_for_red:
+    for line in open(pf.out_gamse_sorted.format(redmine_id), 'r'):
+        line = line.strip()
+        dates_for_red.append(line)
+
+    # remove all unnecessary dates from the list for copying
+    startdate = dt.datetime.strptime(str(date), '%Y%m%d')
+    # use only one specific night
+    if option == '-o':
+        if date in set(dates_for_red):
+            dates_for_red_lim.append(date)
+        else:
+            print('WARNING: There is no data with redmine ID {} in the night {}.\n'.format(redmine_id, date))
+            print(dates_for_red)
+            new_date = input('Please choose one of the dates listed above: ')
+            dates_for_red_lim.append(new_date)
+    # use all observed nights after (and including) a specific date
+    if option == '-a':
+        for night in dates_for_red:
+            if startdate <= dt.datetime.strptime(str(night), '%Y%m%d'):
+                dates_for_red_lim.append(night)
+    # use all observed nights
+    if option == '-e':
+        for night in dates_for_red:
+            dates_for_red_lim.append(night)
+
+    dates_for_red_with_discard = dates_for_red_lim.copy()
+
+    with open(pf.sort_copy_cmd.format(redmine_id), 'w') as scriptout6:
+        for single_date in dates_for_red_lim:
             new_folder = os.path.join(pf.abs_path_red_gamse, 'red_{}'.format(str(single_date)))
             orig_data_links = os.path.join(pf.abs_path_data, str(single_date))
             # make a new folder if a reduction folder does not already exist
@@ -404,23 +382,28 @@ def script_sort_for_reduction():
                                          'Do you want to discard and overwrite those? '.format(single_date))
                 # discard old reduction data if needed
                 if re.match(r'^y', yn_overwrite_old, re.I) or re.match(r'^j', yn_overwrite_old, re.I):
-                    dates_for_red_with_discard.append(single_date)
                     scriptout6.write('rm -r {}/*\n'.format(new_folder))
                     scriptout6.write(cmd7.format(str(new_folder) + '/rawdata'))
                     # copy the symbolic links to the rawdata folder
-                    cmd8 = 'cp -s {0}/{1}_*.fits {2}/rawdata/.\n'.format(str(orig_data_links), str(single_date), str(new_folder))
+                    cmd8 = 'cp -s {0}/{1}_*.fits {2}/rawdata/.\n'.format(str(orig_data_links), str(single_date),
+                                                                         str(new_folder))
                     scriptout6.write(cmd8)
                 else:
-                    print('Did not copy rawdata for {}.\n'.format(single_date))
+                    dates_for_red_with_discard.remove(single_date)
+                    print('Will not copy rawdata for {}.\n'.format(single_date))
             else:
-                dates_for_red_with_discard.append(single_date)
                 scriptout6.write(cmd7.format(str(new_folder)))
                 scriptout6.write(cmd7.format(str(new_folder) + '/rawdata'))
                 # copy the symbolic links to the rawdata folder
-                cmd8 = 'cp -s {0}/{1}_*.fits {2}/rawdata/.\n'.format(str(orig_data_links), str(single_date), str(new_folder))
+                cmd8 = 'cp -s {0}/{1}_*.fits {2}/rawdata/.\n'.format(str(orig_data_links), str(single_date),
+                                                                     str(new_folder))
                 scriptout6.write(cmd8)
 
-    return dates_for_red, dates_for_red_with_discard
+    with open(pf.out_gamse_copy.format(redmine_id), 'w') as copyfile:
+        for each_date in dates_for_red_with_discard:
+            copyfile.write(each_date + '\n')
+
+    return
 
 
 # make script to automatically copy the wavelength calibrated data to the IRAF folder
@@ -447,4 +430,4 @@ def script_copy_reduced_data():
 
 
 
-script_grep_redmineid(2894, 20200125, '-o')
+# script_sort_for_reduction(2894, 20200120, '-a')

@@ -14,10 +14,11 @@ data_script_USM = 'sync_datafiles_USM.sh'
 file_script_local = 'sync_obslogfiles_local.sh'
 data_script_local = 'sync_datafiles_local.sh'
 add_header_script = 'add_header_entries.sh'
-grep_redmineID_script = 'grep_ID{}_cmd.sh'
-grep_redmineID_results = 'grep_redID_out.txt'
-sort_copy_gamse_script = 'sort_copy_gamse.sh'
-sort_gamse_results = 'sort_gamse_out.txt'
+grep_redmineID_script = 'grep_ID{}.sh'
+grep_redmineID_results = 'grep_ID{}.txt'
+sort_copy_gamse_script = 'copy_ID{}_to_gamse.sh'
+sort_gamse_results = 'sort_ID{}_for_gamse.txt'
+copy_dates_gamse = 'copy_ID{}_to_gamse.txt'
 copy_wvcal_script = 'copy_wvcal_to_IRAF.sh'
 
 # initialize all paths and make them platform independent
@@ -39,5 +40,6 @@ grep_redID_out = os.path.join(abs_path_output, grep_redmineID_results)
 sort_copy_cmd = os.path.join(abs_path_scripts, sort_copy_gamse_script)
 copy_reduced_cmd = os.path.join(abs_path_scripts, copy_wvcal_script)
 out_gamse_sorted = os.path.join(abs_path_output, sort_gamse_results)
+out_gamse_copy = os.path.join(abs_path_output, copy_dates_gamse)
 
 # other paths
