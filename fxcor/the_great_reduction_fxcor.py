@@ -172,14 +172,15 @@ if re.match(r'^y', yn_wvcal, re.I) or re.match(r'^j', yn_wvcal, re.I):
         subprocess.call(['gamse', 'reduce'])
 
 
-# # ask if the data with wavelength calibration should be copied to the IRAF folder
-# print('\n')
-# yn_wvcal_copy = input('Do you want to copy the wavelength calibrated data to the IRAF folder? ')
-#
-# if re.match(r'^y', yn_sortproject, re.I) or re.match(r'^j', yn_sortproject, re.I):
-#     print('\n')
-#
-# else:
-#     print('\n')
-#     print('No files were copied to the IRAF folder.')
-#     print('\n')
+# ask if the data with wavelength calibration should be copied to the IRAF folder
+print('\n')
+yn_wvcal_copy = input('Do you want to copy the wavelength calibrated data to the IRAF folder? ')
+
+if re.match(r'^y', yn_wvcal_copy, re.I) or re.match(r'^j', yn_wvcal_copy, re.I):
+    print('\n')
+    redmine_id = input('Just to be sure, enter the redmine ID one last time: ')
+    sf.script_copy_reduced_data(redmine_id)
+else:
+    print('\n')
+    print('No files were copied to the IRAF folder.')
+    print('\n')

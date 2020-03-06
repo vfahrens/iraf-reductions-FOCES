@@ -406,27 +406,6 @@ def script_sort_for_reduction(redmine_id, date, option):
     return
 
 
-# make script to automatically copy the wavelength calibrated data to the IRAF folder
-def script_copy_reduced_data():
-    # read the results from the grep command
-    with open(pf.grep_redID_out, 'r') as grepfile:
-        for line in grepfile:
-            # remove whitespaces in the beginning and end of the string
-            line = line.strip()
-            # remove whitespaces inside the string
-            line = line.replace(' ', '')
-            # split the string into its single entries
-            line = line.split('|')
-            if line[0][0] != '#':
-                # extract the name of each file from the grep results
-                file_name = line[0]
-                file_time = dt.datetime.strptime(line[0][4:18], '%Y%m%d%H%M%S')
-                print(file_name)
-
-                # with open()
-                #
-                # with open(pf.copy_reduced_cmd, 'w') as scriptout7:
-
 
 
 
