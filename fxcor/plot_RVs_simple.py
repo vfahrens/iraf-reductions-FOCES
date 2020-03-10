@@ -8,10 +8,13 @@ import paths_and_files as pf
 
 id_string = 'ID2908'
 id_string2 = 'ID2894'
+id_string3 = '51Peg_time'
 results_folder = os.path.join(pf.abs_path_output, id_string)
 results_folder2 = os.path.join(pf.abs_path_output, id_string2)
+results_folder3 = os.path.join(pf.abs_path_output, id_string3)
 RV_file_path = os.path.join(results_folder, 'RVs_time_weighted_200309.txt')
 RV_file_path2 = os.path.join(results_folder2, 'RVs_time_weighted_200309.txt')
+RV_file_path3 = os.path.join(results_folder3, 'RVs_time_weighted.txt')
 
 dates = []
 RVs = []
@@ -21,7 +24,12 @@ dates2 = []
 RVs2 = []
 RVerr2 = []
 this_list2 = []
+dates3 = []
+RVs3 = []
+RVerr3 = []
+this_list3 = []
 
+# read the data of ups And
 with open(RV_file_path) as RVfile:
     for line in RVfile:
         line = line.strip()
@@ -44,7 +52,7 @@ for j in RVs:
 for k in RVerr:
     RVerr_fl.append(float(k))
 
-
+# read the data of HD9407
 with open(RV_file_path2) as RVfile2:
     for line in RVfile2:
         line = line.strip()
@@ -67,30 +75,56 @@ for j in RVs2:
 for k in RVerr2:
     RVerr_fl2.append(float(k))
 
+# read the data of 51Peg
+with open(RV_file_path3) as RVfile3:
+    for line in RVfile3:
+        line = line.strip()
+        line = line.split()
+        this_list3.append(line)
 
-# plot the RVs
+nicely_3 = sorted(this_list3, key=itemgetter(0))
+nicely2_3 = np.transpose(nicely_3)
+dates3 = nicely2_3[0]
+RVs3 = nicely2_3[1]
+RVerr3 = nicely2_3[2]
+
+dates_fl3 = []
+RVs_fl3 = []
+RVerr_fl3 = []
+for i in dates3:
+    dates_fl3.append(float(i))
+for j in RVs3:
+    RVs_fl3.append(float(j))
+for k in RVerr3:
+    RVerr_fl3.append(float(k))
+
+
+# plot the RVs for all frames after each other
 x = np.arange(len(RVs_fl))
 x2 = np.arange(len(RVs_fl2))
+x3 = np.arange(len(RVs_fl3))
 fig = plt.figure()
 plt.errorbar(x, RVs_fl, yerr=RVerr_fl, fmt='o', label='upsAnd', alpha=0.5)
 plt.errorbar(x2, RVs_fl2, yerr=RVerr_fl2, fmt='o', label='HD9407', alpha=0.5)
+plt.errorbar(x3, RVs_fl3, yerr=RVerr_fl3, fmt='o', label='51Peg', alpha=0.5)
 # plt.hlines(rv_weightmean, [0], len(x), lw=2)
 plt.xlabel('# of observation')
 plt.ylabel('RV in m/s')
 plt.legend()
 # plt.show()
-plt.savefig('plot_RV_notime.pdf')
+plt.savefig('all3_RV_notime.pdf')
 
-# plot the RVs
+# plot the RVs at the correct observation time
 fig = plt.figure()
 plt.errorbar(dates_fl, RVs_fl, yerr=RVerr_fl, fmt='o', label='upsAnd', alpha=0.5)
 plt.errorbar(dates_fl2, RVs_fl2, yerr=RVerr_fl2, fmt='o', label='HD9407', alpha=0.5)
+plt.errorbar(dates_fl3, RVs_fl3, yerr=RVerr_fl3, fmt='o', label='51Peg', alpha=0.5)
 # plt.hlines(rv_weightmean, [0], len(x), lw=2)
 plt.xlabel('date of observation')
 plt.ylabel('RV in m/s')
 plt.legend()
 # plt.show()
-plt.savefig('plot_RV_time.pdf')
+plt.savefig('all3_RV_time.pdf')
 
 
 
