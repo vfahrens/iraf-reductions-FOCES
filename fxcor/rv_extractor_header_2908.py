@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 
 ###############################
 # User definitions
-path = 'output/ID2894/'
-path_to_outfiles = 'output/ID2894/'
+path = 'output/ID2908/'
+path_to_outfiles = 'output/ID2908/'
 filename_fxcortxt = 'out_allRVs_200309.txt'
 filename_all_single_orders = 'RVs_all_single_orders_200309.txt'
 filename_weighted = 'RVs_time_weighted_200309.txt'
@@ -80,7 +80,7 @@ for i in dates_list:
             line = line.split()
             if line[0] == i:
                 if int(line[3]) > 104 and int(line[3]) < 137 and int(line[3]) != 115:
-                    vel_corroff = float(line[1]) + 16500.0
+                    vel_corroff = float(line[1]) + 26600.0
                     vels_onedate.append(vel_corroff)
                     vel_err = float(line[2])
                     v_err.append(vel_err)
