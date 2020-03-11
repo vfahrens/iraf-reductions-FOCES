@@ -7,15 +7,15 @@ import paths_and_files as pf
 
 
 id_string = 'ID2908'
-id_string2 = 'ID2894'
+id_string2 = 'ID2864_oldscatred'
 # id_string3 = '51Peg_time'
 id_string3 = 'ID2864_oldscatred'
 results_folder = os.path.join(pf.abs_path_output, id_string)
 results_folder2 = os.path.join(pf.abs_path_output, id_string2)
 results_folder3 = os.path.join(pf.abs_path_output, id_string3)
 RV_file_path = os.path.join(results_folder, 'RVs_time_weighted_200309.txt')
-RV_file_path2 = os.path.join(results_folder2, 'RVs_time_weighted_200309.txt')
-RV_file_path3 = os.path.join(results_folder3, 'RVs_time_weighted_oldscatred.txt')
+RV_file_path2 = os.path.join(results_folder2, 'RVs_time_weighted_oldscatred.txt')
+RV_file_path3 = os.path.join(results_folder3, 'test_RVs_time_weighted.txt')
 
 dates = []
 RVs = []
@@ -106,7 +106,7 @@ x2 = np.arange(len(RVs_fl2))
 x3 = np.arange(len(RVs_fl3))
 fig = plt.figure()
 # plt.errorbar(x, RVs_fl, yerr=RVerr_fl, fmt='o', label='upsAnd', alpha=0.5)
-# plt.errorbar(x2, RVs_fl2, yerr=RVerr_fl2, fmt='o', label='HD9407', alpha=0.5)
+plt.errorbar(x2, RVs_fl2, yerr=RVerr_fl2, fmt='o', label='HD9407', alpha=0.5)
 plt.errorbar(x3, RVs_fl3, yerr=RVerr_fl3, fmt='o', label='51Peg', alpha=0.5)
 # plt.hlines(rv_weightmean, [0], len(x), lw=2)
 plt.xlabel('# of observation')
@@ -118,7 +118,7 @@ plt.show()
 # plot the RVs at the correct observation time
 fig = plt.figure()
 # plt.errorbar(dates_fl, RVs_fl, yerr=RVerr_fl, fmt='o', label='upsAnd', alpha=0.5)
-# plt.errorbar(dates_fl2, RVs_fl2, yerr=RVerr_fl2, fmt='o', label='HD9407', alpha=0.5)
+plt.errorbar(dates_fl2, RVs_fl2, yerr=RVerr_fl2, fmt='o', label='HD9407', alpha=0.5)
 plt.errorbar(dates_fl3, RVs_fl3, yerr=RVerr_fl3, fmt='o', label='51Peg', alpha=0.5)
 # plt.hlines(rv_weightmean, [0], len(x), lw=2)
 plt.xlabel('date of observation')
