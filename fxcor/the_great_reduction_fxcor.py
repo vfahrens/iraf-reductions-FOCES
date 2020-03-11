@@ -184,3 +184,25 @@ else:
     print('\n')
     print('No files were copied to the IRAF folder.')
     print('\n')
+
+
+# do the fxcor reduction manually
+print('\n')
+input('Please follow the instructions in "workflow_fxcor.txt" to manually '
+      'execute the CCF with fxcor and hit ENTER when finished.')
+
+
+# plot the data produced by fxcor
+print('\n')
+yn_plotdata = input('Do you want to plot the RVs you got from fxcor? ')
+
+if re.match(r'^y', yn_wvcal_copy, re.I) or re.match(r'^j', yn_wvcal_copy, re.I):
+    print('\n')
+    redmine_id = input('I am sorry to ask for the redmine ID yet again: ')
+    plot_type = input('What kind of plot do you want to create? (single: only one dataset, '
+                      'double: comparison of two datasets)')
+
+    if re.search(r'single', plot_type, re.I):
+
+
+

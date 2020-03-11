@@ -21,8 +21,8 @@ import matplotlib.ticker as tck
 
 ###############################
 # give the path to the input and output files as relative path
-path_to_infiles = 'data/51Peg/'
-path_to_outfiles = 'data/51Peg_time/'
+path_to_infiles = 'data/ID2864/'
+path_to_outfiles = 'output/ID2864/'
 # # for quick tests:
 # path_to_infiles = "../file_parser/testfiles/"
 # path_to_outfiles = '../file_parser/testfiles/testout/'
@@ -35,9 +35,9 @@ pathout = (location / path_to_outfiles).resolve()
 if not os.path.exists(pathout):
     os.makedirs(pathout)
 
-objcoord_ra = '22:57:28.00'
-objcoord_dec = '+20:46:07.82'
-CCD_readtime = 89.0
+objcoord_ra = '22:57:27.98042'
+objcoord_dec = '+20:46:07.78224'
+CCD_readtime = 87.5
 
 
 fname_lst = sorted(os.listdir(path))

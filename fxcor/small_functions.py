@@ -117,3 +117,9 @@ def script_copy_reduced_data(redmine_id):
     print('Successfully copied {} files!'.format(total_files_copied))
 
     return
+
+
+def plot_single_RVs():
+
+    return
+

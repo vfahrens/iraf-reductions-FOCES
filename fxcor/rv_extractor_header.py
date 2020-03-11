@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 
 ###############################
 # User definitions
-path = 'data/51Peg_time/'
-path_to_outfiles = 'output/51Peg_time/'
-filename_fxcortxt = 'out_all_200207.txt'
+path = 'output/ID2864/'
+path_to_outfiles = 'output/ID2864/'
+filename_fxcortxt = 'out_allRVs_200311.txt'
 filename_all_single_orders = 'RVs_all_single_orders.txt'
 filename_weighted = 'RVs_time_weighted.txt'
 ###############################

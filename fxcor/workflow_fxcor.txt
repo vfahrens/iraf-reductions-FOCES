@@ -6,6 +6,7 @@ PYCHARM:
 TERMINAL:
 - copy the file "/mnt/e/IRAF/iraf-reductions-FOCES/fxcor/recipe_make_orderlists.sh" to the folder where the data frames are located
 - copy the file "/mnt/e/IRAF/iraf-reductions-FOCES/fxcor/recipe_make_fxcor_with_lists.sh" to the folder where the data frames are located
+- change the template file name in "recipe_make_fxcor_with_lists.sh"
 - execute "dos2unix recipe_make_*.sh"
 - execute "./recipe_make_orderlists.sh" in the folder with the data (with new header and separated by order)
 - execute "./recipe_make_fxcor_with_lists.sh" in the folder with the data (with new header and separated by order)
