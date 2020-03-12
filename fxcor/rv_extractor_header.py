@@ -25,18 +25,6 @@ fxcor_output = os.path.join(path, filename_fxcortxt)
 out1_filepath = os.path.join(pathout, filename_all_single_orders)
 out2_filepath = os.path.join(pathout, filename_weighted)
 
-#
-# outname_lst = []
-#
-# with os.scandir(path) as it:
-#     for entry in it:
-#         # if the file name contains fxcor_result
-#         if entry.name.rfind('_A_lin_IRAF.fits') != -1 and entry.is_file():
-#             with open(path + entry.name) as file:
-#                 with open(path + '{}_rv_allorders.txt'.format(entry.name[:13]), 'w') as outfile:
-#                     print("test")
-
-
 
 alldates = []
 
@@ -65,7 +53,7 @@ alldates = []
 #                 rv_err = float(line[-1]) * 1000.0
 #
 #     # save all the results for the single orders to a file
-#     with open(out1_filepath, 'a') as outfile:
+#     with open(out1_filepath, 'w') as outfile:
 #         if 'HJD' in header:
 #             output_singleorders = str(date) + ' ' + str(rv_value) + ' ' + str(rv_err) + ' ' + str(phys_ord) + '\n'
 #             print(output_singleorders)
@@ -81,23 +69,13 @@ dates_list = set(alldates)
 
 # read all RV results for a specific observation date (= 1 frame) from the single order file
 RVs_eachdate = []
-for i in dates_list:
-    with open(out1_filepath, 'r') as infile:
-        vels_onedate = []
-        v_err = []
-        for line in infile:
-            line = line.split()
-            # only use the lines that contain RV data from one observation date
-            if line[0] == i:
-                # only use physical orders 105-136 and not 115, because the rest is bad
-                if int(line[3]) > 104 and int(line[3]) < 137 and int(line[3]) != 115:
-                    # save the RV results and errors of this date in a list (REDUNDANT!)
-                    vel_corroff = float(line[1])
-                    vels_onedate.append(vel_corroff)
-                    vel_err = float(line[2])
-                    v_err.append(vel_err)
-                    # save the whole line in a larger array with all observation dates (CURRENTLY USED!)
-                    RVs_eachdate.append(line)
+with open(out1_filepath, 'r') as infile:
+    for line in infile:
+        line = line.split()
+        # only use physical orders 105-136 and not 115, because the rest is bad
+        if 104 < int(line[3]) < 137 and int(line[3]) != 115:
+            # save the whole line in a larger array with all observation dates
+            RVs_eachdate.append(line)
 
 # convert that array to a useful format for numpy
 RVs_eachdate = np.transpose(RVs_eachdate)
@@ -114,48 +92,48 @@ print(med_RV, med_err)
 
 # get the data for one specific observation date again and compute the weighted mean of the RV and the RV error
 all_stds = []
-for date in set(RVs_eachdate[0]):
-    vels_onedate = []
-    v_err = []
-    for j in range(len(RVs_eachdate[0])):
-        # only use the rows of the array that contain RV data from one observation date
-        if RVs_eachdate[0, j] == date:
-            vels_onedate.append(RVs_eachdate[1, j])
-            # if the RV error given by fxcor is zero, use the median RV error instead
-            if RVs_eachdate[2, j] != 0.0:
-                v_err.append(RVs_eachdate[2, j])
-            else:
-                v_err.append(med_err)
-    # compute the weighted average for that date and use the median RV as zero-point correction
-    rv_weightmean = np.average(vels_onedate, weights=(1/np.abs(v_err))) - med_RV
-    # compute the RV error across the orders and put it in a list of RV errors
-    rv_std = np.std(vels_onedate) * np.sqrt(2) / np.sqrt(len(vels_onedate))
-    all_stds.append(rv_std)
+with open(out2_filepath, 'w') as out2file:
+    for date in set(RVs_eachdate[0]):
+        vels_onedate = []
+        v_err = []
+        for j in range(len(RVs_eachdate[0])):
+            # only use the rows of the array that contain RV data from one observation date
+            if RVs_eachdate[0, j] == date:
+                vels_onedate.append(RVs_eachdate[1, j])
+                # if the RV error given by fxcor is zero, use the median RV error instead
+                if RVs_eachdate[2, j] != 0.0:
+                    v_err.append(RVs_eachdate[2, j])
+                else:
+                    v_err.append(med_err)
+        # compute the weighted average for that date and use the median RV as zero-point correction
+        rv_weightmean = np.average(vels_onedate, weights=(1/np.abs(v_err))) - med_RV
+        # compute the RV error across the orders and put it in a list of RV errors
+        rv_std = np.std(vels_onedate) * np.sqrt(2) / np.sqrt(len(vels_onedate))
+        all_stds.append(rv_std)
 
-    # if len(vels_onedate) > 0:
-    #     vels_onedate_np = np.array(vels_onedate).astype(np.float)
-    #     v_err_np = np.array(v_err).astype(np.float)
-    #     rv_weightmean = np.average(vels_onedate_np, weights=(1/np.abs(v_err_np)))
-    #     rv_std = np.std(vels_onedate_np) * np.sqrt(2) / np.sqrt(len(vels_onedate))
-    #
-
-    # write the results to a file, if the data point is good, which means that the error is below a certain limit
-    if rv_std < 29.0:
-        with open(out2_filepath, 'a') as out2file:
+        # write the results to a file, if the data point is good, which means that the error is below a certain limit
+        if rv_std < 29.0:
             results = str(date) + ' ' + str(rv_weightmean) + ' ' + str(rv_std) + '\n'
             out2file.write(results)
 
 # read the results from the file again to fix missing RV error values
-with open(out2_filepath, 'r+') as in2file:
+RV_results = []
+with open(out2_filepath, 'r') as in2file:
     for line2 in in2file:
         line2 = line2.split()
-        print(line2[2])
         # check if the cross-order RV error has a reasonable value, this is not the case e.g. for the template
         # a value of 0.1 m/s cross-order RV error is probably never possible with FOCES
         # replace bad RV errors with the median of all other RV errors
         if float(line2[2]) < 0.1:
             line2[2] = str(np.median(all_stds))
-            in2file.write(line2[0] + ' ' + line2[1] + ' ' + line2[2])
+            RV_results.append(line2)
+        else:
+            RV_results.append(line2)
 
-
-# I think I need to read in the whole file again and overwrite the old one after changing the value...
+# save all RV results with the now corrected error to the file again
+RV_results = np.transpose(RV_results)
+with open(out2_filepath, 'w') as out2file_corr:
+    for m in range(len(RV_results[0])):
+        results_corr = str(RV_results[0,m]) + ' ' + str(RV_results[1,m]) + ' ' + str(RV_results[2,m]) + '\n'
+        out2file_corr.write(results_corr)
+# # I think I need to read in the whole file again and overwrite the old one after changing the value...
