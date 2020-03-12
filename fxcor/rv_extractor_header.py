@@ -26,8 +26,6 @@ out1_filepath = os.path.join(pathout, filename_all_single_orders)
 out2_filepath = os.path.join(pathout, filename_weighted)
 
 
-alldates = []
-
 # # get the RVs and RVerrs from the image header and fxcor result file, respectively
 # fname_lst = sorted(os.listdir(path))
 # prev_frameid = 0
@@ -60,6 +58,7 @@ alldates = []
 #             outfile.write(output_singleorders)
 
 # read the list of observation dates from the file containing the single order RV results
+alldates = []
 with open(out1_filepath, 'r') as infile:
     for line in infile:
         line = line.split()
@@ -68,27 +67,25 @@ with open(out1_filepath, 'r') as infile:
 dates_list = set(alldates)
 
 # read all RV results for a specific observation date (= 1 frame) from the single order file
-RVs_eachdate = []
+RVs_fromfile = []
 with open(out1_filepath, 'r') as infile:
     for line in infile:
         line = line.split()
         # only use physical orders 105-136 and not 115, because the rest is bad
         if 104 < int(line[3]) < 137 and int(line[3]) != 115:
             # save the whole line in a larger array with all observation dates
-            RVs_eachdate.append(line)
+            RVs_fromfile.append(line)
 
+# sort all RV results by date and order
+RVs_eachdate = sorted(RVs_fromfile, key=itemgetter(0))
 # convert that array to a useful format for numpy
 RVs_eachdate = np.transpose(RVs_eachdate)
 RVs_eachdate = np.asarray(RVs_eachdate).astype(np.float)
+print(RVs_eachdate)
 
 # compute the median of all measured RVs and RV errors
 med_RV = np.median(RVs_eachdate[1])
 med_err = np.median(RVs_eachdate[2])
-print(med_RV, med_err)
-# for k in range(np.shape(RVs_eachdate)[1]):
-#     if k % 150 == 0:
-#         print(RVs_eachdate[:,k])
-# print(len(vels_onedate))
 
 # get the data for one specific observation date again and compute the weighted mean of the RV and the RV error
 all_stds = []
@@ -130,10 +127,10 @@ with open(out2_filepath, 'r') as in2file:
         else:
             RV_results.append(line2)
 
+RV_tofile = sorted(RV_results, key=itemgetter(0))
 # save all RV results with the now corrected error to the file again
-RV_results = np.transpose(RV_results)
+RV_tofile = np.transpose(RV_tofile)
 with open(out2_filepath, 'w') as out2file_corr:
-    for m in range(len(RV_results[0])):
-        results_corr = str(RV_results[0,m]) + ' ' + str(RV_results[1,m]) + ' ' + str(RV_results[2,m]) + '\n'
+    for m in range(len(RV_tofile[0])):
+        results_corr = str(RV_tofile[0, m]) + ' ' + str(RV_tofile[1, m]) + ' ' + str(RV_tofile[2, m]) + '\n'
         out2file_corr.write(results_corr)
-# # I think I need to read in the whole file again and overwrite the old one after changing the value...
