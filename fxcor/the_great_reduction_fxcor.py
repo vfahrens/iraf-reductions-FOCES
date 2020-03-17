@@ -10,6 +10,7 @@ import datetime as dt
 import shell_script_maker as shesm
 import paths_and_files as pf
 import small_functions as sf
+from gamse_to_iraf_converter_with_interpol import iraf_converter
 
 
 in_date = dt.datetime.strftime(dt.datetime.now(), '%Y%m%d')
@@ -186,23 +187,39 @@ else:
     print('\n')
 
 
+# convert the GAMSE data to IRAF readable form if desired
+print('\n')
+yn_iraf_convert = input('Do you want to convert the wavelength calibrated data to IRAF readable form? ')
+
+if re.match(r'^y', yn_iraf_convert, re.I) or re.match(r'^j', yn_iraf_convert, re.I):
+    print('\n')
+    str_redmine_id = input('Please enter the redmine ID: ')
+    # fileextension = input('If you want to add a specific extension to the output filenames,
+    # please enter that (default: ): ')
+    iraf_converter(str_redmine_id)
+
+else:
+    print('\n')
+    print('No files were converted.')
+    print('\n')
+
 # do the fxcor reduction manually
 print('\n')
 input('Please follow the instructions in "workflow_fxcor.txt" to manually '
       'execute the CCF with fxcor and hit ENTER when finished.')
 
 
-# plot the data produced by fxcor
-print('\n')
-yn_plotdata = input('Do you want to plot the RVs you got from fxcor? ')
-
-if re.match(r'^y', yn_wvcal_copy, re.I) or re.match(r'^j', yn_wvcal_copy, re.I):
-    print('\n')
-    redmine_id = input('I am sorry to ask for the redmine ID yet again: ')
-    plot_type = input('What kind of plot do you want to create? (single: only one dataset, '
-                      'double: comparison of two datasets)')
-
-    if re.search(r'single', plot_type, re.I):
-
-
-
+# # plot the data produced by fxcor
+# print('\n')
+# yn_plotdata = input('Do you want to plot the RVs you got from fxcor? ')
+#
+# if re.match(r'^y', yn_wvcal_copy, re.I) or re.match(r'^j', yn_wvcal_copy, re.I):
+#     print('\n')
+#     redmine_id = input('I am sorry to ask for the redmine ID yet again: ')
+#     plot_type = input('What kind of plot do you want to create? (single: only one dataset, '
+#                       'double: comparison of two datasets)')
+#
+#     if re.search(r'single', plot_type, re.I):
+#
+#
+#

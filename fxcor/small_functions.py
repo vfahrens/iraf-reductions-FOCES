@@ -72,9 +72,8 @@ def get_reductiondates(redmine_id):
 def script_copy_reduced_data(redmine_id):
     total_files_copied = 0
     # check if a folder with this redmine ID exists already in IRAF data input
-    iraf_data_folder = os.path.join(pf.abs_path_IRAF, 'ID{}'.format(redmine_id))
-    if not os.path.exists(str(iraf_data_folder)):
-        os.makedirs(str(iraf_data_folder))
+    if not os.path.exists(pf.iraf_data_folder.format(redmine_id)):
+        os.makedirs(pf.iraf_data_folder.format(redmine_id))
     # read the results from the grep command
     with open(pf.grep_redID_out.format(redmine_id), 'r') as grepfile:
         for line in grepfile:
@@ -101,25 +100,22 @@ def script_copy_reduced_data(redmine_id):
 
                 # from the .tab file extract the correct link name of the raw frame
                 with open(tab_file_path, 'r') as tabfile:
-                    for line in tabfile:
-                        if 'LINKNAME' in line:
-                            line = line.strip()
-                            line = line.split('=')
-                            raw_name = line[1]
+                    for linex in tabfile:
+                        if 'LINKNAME' in linex:
+                            linex = linex.strip()
+                            linex = linex.split('=')
+                            raw_name = linex[1]
 
                 # generate the file name for the reduced frame and copy it
                 red_name = raw_name[:-5] + '_ods.fits'
-                gamse_red_folder = os.path.join(pf.abs_path_red_gamse, 'red_' + folder_date)
-                gamse_result_folder = os.path.join(gamse_red_folder, 'onedspec')
-                result_file_path = os.path.join(gamse_result_folder, red_name)
-                shutil.copy(result_file_path, iraf_data_folder)
+                result_file_path = os.path.join(pf.gamse_results_folder.format(folder_date), red_name)
+                shutil.copy(result_file_path, pf.iraf_data_folder.format(redmine_id))
                 total_files_copied += 1
     print('Successfully copied {} files!'.format(total_files_copied))
 
     return
 
 
-def plot_single_RVs():
-
-    return
-
+# def plot_single_RVs():
+#
+#     return

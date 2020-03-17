@@ -29,37 +29,37 @@ out2_filepath = os.path.join(pathout, filename_weighted)
 out3_filepath = os.path.join(pathout, filename_weighted_tels)
 out4_filepath = os.path.join(pathout, filename_weighted_corrtels)
 
-#
-# # get the RVs and RVerrs from the image header and fxcor result file, respectively
-# fname_lst = sorted(os.listdir(path))
-# prev_frameid = 0
-# with open(out1_filepath, 'w') as outfile:
-#     for fname in fname_lst:
-#         # only use the science fiber frames
-#         if fname[-16:] != '_A_lin_IRAF.fits':
-#             continue
-#
-#         # get the RV (converted to m/s) and the physical order number from the header
-#         open_filepath = os.path.join(pathin, fname)
-#         with fits.open(open_filepath) as datei:
-#             header = datei[0].header
-#             if 'HJD' in header:
-#                 date = header['HJD']
-#                 rv_value = header['VHELIO']*1000.0
-#             phys_ord = fname[34:37]
-#
-#         # get the corresponding RV error (converted to m/s) from the fxcor result file
-#         with open(fxcor_output, 'r') as fxfile:
-#             for line in fxfile:
-#                 line = line.split()
-#                 if fname in line and line[-1] != 'INDEF':
-#                     rv_err = float(line[-1]) * 1000.0
-#
-#         # save all the results for the single orders to a file
-#         if 'HJD' in header:
-#             output_singleorders = str(date) + ' ' + str(rv_value) + ' ' + str(rv_err) + ' ' + str(phys_ord) + '\n'
-#             print(output_singleorders)
-#             outfile.write(output_singleorders)
+
+# get the RVs and RVerrs from the image header and fxcor result file, respectively
+fname_lst = sorted(os.listdir(path))
+prev_frameid = 0
+with open(out1_filepath, 'w') as outfile:
+    for fname in fname_lst:
+        # only use the science fiber frames
+        if fname[-16:] != '_A_lin_IRAF.fits':
+            continue
+
+        # get the RV (converted to m/s) and the physical order number from the header
+        open_filepath = os.path.join(pathin, fname)
+        with fits.open(open_filepath) as datei:
+            header = datei[0].header
+            if 'HJD' in header:
+                date = header['HJD']
+                rv_value = header['VHELIO']*1000.0
+            phys_ord = fname[34:37]
+
+        # get the corresponding RV error (converted to m/s) from the fxcor result file
+        with open(fxcor_output, 'r') as fxfile:
+            for line in fxfile:
+                line = line.split()
+                if fname in line and line[-1] != 'INDEF':
+                    rv_err = float(line[-1]) * 1000.0
+
+        # save all the results for the single orders to a file
+        if 'HJD' in header:
+            output_singleorders = str(date) + ' ' + str(rv_value) + ' ' + str(rv_err) + ' ' + str(phys_ord) + '\n'
+            print(output_singleorders)
+            outfile.write(output_singleorders)
 
 # read the list of observation dates from the file containing the single order RV results
 alldates = []
