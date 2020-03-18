@@ -223,10 +223,27 @@ if re.match(r'^y', yn_iraf_execute, re.I) or re.match(r'^j', yn_iraf_execute, re
 
     print('List of frames for this object: {}'.format(pf.all_used_frames.format(redmine_id)))
     template = input('Please choose a template that should be used for the cross correlation: '
-                     '(e.g.: 20190903_0114_FOC1903_SCI0')
+                     '(e.g.: 20190903_0114_FOC1903_SCI0) ')
     shesm.script_fxcor_lists(redmine_id, template)
     subprocess.call(['dos2unix', str(pf.make_cl_fxcor.format(redmine_id))])
     subprocess.call(['bash', str(pf.make_cl_fxcor.format(redmine_id))])
+
+    print('Please open a terminal now and type "xterm". Then go to the new window.')
+    print('Type the following command in the xterm window: \n')
+    input('$ cl')
+    print('After IRAF has loaded, please execute the following commands: \n')
+    print('vocl> reset obsdb=home$obsdb.dat')
+    input('vocl> rv')
+    print('Now navigate to the folder containing the data: \n')
+    input('rv> cd {}'.format(pf.iraf_output_folder))
+    print('make a list of all the spectra used as templates: \n')
+    input('rv> files {}_*_A_*.fits > templates_ID{}.lis'.format(template, redmine_id))
+    print('now do the heliocentric correction for the template spectra: enter the given command or open '
+          '"epar rvcorrect" and put the template list as entry for '
+          '"images": "images = @templates_ID{}.lis"\n'.format(redmine_id))
+    input('rv> rvcorrect images=@templates_ID{}.lis'.format(redmine_id))
+    print('finally, execute fxcor: (may take a while, please hit ENTER here when finished)\n')
+    input('cl < fxcor_with_lists.cl')
 
 
 # do the fxcor reduction manually
