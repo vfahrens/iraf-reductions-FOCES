@@ -1,7 +1,2 @@
-from astroquery.simbad import Simbad
-from astropy import io
-
-result_table = Simbad.query_object('ups And')
-print(result_table)
-print(result_table['DEC'][0])
+print('for i in {065..148..1}\n')
 # RA =

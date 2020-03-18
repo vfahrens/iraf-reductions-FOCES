@@ -406,7 +406,23 @@ def script_sort_for_reduction(redmine_id, date, option):
     return
 
 
+# make a script to generate a input cl file for fxcor
+def script_fxcor_lists(redmine_id, template_name):
+    with open(pf.make_cl_fxcor.format(redmine_id), 'w') as scriptout_fx:
+        scriptout_fx.write('#!/usr/bin/bash\n')
+        scriptout_fx.write('\n')
+        scriptout_fx.write('name1="fxcor_ord"\n')
+        scriptout_fx.write('name2=".lis"\n')
+        scriptout_fx.write('for i in {065..148..1}\n')
+        scriptout_fx.write('do\n')
+        scriptout_fx.write('  echo $i\n')
+        scriptout_fx.write('  for j in `ls $name1$i$name2`\n')
+        scriptout_fx.write('  do\n')
+        scriptout_fx.write('    echo "fxcor @"$j "{}_ods_ord"$i"_A_lin_IRAF.fits" '
+                           '>> fxcor_with_lists.cl\n'.format(template_name))
+        scriptout_fx.write('  done\n')
+        scriptout_fx.write('done\n')
 
+    return
 
-
-# script_sort_for_reduction(2894, 20200120, '-a')
+# script_fxcor_lists(2864, 'testwhatever')

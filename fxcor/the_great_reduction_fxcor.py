@@ -221,6 +221,13 @@ if re.match(r'^y', yn_iraf_execute, re.I) or re.match(r'^j', yn_iraf_execute, re
     subprocess.call(['dos2unix', str(orderlists_path)])
     subprocess.call(['bash', str(orderlists_path)])
 
+    print('List of frames for this object: {}'.format(pf.all_used_frames.format(redmine_id)))
+    template = input('Please choose a template that should be used for the cross correlation: '
+                     '(e.g.: 20190903_0114_FOC1903_SCI0')
+    shesm.script_fxcor_lists(redmine_id, template)
+    subprocess.call(['dos2unix', str(pf.make_cl_fxcor.format(redmine_id))])
+    subprocess.call(['bash', str(pf.make_cl_fxcor.format(redmine_id))])
+
 
 # do the fxcor reduction manually
 print('\n')

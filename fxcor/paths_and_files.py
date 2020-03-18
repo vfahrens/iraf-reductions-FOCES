@@ -24,6 +24,7 @@ sort_gamse_results = 'sort_ID{}_for_gamse.txt'
 copy_dates_gamse = 'copy_ID{}_to_gamse.txt'
 copy_wvcal_script = 'copy_wvcal_ID{}_to_IRAF.sh'
 recipe_orderlists = 'recipe_make_orderlists.sh'
+recipe_cl_fxcor = 'recipe_make_fxcor_with_lists.sh'
 all_used_frames = 'used_frames_ID{}.txt'
 
 # initialize all paths and make them platform independent
@@ -54,4 +55,5 @@ out_gamse_sorted = os.path.join(abs_path_output, sort_gamse_results)
 out_gamse_copy = os.path.join(abs_path_output, copy_dates_gamse)
 copy_reduced_cmd = os.path.join(abs_path_scripts, copy_wvcal_script)
 make_orderlists = os.path.join(abs_path_scripts, recipe_orderlists)
+make_cl_fxcor = os.path.join(iraf_output_folder, recipe_cl_fxcor)
 frames_list = os.path.join(abs_path_output, all_used_frames)
