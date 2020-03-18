@@ -1,8 +1,8 @@
 PYCHARM:
 # - open the file "/mnt/e/IRAF/iraf-reductions-FOCES/fxcor/gamse_to_iraf_converter_with_interpol.py"
 # - change the data input and output folders as needed (not existing folders will be created automatically)
-- put the correct object coordinates and maybe readout time of the camera
-- run the script
+# - put the correct object coordinates and maybe readout time of the camera
+# - run the script
 TERMINAL:
 - copy the file "/mnt/e/IRAF/iraf-reductions-FOCES/fxcor/recipe_make_orderlists.sh" to the folder where the data frames are located
 - copy the file "/mnt/e/IRAF/iraf-reductions-FOCES/fxcor/recipe_make_fxcor_with_lists.sh" to the folder where the data frames are located

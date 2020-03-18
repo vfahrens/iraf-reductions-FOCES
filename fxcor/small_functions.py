@@ -74,44 +74,50 @@ def script_copy_reduced_data(redmine_id):
     # check if a folder with this redmine ID exists already in IRAF data input
     if not os.path.exists(pf.iraf_data_folder.format(redmine_id)):
         os.makedirs(pf.iraf_data_folder.format(redmine_id))
-    # read the results from the grep command
-    with open(pf.grep_redID_out.format(redmine_id), 'r') as grepfile:
-        for line in grepfile:
-            # remove whitespaces in the beginning and end of the string
-            line = line.strip()
-            # remove whitespaces inside the string
-            line = line.replace(' ', '')
-            # split the string into its single entries
-            line = line.split('|')
-            if line[0][0] != '#':
-                # extract the name of each file from the grep results
-                file_name = line[0]
-                file_time = dt.datetime.strptime(line[0][4:18], '%Y%m%d%H%M%S')
 
-                # get the correct date for the night of observation
-                folder_date = dt.datetime.strftime(file_time, '%Y%m%d')
-                if file_time.hour <= 12:
-                    day_before = file_time - dt.timedelta(days=1)
-                    str_day_before = dt.datetime.strftime(day_before, '%Y%m%d')
-                    folder_date = str_day_before
-                # get the path of the .tab file corresponding to the .fits file
-                data_folder_path = os.path.join(pf.abs_path_data, folder_date)
-                tab_file_path = os.path.join(data_folder_path, file_name + '.tab')
+    with open(pf.frames_list.format(redmine_id), 'w') as framelist:
+        # read the results from the grep command
+        with open(pf.grep_redID_out.format(redmine_id), 'r') as grepfile:
+            for line in grepfile:
+                filename_used = []
+                # remove whitespaces in the beginning and end of the string
+                line = line.strip()
+                # remove whitespaces inside the string
+                line = line.replace(' ', '')
+                # split the string into its single entries
+                line = line.split('|')
+                if line[0][0] != '#':
+                    # extract the name of each file from the grep results
+                    file_name = line[0]
+                    filename_used.append(file_name)
+                    file_time = dt.datetime.strptime(line[0][4:18], '%Y%m%d%H%M%S')
 
-                # from the .tab file extract the correct link name of the raw frame
-                with open(tab_file_path, 'r') as tabfile:
-                    for linex in tabfile:
-                        if 'LINKNAME' in linex:
-                            linex = linex.strip()
-                            linex = linex.split('=')
-                            raw_name = linex[1]
+                    # get the correct date for the night of observation
+                    folder_date = dt.datetime.strftime(file_time, '%Y%m%d')
+                    if file_time.hour <= 12:
+                        day_before = file_time - dt.timedelta(days=1)
+                        str_day_before = dt.datetime.strftime(day_before, '%Y%m%d')
+                        folder_date = str_day_before
+                    # get the path of the .tab file corresponding to the .fits file
+                    data_folder_path = os.path.join(pf.abs_path_data, folder_date)
+                    tab_file_path = os.path.join(data_folder_path, file_name + '.tab')
 
-                # generate the file name for the reduced frame and copy it
-                red_name = raw_name[:-5] + '_ods.fits'
-                result_file_path = os.path.join(pf.gamse_results_folder.format(folder_date), red_name)
-                shutil.copy(result_file_path, pf.iraf_data_folder.format(redmine_id))
-                total_files_copied += 1
-    print('Successfully copied {} files!'.format(total_files_copied))
+                    # from the .tab file extract the correct link name of the raw frame
+                    with open(tab_file_path, 'r') as tabfile:
+                        for linex in tabfile:
+                            if 'LINKNAME' in linex:
+                                linex = linex.strip()
+                                linex = linex.split('=')
+                                raw_name = linex[1]
+                                filename_used.append(raw_name)
+
+                    # generate the file name for the reduced frame and copy it
+                    red_name = raw_name[:-5] + '_ods.fits'
+                    result_file_path = os.path.join(pf.gamse_results_folder.format(folder_date), red_name)
+                    shutil.copy(result_file_path, pf.iraf_data_folder.format(redmine_id))
+                    total_files_copied += 1
+                    framelist.write(str(filename_used[0]) + ' ' + str(filename_used[1]) + '\n')
+        print('Successfully copied {} files!'.format(total_files_copied))
 
     return
 

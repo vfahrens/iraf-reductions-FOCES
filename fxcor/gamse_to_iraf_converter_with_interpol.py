@@ -112,5 +112,3 @@ def iraf_converter(redmine_id, objname):
 
     print('IRAF conversion completed.')
     return
-
-iraf_converter(2894, 'ups And')

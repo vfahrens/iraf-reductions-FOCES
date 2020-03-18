@@ -5,6 +5,7 @@ import os
 import subprocess
 import re  # module for regular expressions
 import datetime as dt
+import shutil
 
 # import statements for other python scripts
 import shell_script_maker as shesm
@@ -193,19 +194,33 @@ yn_iraf_convert = input('Do you want to convert the wavelength calibrated data t
 
 if re.match(r'^y', yn_iraf_convert, re.I) or re.match(r'^j', yn_iraf_convert, re.I):
     print('\n')
-    str_redmine_id = input('Please enter the redmine ID and name of the object (format: XXXX identifierforSIMBAD): ')
+    str_redmine_id = input('Please enter the redmine ID and the name of the object (format: XXXX identifierforSIMBAD): ')
     str_redmine_id = str_redmine_id.strip()
     str_redmine_id = str_redmine_id.split()
     redmine_id = str_redmine_id[0]
     objname = str_redmine_id[1]
-    # fileextension = input('If you want to add a specific extension to the output filenames,
-    # please enter that (default: ): ')
     iraf_converter(redmine_id, objname)
 
 else:
     print('\n')
     print('No files were converted.')
     print('\n')
+
+
+# prepare data for fxcor and give instructions for IRAF execution
+print('\n')
+yn_iraf_execute = input('Do you want to do the cross-correlation function for all data with IRAF? ')
+
+if re.match(r'^y', yn_iraf_execute, re.I) or re.match(r'^j', yn_iraf_execute, re.I):
+    print('\n')
+    redmine_id = input('Surprise: I need the redmine ID again: ')
+    shutil.copy(pf.make_orderlists, pf.iraf_output_folder.format(redmine_id))
+    # subprocess.call(['cp', pf.make_orderlists, pf.iraf_output_folder.format(redmine_id)])
+    orderlists_path = os.path.join(pf.iraf_output_folder.format(redmine_id), pf.recipe_orderlists)
+    os.chdir(str(pf.iraf_output_folder.format(redmine_id)))
+    subprocess.call(['dos2unix', str(orderlists_path)])
+    subprocess.call(['bash', str(orderlists_path)])
+
 
 # do the fxcor reduction manually
 print('\n')
