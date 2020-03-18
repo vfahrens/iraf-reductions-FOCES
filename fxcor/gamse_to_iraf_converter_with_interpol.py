@@ -5,6 +5,7 @@ import astropy.io.fits as fits
 from pathlib import Path
 from datetime import datetime
 import datetime as dt
+from astroquery.simbad import Simbad
 
 # import statements for other python scripts
 import paths_and_files as pf
@@ -12,7 +13,7 @@ import paths_and_files as pf
 
 # extract the single orders from the GAMSE result files, add missing header entries
 # and interpolate to log-linear wavelength grid
-def iraf_converter(redmine_id):
+def iraf_converter(redmine_id, objname):
     # give the readout time of the camera for the calculation of the mid-time of observation
     CCD_readtime = 87.5
 
@@ -70,33 +71,33 @@ def iraf_converter(redmine_id):
 
                         # make a header for the new fits file
                         new_headyyy = headyyy
-                        new_headyyy["PHYSORD"] = (order, "Physical order of aperture")
-                        new_headyyy["CRPIX1"] = ("1.", "Reference pixel")
+                        new_headyyy['PHYSORD'] = (order, 'Physical order of aperture')
+                        new_headyyy['CRPIX1'] = ('1.', 'Reference pixel')
 
                         # get the starting wavelength of the current order
                         start_wl = wave_lin[0]
-                        new_headyyy["CRVAL1"] = (start_wl, "Coordinate at reference pixel")
+                        new_headyyy['CRVAL1'] = (start_wl, 'Coordinate at reference pixel')
                         # calculate the step size of the current order
                         wl_step = (wave_lin[-1]-wave_lin[0])/len(wave_lin)
-                        new_headyyy["CDELT1"] = (wl_step, "Coord.incr.per pixel(original value)")
+                        new_headyyy['CDELT1'] = (wl_step, 'Coord.incr.per pixel(original value)')
 
                         # add some more useful header entries
-                        new_headyyy["CTYPE1"] = ('                ', 'Units of coordinate')
-                        new_headyyy["BUNIT"] = ('                ', 'Units of data values')
-                        new_headyyy["DATAMAX"] = (str(np.max(flux_interpol)), "Maximum data value")
-                        new_headyyy["DATAMIN"] = (str(np.min(flux_interpol)), "Minimum data value")
+                        new_headyyy['CTYPE1'] = ('                ', 'Units of coordinate')
+                        new_headyyy['BUNIT'] = ('                ', 'Units of data values')
+                        new_headyyy['DATAMAX'] = (str(np.max(flux_interpol)), 'Maximum data value')
+                        new_headyyy['DATAMIN'] = (str(np.min(flux_interpol)), 'Minimum data value')
 
                         # add ra/dec coordinates to header if not present
-                        if 'TESRA' not in new_headyyy:
-                            objcoord_ra = '22:57:27.98042'
-                            new_headyyy['TESRA'] = (objcoord_ra, 'Right ascension coordinate')
-                        if 'TESDEC' not in new_headyyy:
-                            objcoord_dec = '+20:46:07.78224'
-                            new_headyyy["TESDEC"] = (objcoord_dec, "Declination coordinate")
+                        if 'RA' or 'DEC' not in new_headyyy:
+                            radec_table = Simbad.query_object(objname)
+                            objcoord_ra = radec_table['RA'][0].replace(' ', ':')
+                            objcoord_dec = radec_table['DEC'][0].replace(' ', ':')
+                            new_headyyy['RA'] = (objcoord_ra, 'Right ascension coordinate')
+                            new_headyyy['DEC'] = (objcoord_dec, 'Declination coordinate')
                             print('Header entry added.')
 
-                        new_headyyy["EQUINOX"] = (2000.0, "Epoch of observation")
-                        new_headyyy["UTMID"] = (datetime.isoformat(exp_midtime), "UT of midpoint of observation")
+                        new_headyyy['EQUINOX'] = (2000.0, 'Epoch of observation')
+                        new_headyyy['UTMID'] = (datetime.isoformat(exp_midtime),'UT of midpoint of observation')
 
                         # make a new fits file with the header and data BOTH as primary HDU,
                         # because this is what IRAF expects
@@ -107,7 +108,9 @@ def iraf_converter(redmine_id):
                         new_fitsiii2.writeto(outname)
 
             else:
-                print("Warning: this is a single fiber file: {}".format(fname))
+                print('Warning: This is a single fiber file: {}. IRAF conversion is not possible (yet).'.format(fname))
 
     print('IRAF conversion completed.')
     return
+
+iraf_converter(2894, 'ups And')

@@ -193,10 +193,14 @@ yn_iraf_convert = input('Do you want to convert the wavelength calibrated data t
 
 if re.match(r'^y', yn_iraf_convert, re.I) or re.match(r'^j', yn_iraf_convert, re.I):
     print('\n')
-    str_redmine_id = input('Please enter the redmine ID: ')
+    str_redmine_id = input('Please enter the redmine ID and name of the object (format: XXXX identifierforSIMBAD): ')
+    str_redmine_id = str_redmine_id.strip()
+    str_redmine_id = str_redmine_id.split()
+    redmine_id = str_redmine_id[0]
+    objname = str_redmine_id[1]
     # fileextension = input('If you want to add a specific extension to the output filenames,
     # please enter that (default: ): ')
-    iraf_converter(str_redmine_id)
+    iraf_converter(redmine_id, objname)
 
 else:
     print('\n')
