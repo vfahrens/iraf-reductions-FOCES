@@ -224,7 +224,8 @@ if re.match(r'^y', yn_iraf_execute, re.I) or re.match(r'^j', yn_iraf_execute, re
     print('List of frames for this object: {}'.format(pf.all_used_frames.format(redmine_id)))
     template = input('Please choose a template that should be used for the cross correlation: '
                      '(e.g.: 20190903_0114_FOC1903_SCI0) ')
-    shesm.script_fxcor_lists(redmine_id, template)
+    outname = input('Please give a name for the fxcor output file: (e.g.: out_allRVs_200319) ')
+    shesm.script_fxcor_lists(redmine_id, template, outname)
     subprocess.call(['dos2unix', str(pf.make_cl_fxcor.format(redmine_id))])
     subprocess.call(['bash', str(pf.make_cl_fxcor.format(redmine_id))])
 
@@ -246,10 +247,22 @@ if re.match(r'^y', yn_iraf_execute, re.I) or re.match(r'^j', yn_iraf_execute, re
     input('cl < fxcor_with_lists.cl')
 
 
+# extract the RVs from the fxcor results
+print('\n')
+yn_RV_extract = input('Do you want to extract the RV values you got from fxcor? ')
+
+if re.match(r'^y', yn_RV_extract, re.I) or re.match(r'^j', yn_RV_extract, re.I):
+    print('\n')
+    redmine_id = input('The redmine ID is needed once again: ')
+    fxcor_outfile = input('Tell me which fxcor output file to use: (e.g.: out_allRVs_200319) ')
+    sf.get_rvs(redmine_id, fxcor_outfile)
+    RVs_single, tels_single = sf.split_rvs_tel(redmine_id)
+    RVs_single_med, RVerr_single_med = sf.rv_and_err_median(RVs_single)
+    tels_single_med, telserr_single_med = sf.rv_and_err_median(tels_single)
+
 # do the fxcor reduction manually
 print('\n')
-input('Please follow the instructions in "workflow_fxcor.txt" to manually '
-      'execute the CCF with fxcor and hit ENTER when finished.')
+input('Please hit ENTER when finished.')
 
 
 # # plot the data produced by fxcor

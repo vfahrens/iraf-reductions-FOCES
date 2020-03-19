@@ -30,74 +30,74 @@ out3_filepath = os.path.join(pathout, filename_weighted_tels)
 out4_filepath = os.path.join(pathout, filename_weighted_corrtels)
 
 
-# get the RVs and RVerrs from the image header and fxcor result file, respectively
-fname_lst = sorted(os.listdir(path))
-prev_frameid = 0
-with open(out1_filepath, 'w') as outfile:
-    for fname in fname_lst:
-        # only use the science fiber frames
-        if fname[-16:] != '_A_lin_IRAF.fits':
-            continue
-
-        # get the RV (converted to m/s) and the physical order number from the header
-        open_filepath = os.path.join(pathin, fname)
-        with fits.open(open_filepath) as datei:
-            header = datei[0].header
-            if 'HJD' in header:
-                date = header['HJD']
-                rv_value = header['VHELIO']*1000.0
-            phys_ord = fname[34:37]
-
-        # get the corresponding RV error (converted to m/s) from the fxcor result file
-        with open(fxcor_output, 'r') as fxfile:
-            for line in fxfile:
-                line = line.split()
-                if fname in line and line[-1] != 'INDEF':
-                    rv_err = float(line[-1]) * 1000.0
-
-        # save all the results for the single orders to a file
-        if 'HJD' in header:
-            output_singleorders = str(date) + ' ' + str(rv_value) + ' ' + str(rv_err) + ' ' + str(phys_ord) + '\n'
-            print(output_singleorders)
-            outfile.write(output_singleorders)
-
-# read the list of observation dates from the file containing the single order RV results
-alldates = []
-with open(out1_filepath, 'r') as infile:
-    for line in infile:
-        line = line.split()
-        alldates.append(line[0])
-# remove any duplicates from the dates list
-dates_list = set(alldates)
-
-# read all RV results for a specific observation date (= 1 frame) from the single order file
-RVs_fromfile = []
-tellurics_fromfile = []
-with open(out1_filepath, 'r') as infile:
-    for line in infile:
-        line = line.split()
-        # only use physical orders 105-136 and not 115, because the rest is bad
-        if 104 < int(line[3]) < 137 and int(line[3]) != 115:
-            # save the whole line in a larger array with all observation dates
-            RVs_fromfile.append(line)
-        if int(line[3]) == 75 or int(line[3]) == 83:
-            tellurics_fromfile.append(line)
-
-# sort all RV results by date and order
-RVs_eachdate = sorted(RVs_fromfile, key=itemgetter(0))
-tellurics_eachdate = sorted(tellurics_fromfile, key=itemgetter(0))
-# convert that array to a useful format for numpy
-RVs_eachdate = np.transpose(RVs_eachdate)
-RVs_eachdate = np.asarray(RVs_eachdate).astype(np.float)
-tellurics_eachdate = np.transpose(tellurics_eachdate)
-tellurics_eachdate = np.asarray(tellurics_eachdate).astype(np.float)
-# print(tellurics_eachdate)
-
-# compute the median of all measured RVs and RV errors
-med_RV = np.median(RVs_eachdate[1])
-med_err = np.median(RVs_eachdate[2])
-med_RV_tels = np.median(tellurics_eachdate[1])
-med_err_tels = np.median(tellurics_eachdate[2])
+# # get the RVs and RVerrs from the image header and fxcor result file, respectively
+# fname_lst = sorted(os.listdir(path))
+# prev_frameid = 0
+# with open(out1_filepath, 'w') as outfile:
+#     for fname in fname_lst:
+#         # only use the science fiber frames
+#         if fname[-16:] != '_A_lin_IRAF.fits':
+#             continue
+#
+#         # get the RV (converted to m/s) and the physical order number from the header
+#         open_filepath = os.path.join(pathin, fname)
+#         with fits.open(open_filepath) as datei:
+#             header = datei[0].header
+#             if 'HJD' in header:
+#                 date = header['HJD']
+#                 rv_value = header['VHELIO']*1000.0
+#             phys_ord = fname[34:37]
+#
+#         # get the corresponding RV error (converted to m/s) from the fxcor result file
+#         with open(fxcor_output, 'r') as fxfile:
+#             for line in fxfile:
+#                 line = line.split()
+#                 if fname in line and line[-1] != 'INDEF':
+#                     rv_err = float(line[-1]) * 1000.0
+#
+#         # save all the results for the single orders to a file
+#         if 'HJD' in header:
+#             output_singleorders = str(date) + ' ' + str(rv_value) + ' ' + str(rv_err) + ' ' + str(phys_ord) + '\n'
+#             print(output_singleorders)
+#             outfile.write(output_singleorders)
+#
+# # read the list of observation dates from the file containing the single order RV results
+# alldates = []
+# with open(out1_filepath, 'r') as infile:
+#     for line in infile:
+#         line = line.split()
+#         alldates.append(line[0])
+# # remove any duplicates from the dates list
+# dates_list = set(alldates)
+#
+# # read all RV results for a specific observation date (= 1 frame) from the single order file
+# RVs_fromfile = []
+# tellurics_fromfile = []
+# with open(out1_filepath, 'r') as infile:
+#     for line in infile:
+#         line = line.split()
+#         # only use physical orders 105-136 and not 115, because the rest is bad
+#         if 104 < int(line[3]) < 137 and int(line[3]) != 115:
+#             # save the whole line in a larger array with all observation dates
+#             RVs_fromfile.append(line)
+#         if int(line[3]) == 75 or int(line[3]) == 83:
+#             tellurics_fromfile.append(line)
+#
+# # sort all RV results by date and order
+# RVs_eachdate = sorted(RVs_fromfile, key=itemgetter(0))
+# tellurics_eachdate = sorted(tellurics_fromfile, key=itemgetter(0))
+# # convert that array to a useful format for numpy
+# RVs_eachdate = np.transpose(RVs_eachdate)
+# RVs_eachdate = np.asarray(RVs_eachdate).astype(np.float)
+# tellurics_eachdate = np.transpose(tellurics_eachdate)
+# tellurics_eachdate = np.asarray(tellurics_eachdate).astype(np.float)
+# # print(tellurics_eachdate)
+#
+# # compute the median of all measured RVs and RV errors
+# med_RV = np.median(RVs_eachdate[1])
+# med_err = np.median(RVs_eachdate[2])
+# med_RV_tels = np.median(tellurics_eachdate[1])
+# med_err_tels = np.median(tellurics_eachdate[2])
 
 # get the data for one specific observation date again and compute the weighted mean of the RV and the RV error
 all_stds = []

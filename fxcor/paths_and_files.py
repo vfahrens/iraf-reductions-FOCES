@@ -10,6 +10,7 @@ path_reduce_gamse = '../../../GAMSE'
 path_IRAF_datainput = 'data/'
 path_gamse_results = 'onedspec'
 path_gamse_reduce = 'red_{}'
+path_rv_results = 'rv_results/'
 
 # definition of many filenames
 file_script_USM = 'sync_obslogfiles_USM.sh'
@@ -26,6 +27,10 @@ copy_wvcal_script = 'copy_wvcal_ID{}_to_IRAF.sh'
 recipe_orderlists = 'recipe_make_orderlists.sh'
 recipe_cl_fxcor = 'recipe_make_fxcor_with_lists.sh'
 all_used_frames = 'used_frames_ID{}.txt'
+RVs_single_orders = 'RVs_ID{}_single_orders.txt'
+RVs_weighted = 'RVs_ID{}_weighted.txt'
+# filename_weighted_tels = 'RVs_time_weighted_tels_oldscatred.txt'
+RVs_telcorr = 'RVs_ID{}_telcorr.txt'
 
 # initialize all paths and make them platform independent
 location = Path(__file__).parent
@@ -35,6 +40,7 @@ abs_path_obslog = (location / path_obslog_local).resolve()
 abs_path_data = (location / path_data_local).resolve()
 abs_path_red_gamse = (location / path_reduce_gamse).resolve()
 abs_path_IRAF = (location / path_IRAF_datainput).resolve()
+abs_path_rvout = (location / path_rv_results).resolve()
 
 # other paths
 gamse_reduce_folder = os.path.join(abs_path_red_gamse, path_gamse_reduce)
@@ -57,3 +63,6 @@ copy_reduced_cmd = os.path.join(abs_path_scripts, copy_wvcal_script)
 make_orderlists = os.path.join(abs_path_scripts, recipe_orderlists)
 make_cl_fxcor = os.path.join(iraf_output_folder, recipe_cl_fxcor)
 frames_list = os.path.join(abs_path_output, all_used_frames)
+out_RVs_single = os.path.join(abs_path_rvout, RVs_single_orders)
+out_RVs_weighted = os.path.join(abs_path_rvout, RVs_weighted)
+out_RVs_telcorr = os.path.join(abs_path_rvout, RVs_telcorr)

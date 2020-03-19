@@ -14,7 +14,7 @@ IRAF:
 # - after starting IRAF, execute "reset obsdb=home$obsdb.dat"
 # - make a list of all the spectra used as templates: "files 20190903_0104_*_A_*.fits > templates_51Peg.lis"
 # - do the heliocentric correction for the template spectra: "rvcorrect images=@templates_51Peg.lis" (or open "epar rvcorrect" and put the template list as entry for "images": "images = @templates_51Peg.lis")
-- in IRAF do the correlation: "cl < fxcor_with_lists.cl"
+# - in IRAF do the correlation: "cl < fxcor_with_lists.cl"
 PYCHARM:
 - open the file "/mnt/e/IRAF/iraf-reductions-FOCES/fxcor/rv_extractor_header.py"
 - change the data input and output folders as needed
