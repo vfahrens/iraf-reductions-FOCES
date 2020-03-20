@@ -98,54 +98,54 @@ out4_filepath = os.path.join(pathout, filename_weighted_corrtels)
 # med_err = np.median(RVs_eachdate[2])
 # med_RV_tels = np.median(tellurics_eachdate[1])
 # med_err_tels = np.median(tellurics_eachdate[2])
-
-# get the data for one specific observation date again and compute the weighted mean of the RV and the RV error
-all_stds = []
-with open(out2_filepath, 'w') as out2file:
-    for date in set(RVs_eachdate[0]):
-        vels_onedate = []
-        v_err = []
-        for j in range(len(RVs_eachdate[0])):
-            # only use the rows of the array that contain RV data from one observation date
-            if RVs_eachdate[0, j] == date:
-                vels_onedate.append(RVs_eachdate[1, j])
-                # if the RV error given by fxcor is zero, use the median RV error instead
-                if RVs_eachdate[2, j] != 0.0:
-                    v_err.append(RVs_eachdate[2, j])
-                else:
-                    v_err.append(med_err)
-        # compute the weighted average for that date and use the median RV as zero-point correction
-        rv_weightmean = np.average(vels_onedate, weights=(1/np.abs(v_err))) - med_RV
-        # compute the RV error across the orders and put it in a list of RV errors
-        rv_std = np.std(vels_onedate) * np.sqrt(2) / np.sqrt(len(vels_onedate))
-        all_stds.append(rv_std)
-
-        # write the results to a file, if the data point is good, which means that the error is below a certain limit
-        if rv_std < 29.0:
-            results = str(date) + ' ' + str(rv_weightmean) + ' ' + str(rv_std) + '\n'
-            out2file.write(results)
-
-# read the results from the file again to fix missing RV error values
-RV_results = []
-with open(out2_filepath, 'r') as in2file:
-    for line2 in in2file:
-        line2 = line2.split()
-        # check if the cross-order RV error has a reasonable value, this is not the case e.g. for the template
-        # a value of 0.1 m/s cross-order RV error is probably never possible with FOCES
-        # replace bad RV errors with the median of all other RV errors
-        if float(line2[2]) < 0.1:
-            line2[2] = str(np.median(all_stds))
-            RV_results.append(line2)
-        else:
-            RV_results.append(line2)
-
-RV_tofile = sorted(RV_results, key=itemgetter(0))
-# save all RV results with the now corrected error to the file again
-RV_tofile = np.transpose(RV_tofile)
-with open(out2_filepath, 'w') as out2file_corr:
-    for m in range(len(RV_tofile[0])):
-        results_corr = str(RV_tofile[0, m]) + ' ' + str(RV_tofile[1, m]) + ' ' + str(RV_tofile[2, m]) + '\n'
-        out2file_corr.write(results_corr)
+#
+# # get the data for one specific observation date again and compute the weighted mean of the RV and the RV error
+# all_stds = []
+# with open(out2_filepath, 'w') as out2file:
+#     for date in set(RVs_eachdate[0]):
+#         vels_onedate = []
+#         v_err = []
+#         for j in range(len(RVs_eachdate[0])):
+#             # only use the rows of the array that contain RV data from one observation date
+#             if RVs_eachdate[0, j] == date:
+#                 vels_onedate.append(RVs_eachdate[1, j])
+#                 # if the RV error given by fxcor is zero, use the median RV error instead
+#                 if RVs_eachdate[2, j] != 0.0:
+#                     v_err.append(RVs_eachdate[2, j])
+#                 else:
+#                     v_err.append(med_err)
+#         # compute the weighted average for that date and use the median RV as zero-point correction
+#         rv_weightmean = np.average(vels_onedate, weights=(1/np.abs(v_err))) - med_RV
+#         # compute the RV error across the orders and put it in a list of RV errors
+#         rv_std = np.std(vels_onedate) * np.sqrt(2) / np.sqrt(len(vels_onedate))
+#         all_stds.append(rv_std)
+#
+#         # write the results to a file, if the data point is good, which means that the error is below a certain limit
+#         if rv_std < 29.0:
+#             results = str(date) + ' ' + str(rv_weightmean) + ' ' + str(rv_std) + '\n'
+#             out2file.write(results)
+#
+# # read the results from the file again to fix missing RV error values
+# RV_results = []
+# with open(out2_filepath, 'r') as in2file:
+#     for line2 in in2file:
+#         line2 = line2.split()
+#         # check if the cross-order RV error has a reasonable value, this is not the case e.g. for the template
+#         # a value of 0.1 m/s cross-order RV error is probably never possible with FOCES
+#         # replace bad RV errors with the median of all other RV errors
+#         if float(line2[2]) < 0.1:
+#             line2[2] = str(np.median(all_stds))
+#             RV_results.append(line2)
+#         else:
+#             RV_results.append(line2)
+#
+# RV_tofile = sorted(RV_results, key=itemgetter(0))
+# # save all RV results with the now corrected error to the file again
+# RV_tofile = np.transpose(RV_tofile)
+# with open(out2_filepath, 'w') as out2file_corr:
+#     for m in range(len(RV_tofile[0])):
+#         results_corr = str(RV_tofile[0, m]) + ' ' + str(RV_tofile[1, m]) + ' ' + str(RV_tofile[2, m]) + '\n'
+#         out2file_corr.write(results_corr)
 
 
 # get the telluric line RVs for one specific observation date and compute the weighted mean of the RV and the RV error

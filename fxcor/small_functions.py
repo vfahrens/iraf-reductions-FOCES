@@ -262,6 +262,43 @@ def rv_weightedmean(redmine_id, rvs_array, med_rv, med_err, rv_type):
                 date_norm = julian.from_jd(date, fmt='jd')
                 print('WARNING: Date {} has larger errors than {} m/s.'.format(date_norm, error_limit))
 
+    return all_stds
+
+
+# read the weighted RV results from the file again to fix missing RV error values
+def fix_missing_errors(redmine_id, rv_type, all_stds):
+    rv_results = []
+    if rv_type != 'tel':
+        input_file = pf.out_RVs_weighted.format(redmine_id)
+    else:
+        input_file = pf.out_tels_weighted.format(redmine_id)
+
+    with open(input_file, 'r') as in2file:
+        for line2 in in2file:
+            line2 = line2.split()
+            # check if the cross-order RV error has a reasonable value, this is not the case e.g. for the template
+            # a value of 0.1 m/s cross-order RV error is probably never possible with FOCES
+            # replace bad RV errors with the median of all other RV errors
+            if float(line2[2]) < 0.1:
+                line2[2] = str(np.median(all_stds))
+                rv_results.append(line2)
+            else:
+                rv_results.append(line2)
+
+    rv_tofile = sorted(rv_results, key=itemgetter(0))
+    # save all RV results with the now corrected error to the file again
+    rv_tofile = np.transpose(rv_tofile)
+
+    if rv_type != 'tel':
+        out2_filepath = pf.out_RVs_weighted.format(redmine_id)
+    else:
+        out2_filepath = pf.out_tels_weighted.format(redmine_id)
+    with open(out2_filepath, 'w') as out2file_corr:
+        for m in range(len(rv_tofile[0])):
+            results_corr = str(rv_tofile[0, m]) + ' ' + str(rv_tofile[1, m]) + ' ' + str(rv_tofile[2, m]) + '\n'
+            out2file_corr.write(results_corr)
+
+    return
 
 # get_rvs(2864, 'out_allRVs_200309')
 

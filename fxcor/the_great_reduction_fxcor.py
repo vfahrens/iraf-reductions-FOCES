@@ -259,8 +259,10 @@ if re.match(r'^y', yn_RV_extract, re.I) or re.match(r'^j', yn_RV_extract, re.I):
     RVs_single, tels_single = sf.split_rvs_tel(redmine_id)
     RVs_single_med, RVerr_single_med = sf.rv_and_err_median(RVs_single, 'obj')
     tels_single_med, telserr_single_med = sf.rv_and_err_median(tels_single, 'tel')
-    sf.rv_weightedmean(redmine_id, RVs_single, RVs_single_med, RVerr_single_med, 'obj')
-    sf.rv_weightedmean(redmine_id, tels_single, tels_single_med, telserr_single_med, 'tel')
+    RVs_stds = sf.rv_weightedmean(redmine_id, RVs_single, RVs_single_med, RVerr_single_med, 'obj')
+    tel_stds = sf.rv_weightedmean(redmine_id, tels_single, tels_single_med, telserr_single_med, 'tel')
+    sf.fix_missing_errors(redmine_id, 'obj', RVs_stds)
+    sf.fix_missing_errors(redmine_id, 'tel', tel_stds)
 
 # do the fxcor reduction manually
 print('\n')
