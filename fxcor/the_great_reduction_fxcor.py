@@ -257,8 +257,10 @@ if re.match(r'^y', yn_RV_extract, re.I) or re.match(r'^j', yn_RV_extract, re.I):
     fxcor_outfile = input('Tell me which fxcor output file to use: (e.g.: out_allRVs_200319) ')
     sf.get_rvs(redmine_id, fxcor_outfile)
     RVs_single, tels_single = sf.split_rvs_tel(redmine_id)
-    RVs_single_med, RVerr_single_med = sf.rv_and_err_median(RVs_single)
-    tels_single_med, telserr_single_med = sf.rv_and_err_median(tels_single)
+    RVs_single_med, RVerr_single_med = sf.rv_and_err_median(RVs_single, 'obj')
+    tels_single_med, telserr_single_med = sf.rv_and_err_median(tels_single, 'tel')
+    sf.rv_weightedmean(redmine_id, RVs_single, RVs_single_med, RVerr_single_med, 'obj')
+    sf.rv_weightedmean(redmine_id, tels_single, tels_single_med, telserr_single_med, 'tel')
 
 # do the fxcor reduction manually
 print('\n')

@@ -29,7 +29,7 @@ recipe_cl_fxcor = 'recipe_make_fxcor_with_lists.sh'
 all_used_frames = 'used_frames_ID{}.txt'
 RVs_single_orders = 'RVs_ID{}_single_orders.txt'
 RVs_weighted = 'RVs_ID{}_weighted.txt'
-# filename_weighted_tels = 'RVs_time_weighted_tels_oldscatred.txt'
+tels_weighted = 'tels_ID{}_weighted.txt'
 RVs_telcorr = 'RVs_ID{}_telcorr.txt'
 
 # initialize all paths and make them platform independent
@@ -65,4 +65,5 @@ make_cl_fxcor = os.path.join(iraf_output_folder, recipe_cl_fxcor)
 frames_list = os.path.join(abs_path_output, all_used_frames)
 out_RVs_single = os.path.join(abs_path_rvout, RVs_single_orders)
 out_RVs_weighted = os.path.join(abs_path_rvout, RVs_weighted)
+out_tels_weighted = os.path.join(abs_path_rvout, tels_weighted)
 out_RVs_telcorr = os.path.join(abs_path_rvout, RVs_telcorr)

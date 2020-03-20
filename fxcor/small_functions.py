@@ -197,38 +197,61 @@ def make_rv_array(rv_list):
 
 
 # compute the median of the measured single-order RVs and RV errors
-def rv_and_err_median(rvs_array):
-    med_rv = np.median(rvs_array[1])
+def rv_and_err_median(rvs_array, rv_type):
+    # for normal RVs, use RV with heliocentric correction
+    if rv_type != 'tel':
+        med_rv = np.median(rvs_array[1])
+    # for tellurics, use relative velocity without heliocentric correction
+    else:
+        med_rv = np.median(rvs_array[3])
+    # for both cases use the fxcor error to get a median error of all RV values
     med_err = np.median(rvs_array[2])
     return med_rv, med_err
 
 
 # get the data for one specific observation date and compute the weighted mean of the RV and the RV error
-def rv_weightedmean(redmine_id, rvs_array, med_rv, med_err):
+def rv_weightedmean(redmine_id, rvs_array, med_rv, med_err, rv_type):
     all_stds = []
-    with open(pf.out_RVs_weighted.format(redmine_id), 'w') as out2file:
+    error_limit = input('Please give a limit for the max. allowed RV error in m/s: (e.g.: 29.0) ')
+
+    if rv_type != 'tel':
+        output_file = pf.out_RVs_weighted.format(redmine_id)
+    else:
+        output_file = pf.out_tels_weighted.format(redmine_id)
+    with open(output_file, 'w') as out2file:
         for date in set(rvs_array[0]):
             vels_onedate = []
             v_err = []
             for j in range(len(rvs_array[0])):
                 # only use the rows of the array that contain RV data from one observation date
                 if rvs_array[0, j] == date:
-                    vels_onedate.append(rvs_array[1, j])
+                    if rv_type != 'tel':
+                        vels_onedate.append(rvs_array[1, j])
+                    else:
+                        # for tellurics, use the relative RV without heliocentric correction
+                        vels_onedate.append(rvs_array[3, j])
+
                     # if the RV error given by fxcor is zero, use the median RV error instead
                     if rvs_array[2, j] != 0.0:
                         v_err.append(rvs_array[2, j])
                     else:
                         v_err.append(med_err)
+
             # compute the weighted average for that date and use the median RV as zero-point correction
-            rv_weightmean = np.average(vels_onedate, weights=(1/np.abs(v_err))) - med_rv
+            rv_weightmean = np.average(vels_onedate, weights=(1/np.abs(v_err)))  # - med_rv
+            if rv_type != 'tel':
+                rv_weightmean = rv_weightmean - med_rv
             # compute the RV error across the orders and put it in a list of RV errors
             rv_std = np.std(vels_onedate) * np.sqrt(2) / np.sqrt(len(vels_onedate))
             all_stds.append(rv_std)
 
-            # write the results to a file, if the data point is good, which means that the error is below a certain limit
-            if rv_std < 29.0:
+            # write the results to a file, if the data point is good,
+            # which means that the error is below a certain limit
+            if rv_std < float(error_limit):
                 results = str(date) + ' ' + str(rv_weightmean) + ' ' + str(rv_std) + '\n'
                 out2file.write(results)
+            else:
+                print('WARNING: Date {} has larger errors than {} m/s.'.format(date, error_limit))
 
 
 # get_rvs(2864, 'out_allRVs_200309')
