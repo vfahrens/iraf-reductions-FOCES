@@ -4,6 +4,7 @@ import shutil
 import astropy.io.fits as fits
 import numpy as np
 from operator import itemgetter
+import julian
 
 # import statements for other python scripts
 import paths_and_files as pf
@@ -139,8 +140,15 @@ def get_rvs(redmine_id, fxcor_outname):
             open_filepath = os.path.join(pf.iraf_output_folder.format(redmine_id), fname)
             with fits.open(open_filepath) as datei:
                 header = datei[0].header
-                if 'HJD' in header:
-                    date = header['HJD']
+                if 'VHELIO' in header:
+                    date_str = header['UTMID']
+                    if len(date_str) == 19:
+                        date_dt = dt.datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S')
+                    elif len(date_str) > 19:
+                        date_dt = dt.datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S.%f')
+                    else:
+                        print('Warning: Date {} has unexpected format.'.format(date_str))
+                    date = julian.to_jd(date_dt, fmt='jd')
                     rv_value = header['VHELIO'] * 1000.0
                 phys_ord = fname[34:37]
 
@@ -251,7 +259,8 @@ def rv_weightedmean(redmine_id, rvs_array, med_rv, med_err, rv_type):
                 results = str(date) + ' ' + str(rv_weightmean) + ' ' + str(rv_std) + '\n'
                 out2file.write(results)
             else:
-                print('WARNING: Date {} has larger errors than {} m/s.'.format(date, error_limit))
+                date_norm = julian.from_jd(date, fmt='jd')
+                print('WARNING: Date {} has larger errors than {} m/s.'.format(date_norm, error_limit))
 
 
 # get_rvs(2864, 'out_allRVs_200309')
