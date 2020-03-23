@@ -31,6 +31,7 @@ RVs_single_orders = 'RVs_ID{}_single_orders.txt'
 RVs_weighted = 'RVs_ID{}_weighted.txt'
 tels_weighted = 'tels_ID{}_weighted.txt'
 RVs_telcorr = 'RVs_ID{}_telcorr.txt'
+ords_tellurics = 'orders_with_telluric_contamination.txt'
 
 # initialize all paths and make them platform independent
 location = Path(__file__).parent
@@ -67,3 +68,4 @@ out_RVs_single = os.path.join(abs_path_rvout, RVs_single_orders)
 out_RVs_weighted = os.path.join(abs_path_rvout, RVs_weighted)
 out_tels_weighted = os.path.join(abs_path_rvout, tels_weighted)
 out_RVs_telcorr = os.path.join(abs_path_rvout, RVs_telcorr)
+input_tel_orders = os.path.join(abs_path_IRAF, ords_tellurics)

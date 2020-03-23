@@ -5,6 +5,7 @@ import astropy.io.fits as fits
 import numpy as np
 from operator import itemgetter
 import julian
+import matplotlib.pyplot as plt
 
 # import statements for other python scripts
 import paths_and_files as pf
@@ -174,19 +175,26 @@ def get_rvs(redmine_id, fxcor_outname):
 # get the radial velocities as object and telluric velocities
 def split_rvs_tel(redmine_id):
     # read all RV results for a specific observation date (= 1 frame) from the single order file
+    bad_orders = []
     rvs_fromfile = []
     tellurics_fromfile = []
-    order_limits = input('Please give the range of orders where you want RVs extracted: (e.g.: 105-136) ')
-    order_limits = order_limits.strip()
-    order_limits = order_limits.split('-')
+
+    with open(pf.input_tel_orders, 'r') as telluric_file:
+        for linet in telluric_file:
+            linet = linet.strip()
+            bad_orders.append(int(linet))
+    # order_limits = input('Please give the range of orders where you want RVs extracted: (e.g.: 105-136) ')
+    # order_limits = order_limits.strip()
+    # order_limits = order_limits.split('-')
     with open(pf.out_RVs_single.format(redmine_id), 'r') as infile:
         for line in infile:
             line = line.split()
             # only use physical orders between the given limits and not 115, because that is bad
-            if int(line[-1]) in range(int(order_limits[0]), int(order_limits[1]) + 1) and int(line[-1]) != 115:
+            # if int(line[-1]) in range(int(order_limits[0]), int(order_limits[1]) + 1) and int(line[-1]) != 115:
+            if int(line[-1]) not in bad_orders and 67 < int(line[-1]) < 144:
                 # save the whole line in a larger array with all observation dates
                 rvs_fromfile.append(line)
-            if int(line[-1]) == 75 or int(line[-1]) == 83:
+            if int(line[-1]) == 69 or int(line[-1]) == 70 or int(line[-1]) == 75 or int(line[-1]) == 83:
                 tellurics_fromfile.append(line)
 
     rvs_single_array = make_rv_array(rvs_fromfile)
@@ -298,9 +306,57 @@ def fix_missing_errors(redmine_id, rv_type, all_stds):
             results_corr = str(rv_tofile[0, m]) + ' ' + str(rv_tofile[1, m]) + ' ' + str(rv_tofile[2, m]) + '\n'
             out2file_corr.write(results_corr)
 
+    return rv_tofile
+
+
+# save the RV results corrected with the telluric shift to a file
+def get_tel_correction(redmine_id, rvs_fixerr, tel_fixerr):
+    with open(pf.out_RVs_telcorr.format(redmine_id), 'w') as out4file_corr:
+        for m in range(len(tel_fixerr[0])):
+            results_corr = str(tel_fixerr[0, m]) + ' ' + str(
+                np.float(rvs_fixerr[1, m]) - np.float(tel_fixerr[1, m])) + ' ' + str(tel_fixerr[2, m]) + '\n'
+            out4file_corr.write(results_corr)
+
     return
 
-# get_rvs(2864, 'out_allRVs_200309')
+
+# plot the RV results for all orders for each frame
+def plot_single_orders(redmine_id):
+    dates_rv_array = []
+    # read the single order RVs from the file
+    with open(pf.out_RVs_single.format(redmine_id), 'r') as singleorderfile:
+        for line in singleorderfile:
+            line = line.split()
+            dates_rv_array.append(line)
+
+    # convert that array to a useful format
+    dates_rv_array = make_rv_array(dates_rv_array)
+    print(dates_rv_array[0])
+
+    # make a plot for each different date in the array
+    for onedate in set(dates_rv_array[0]):
+        order_list = []
+        rv_list = []
+        err_list = []
+        for g in range(len(dates_rv_array[0])):
+            if dates_rv_array[0, g] == onedate:
+                order_list.append(dates_rv_array[-1, g])
+                rv_list.append(dates_rv_array[1, g])
+                err_list.append(dates_rv_array[2, g])
+
+        onedate_norm = julian.from_jd(onedate, fmt='jd')
+        date_out = dt.datetime.strftime(onedate_norm, '%m.%d_%H:%M:%S')
+        # plot the whole thing
+        fig = plt.figure()
+        plt.errorbar(order_list, rv_list, yerr=err_list, fmt='o', label=date_out, alpha=0.5)
+        plt.hlines(np.median(rv_list), min(order_list), max(order_list), lw=2)
+        plt.xlabel('# of physical order')
+        plt.ylabel('RV in m/s')
+        plt.legend()
+        plt.show()
+
+
+# plot_single_orders(2864)
 
 # def plot_single_RVs():
 #

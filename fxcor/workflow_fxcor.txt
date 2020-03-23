@@ -16,8 +16,8 @@ IRAF:
 # - do the heliocentric correction for the template spectra: "rvcorrect images=@templates_51Peg.lis" (or open "epar rvcorrect" and put the template list as entry for "images": "images = @templates_51Peg.lis")
 # - in IRAF do the correlation: "cl < fxcor_with_lists.cl"
 PYCHARM:
-- open the file "/mnt/e/IRAF/iraf-reductions-FOCES/fxcor/rv_extractor_header.py"
-- change the data input and output folders as needed
-- change the filename of the fxcor output file and the filenames of the files where the RVs should be saved
-- check if in the output folder files with the same name as the desired output already exist, if yes rename or delete them (else the new results will only be appended)
-- run the script
+# - open the file "/mnt/e/IRAF/iraf-reductions-FOCES/fxcor/rv_extractor_header.py"
+# - change the data input and output folders as needed
+# - change the filename of the fxcor output file and the filenames of the files where the RVs should be saved
+# - check if in the output folder files with the same name as the desired output already exist, if yes rename or delete them (else the new results will only be appended)
+# - run the script

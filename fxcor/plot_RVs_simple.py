@@ -89,46 +89,46 @@ for k in RVerr2:
 dates_fl2 = np.asarray(dates_fl2).astype(np.float)
 RVs_fl2 = np.asarray(RVs_fl2).astype(np.float)
 RVerr_fl2 = np.asarray(RVerr_fl2).astype(np.float)
-#
-# # read the data of 51Peg
-# with open(RV_file_path3) as RVfile3:
-#     for line in RVfile3:
-#         line = line.strip()
-#         line = line.split()
-#         this_list3.append(line)
-#
-# nicely_3 = sorted(this_list3, key=itemgetter(0))
-# nicely2_3 = np.transpose(nicely_3)
-# dates3 = nicely2_3[0]
-# RVs3 = nicely2_3[1]
-# RVerr3 = nicely2_3[2]
-#
-# dates_fl3 = []
-# RVs_fl3 = []
-# RVerr_fl3 = []
-# for i in dates3:
-#     dates_fl3.append(float(i))
-# for j in RVs3:
-#     RVs_fl3.append(float(j))
-# for k in RVerr3:
-#     RVerr_fl3.append(float(k))
-#
-# RVs_fl = np.array(RVs_fl)
-# RVs_fl2 = np.array(RVs_fl2)
-# RVs_fl3 = np.array(RVs_fl3)
-# RVerr_fl2 = np.array(RVerr_fl2)
-# RVerr_fl3 = np.array(RVerr_fl3)
-# # print(np.std(RVs_fl3 - RVs_fl2))
+
+# read the data of 51Peg
+with open(pf.out_RVs_telcorr.format('2864')) as RVfile3:
+    for line in RVfile3:
+        line = line.strip()
+        line = line.split()
+        this_list3.append(line)
+
+nicely_3 = sorted(this_list3, key=itemgetter(0))
+nicely2_3 = np.transpose(nicely_3)
+dates3 = nicely2_3[0]
+RVs3 = nicely2_3[1]
+RVerr3 = nicely2_3[2]
+
+dates_fl3 = []
+RVs_fl3 = []
+RVerr_fl3 = []
+for i in dates3:
+    dates_fl3.append(float(i))
+for j in RVs3:
+    RVs_fl3.append(float(j))
+for k in RVerr3:
+    RVerr_fl3.append(float(k))
+
+RVs_fl = np.array(RVs_fl)
+RVs_fl2 = np.array(RVs_fl2)
+RVs_fl3 = np.array(RVs_fl3)
+RVerr_fl2 = np.array(RVerr_fl2)
+RVerr_fl3 = np.array(RVerr_fl3)
+# print(np.std(RVs_fl3 - RVs_fl2))
 
 # plot the RVs for all frames after each other
 x = np.arange(len(RVs_fl))
 x2 = np.arange(len(RVs_fl2))
-# x3 = np.arange(len(RVs_fl3))
+x3 = np.arange(len(RVs_fl3))
 fig = plt.figure()
 plt.errorbar(x, RVs_fl, yerr=RVerr_fl, fmt='o', label='51Peg', alpha=0.5)
 plt.errorbar(x2, RVs_fl2, yerr=RVerr_fl2, fmt='o', label='tellurics', alpha=0.5)
-# plt.errorbar(x3, RVs_fl3, yerr=RVerr_fl3, fmt='o', label='51Peg - tel', alpha=0.5)
-plt.plot(x2, RVs_fl - RVs_fl2, 'o', label='51Peg - tel', alpha=0.5)
+plt.errorbar(x3, RVs_fl3, yerr=RVerr_fl3, fmt='o', label='51Peg - tel', alpha=0.5)
+# plt.plot(x2, RVs_fl - RVs_fl2, 'o', label='51Peg - tel', alpha=0.5)
 # plt.hlines(rv_weightmean, [0], len(x), lw=2)
 plt.xlabel('# of observation')
 plt.ylabel('RV in m/s')
