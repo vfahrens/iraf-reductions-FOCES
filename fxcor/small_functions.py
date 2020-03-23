@@ -191,7 +191,7 @@ def split_rvs_tel(redmine_id):
             line = line.split()
             # only use physical orders between the given limits and not 115, because that is bad
             # if int(line[-1]) in range(int(order_limits[0]), int(order_limits[1]) + 1) and int(line[-1]) != 115:
-            if int(line[-1]) not in bad_orders and 67 < int(line[-1]) < 144:
+            if int(line[-1]) not in bad_orders:
                 # save the whole line in a larger array with all observation dates
                 rvs_fromfile.append(line)
             if int(line[-1]) == 69 or int(line[-1]) == 70 or int(line[-1]) == 75 or int(line[-1]) == 83:
