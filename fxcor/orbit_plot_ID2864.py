@@ -5,10 +5,16 @@ from matplotlib import pyplot as pl
 from matplotlib.ticker import MaxNLocator
 from astropy.time import Time
 
-import radvel
-from radvel import plot
-from radvel.plot import mcmc_plots
-from radvel.utils import t_to_phase, fastbin, sigfig
+# import radvel
+# from radvel import plot
+# from radvel.plot import mcmc_plots
+# from radvel.utils import t_to_phase, fastbin, sigfig
+import radvel_definitions as rvdef
+import radvel_basis
+import radvel_model
+import radvel_likelihood
+import radvel_posterior
+import radvel_mcmc_plot
 
 
 class MultipanelPlot(object):
@@ -92,7 +98,7 @@ class MultipanelPlot(object):
         if status is not None:
             self.status = status
 
-        if isinstance(self.post.likelihood, radvel.likelihood.CompositeLikelihood):
+        if isinstance(self.post.likelihood, radvel_likelihood.CompositeLikelihood):
             self.like_list = self.post.likelihood.like_list
         else:
             self.like_list = [self.post.likelihood]
@@ -185,7 +191,7 @@ class MultipanelPlot(object):
 
         # plot data
         vels = self.rawresid+self.rvmod
-        plot.mtelplot(
+        rvdef.mtelplot(
             # data = residuals + model
             self.plttimes, vels, self.rverr, self.post.likelihood.telvec, ax, telfmts=self.telfmts,
             rms_values=rms_values
@@ -199,7 +205,7 @@ class MultipanelPlot(object):
 
         if self.highlight_last:
             ind = np.argmax(self.plttimes)
-            pl.plot(self.plttimes[ind], vels[ind], **plot.highlight_format)
+            pl.plot(self.plttimes[ind], vels[ind], **rvdef.highlight_format)
 
         # legend
         if self.legend:
@@ -219,7 +225,7 @@ class MultipanelPlot(object):
             scale = np.std(self.rawresid+self.rvmod)
             ax.set_ylim(-self.yscale_sigma * scale, self.yscale_sigma * scale)
 
-        ax.set_ylabel('RV [{ms:}]'.format(**plot.latex), weight='bold')
+        ax.set_ylabel('RV [{ms:}]'.format(**rvdef.latex), weight='bold')
         ticks = ax.yaxis.get_majorticklocs()
         ax.yaxis.set_ticks(ticks[1:])
 
@@ -232,14 +238,14 @@ class MultipanelPlot(object):
 
         ax.plot(self.mplttimes, self.slope, 'b-', lw=self.fit_linewidth)
 
-        plot.mtelplot(self.plttimes, self.resid, self.rverr, self.post.likelihood.telvec, ax, telfmts=self.telfmts)
+        rvdef.mtelplot(self.plttimes, self.resid, self.rverr, self.post.likelihood.telvec, ax, telfmts=self.telfmts)
         if not self.yscale_auto: 
             scale = np.std(self.resid)
             ax.set_ylim(-self.yscale_sigma * scale, self.yscale_sigma * scale)
 
         if self.highlight_last:
             ind = np.argmax(self.plttimes)
-            pl.plot(self.plttimes[ind], self.resid[ind], **plot.highlight_format)
+            pl.plot(self.plttimes[ind], self.resid[ind], **rvdef.highlight_format)
 
         if self.set_xlim is not None:
             ax.set_xlim(self.set_xlim)
@@ -276,29 +282,29 @@ class MultipanelPlot(object):
         bin_markeredgewidth = bin_fac * rcParams['lines.markeredgewidth']
 
         rvmod2 = self.model(self.rvmodt, planet_num=pnum) - self.slope
-        modph = t_to_phase(self.post.params, self.rvmodt, pnum, cat=True) - 1
+        modph = rvdef.t_to_phase(self.post.params, self.rvmodt, pnum, cat=True) - 1
         rvdat = self.rawresid + self.model(self.rvtimes, planet_num=pnum) - self.slope_low
-        phase = t_to_phase(self.post.params, self.rvtimes, pnum, cat=True) - 1
+        phase = rvdef.t_to_phase(self.post.params, self.rvtimes, pnum, cat=True) - 1
         rvdatcat = np.concatenate((rvdat, rvdat))
         rverrcat = np.concatenate((self.rverr, self.rverr))
         rvmod2cat = np.concatenate((rvmod2, rvmod2))
-        bint, bindat, binerr = fastbin(phase+1, rvdatcat, nbins=25)
+        bint, bindat, binerr = rvdef.fastbin(phase+1, rvdatcat, nbins=25)
         bint -= 1.0
 
         ax.axhline(0, color='0.5', linestyle='--', )
         ax.plot(sorted(modph), rvmod2cat[np.argsort(modph)], 'b-', linewidth=self.fit_linewidth)
-        plot.labelfig(pltletter)
+        rvdef.labelfig(pltletter)
 
         telcat = np.concatenate((self.post.likelihood.telvec, self.post.likelihood.telvec))
 
         if self.highlight_last:
             ind = np.argmax(self.rvtimes)
-            hphase = t_to_phase(self.post.params, self.rvtimes[ind], pnum, cat=False)
+            hphase = rvdef.t_to_phase(self.post.params, self.rvtimes[ind], pnum, cat=False)
             if hphase > 0.5:
                 hphase -= 1
-            pl.plot(hphase, rvdatcat[ind], **plot.highlight_format)
+            pl.plot(hphase, rvdatcat[ind], **rvdef.highlight_format)
 
-        plot.mtelplot(phase, rvdatcat, rverrcat, telcat, ax, telfmts=self.telfmts)
+        rvdef.mtelplot(phase, rvdatcat, rverrcat, telcat, ax, telfmts=self.telfmts)
         if not self.nobin and len(rvdat) > 10: 
             ax.errorbar(
                 bint, bindat, yerr=binerr, fmt='ro', mec='w', ms=bin_markersize,
@@ -321,11 +327,11 @@ class MultipanelPlot(object):
             ticks = ax.yaxis.get_majorticklocs()
             ax.yaxis.set_ticks(ticks[1:-1])
 
-        ax.set_ylabel('RV [{ms:}]'.format(**plot.latex), weight='bold')
+        ax.set_ylabel('RV [{ms:}]'.format(**rvdef.latex), weight='bold')
         ax.set_xlabel('Phase', weight='bold')
 
         print_params = ['per', 'k', 'e']
-        units = {'per': 'days', 'k': plot.latex['ms'], 'e': ''}
+        units = {'per': 'days', 'k': rvdef.latex['ms'], 'e': ''}
 
         anotext = []
         for l, p in enumerate(print_params):
@@ -343,7 +349,7 @@ class MultipanelPlot(object):
                           "may not be appropriate.")
                 err = self.uparams["%s%d" % (print_params[l], pnum)]
                 if err > 1e-15:
-                    val, err, errlow = sigfig(val, err)
+                    val, err, errlow = rvdef.sigfig(val, err)
                     _anotext = r'$\mathregular{%s}$ = %s $\mathregular{\pm}$ %s %s' \
                                % (labels[l].replace("$", ""), val, err, units[p])
                 else:
@@ -354,7 +360,7 @@ class MultipanelPlot(object):
         if hasattr(self.post, 'derived'):
             chains = pd.read_csv(self.status['derive']['chainfile'])
             self.post.nplanets = self.num_planets
-            dp = mcmc_plots.DerivedPlot(chains, self.post)
+            dp = radvel_mcmc_plot.mcmc_plots.DerivedPlot(chains, self.post)
             labels = dp.labels
             texlabels = dp.texlabels
             units = dp.units
@@ -378,9 +384,9 @@ class MultipanelPlot(object):
                     err_low = val - low
                     err_high = high - val
                     err = np.mean([err_low, err_high])
-                    err = radvel.utils.round_sig(err)
+                    err = rvdef.round_sig(err)
                     if err > 1e-15:
-                        val, err, errlow = sigfig(val, err)
+                        val, err, errlow = rvdef.sigfig(val, err)
                         _anotext = r'$\mathregular{%s}$ = %s $\mathregular{\pm}$ %s %s' \
                                    % (texlabels[index].replace("$", ""), val, err, units[index])
                     else:
@@ -389,7 +395,7 @@ class MultipanelPlot(object):
                     anotext += [_anotext]
 
         anotext = '\n'.join(anotext)
-        plot.add_anchored(
+        rvdef.add_anchored(
             anotext, loc=1, frameon=True, prop=dict(size=self.phasetext_size, weight='bold'),
             bbox=dict(ec='none', fc='w', alpha=0.8)
         )
@@ -436,7 +442,7 @@ class MultipanelPlot(object):
         self.plot_timeseries()
         if letter_labels:
             pltletter = ord('a')
-            plot.labelfig(pltletter)
+            rvdef.labelfig(pltletter)
             pltletter += 1
 
         # residuals
@@ -446,7 +452,7 @@ class MultipanelPlot(object):
         pl.sca(ax_resid)
         self.plot_residuals()
         if letter_labels:
-            plot.labelfig(pltletter)
+            rvdef.labelfig(pltletter)
             pltletter += 1
 
         # phase-folded plots
@@ -523,7 +529,7 @@ class GPMultipanelPlot(MultipanelPlot):
 
         is_gp = False
         for like in self.like_list:
-            if isinstance(like, radvel.likelihood.GPLikelihood):
+            if isinstance(like, radvel_likelihood.GPLikelihood):
                 is_gp = True
                 break
             else:
@@ -540,7 +546,7 @@ class GPMultipanelPlot(MultipanelPlot):
                 plotted will be generated from `like.params`.
             orbit_model4data (numpy array): 
             ci (int): index to use when choosing a color to plot from 
-                radvel.plot.default_colors. This is only used if the
+                rvdef.default_colors. This is only used if the
                 Likelihood object being plotted is not in the list of defaults.
                 Increments by 1 if it is used.
 
@@ -549,7 +555,7 @@ class GPMultipanelPlot(MultipanelPlot):
         """
         ax = pl.gca()
 
-        if isinstance(like, radvel.likelihood.GPLikelihood):
+        if isinstance(like, radvel_likelihood.GPLikelihood):
 
             xpred = np.linspace(np.min(like.x), np.max(like.x), num=int(3e3))
             gpmu, stddev = like.predict(xpred)
@@ -573,12 +579,12 @@ class GPMultipanelPlot(MultipanelPlot):
                 indx = np.where(self.post.likelihood.telvec == like.suffix)
                 orbit_model4data[indx] += gp_mean4data
 
-            if like.suffix not in self.telfmts and like.suffix in plot.telfmts_default:
-                color = plot.telfmts_default[like.suffix]['color']
+            if like.suffix not in self.telfmts and like.suffix in rvdef.telfmts_default:
+                color = rvdef.telfmts_default[like.suffix]['color']
             if like.suffix in self.telfmts:
                 color = self.telfmts[like.suffix]['color']
-            if like.suffix not in self.telfmts and like.suffix not in plot.telfmts_default:
-                color = plot.default_colors[ci]
+            if like.suffix not in self.telfmts and like.suffix not in rvdef.telfmts_default:
+                color = rvdef.default_colors[ci]
                 ci += 1
 
             ax.fill_between(xpred, gpmu+gp_orbit_model-stddev, gpmu+gp_orbit_model+stddev, 
@@ -594,7 +600,7 @@ class GPMultipanelPlot(MultipanelPlot):
             scale = np.std(self.rawresid+self.rvmod)
             ax.set_ylim(-self.yscale_sigma * scale, self.yscale_sigma * scale)
 
-        ax.set_ylabel('RV [{ms:}]'.format(**plot.latex), weight='bold')
+        ax.set_ylabel('RV [{ms:}]'.format(**rvdef.latex), weight='bold')
         ticks = ax.yaxis.get_majorticklocs()
         ax.yaxis.set_ticks(ticks[1:])
 
@@ -619,7 +625,7 @@ class GPMultipanelPlot(MultipanelPlot):
             ci = self.plot_gp_like(like, orbit_model4data, ci)
 
         # plot data
-        plot.mtelplot(
+        rvdef.mtelplot(
             # data = residuals + model
             self.plttimes, self.rawresid+orbit_model4data, self.rverr,
             self.post.likelihood.telvec, ax, telfmts=self.telfmts
@@ -707,7 +713,7 @@ class GPMultipanelPlot(MultipanelPlot):
                 self.plot_gp_like(like, orbit_model4data, ci)
 
                 # plot data
-                plot.mtelplot(
+                rvdef.mtelplot(
                     # data = residuals + model
                     self.plttimes, self.rawresid+orbit_model4data, self.rverr,
                     self.post.likelihood.telvec, ax, telfmts=self.telfmts
@@ -730,7 +736,7 @@ class GPMultipanelPlot(MultipanelPlot):
                     axyrs.set_xlim(*decimalyear)
                     axyrs.set_xlabel('Year', fontweight='bold')    
 
-                plot.labelfig(pltletter)
+                rvdef.labelfig(pltletter)
                 pltletter += 1  
 
             # residuals
@@ -739,7 +745,7 @@ class GPMultipanelPlot(MultipanelPlot):
 
             pl.sca(ax_resid)
             self.plot_residuals()
-            plot.labelfig(pltletter)
+            rvdef.labelfig(pltletter)
             pltletter += 1
 
             # phase-folded plots
