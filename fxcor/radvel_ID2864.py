@@ -65,12 +65,10 @@ def make_radvel_fit(redmine_id, n_cand, inst_list):
     params['w1'].vary = False
     params['k1'].vary = False
 
-
     # Load radial velocity data, in this example the data is contained in
     # an ASCII file, must have 'time', 'mnvel', 'errvel', and 'tel' keys
     # the velocities are expected to be in m/s
     data = pd.read_csv(pf.out_RVs_compare.format('2864'), sep=' ')
-
 
     # Define prior shapes and widths here.
     priors = [
@@ -80,7 +78,6 @@ def make_radvel_fit(redmine_id, n_cand, inst_list):
         radvel.prior.HardBounds('jit_lick', 0.0, 10.0),
         radvel.prior.HardBounds('jit_elodie', 0.0, 10.0)
     ]
-
 
     # optional argument that can contain stellar mass in solar units (mstar) and
     # uncertainty (mstar_err). If not set, mstar will be set to nan.
