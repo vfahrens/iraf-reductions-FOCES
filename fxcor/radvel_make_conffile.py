@@ -115,4 +115,4 @@ def make_radvel_conffile(redmine_id, n_cand, inst_list):
     return pf.radvel_config.format(redmine_id)
 
 
-make_radvel_conffile(2864, 3, ['foces', 'lick', 'elodie'])
+# make_radvel_conffile(2864, 3, ['foces', 'lick', 'elodie'])

@@ -1,0 +1,17 @@
+#K IRAF       = NOAO/IRAF V2.16.1              version   
+#K USER       = fahrenschon                    name      
+#K HOST       = Kaetzchen-Kiste                computer  
+#K DATE       = 2020-03-26                     yyyy-mm-dd
+#K TIME       = 15:39:11                       hh:mm:ss  
+#K PACKAGE    = rv                             name      
+#K TASK       = fxcor                          name      
+# 
+#T Template ' A' -- Object = ''                                              \*
+#                   Image  = 'CI0_ods_ord094_A_lin_IRAF.fits'  Vhelio = 5.77
+# 
+#  Velocity Dispersion = 2.09 Km/sec/pixel     Rebinned WPC = 3.03210E-6
+# 
+#N OBJECT        IMAGE     REF   HJD       AP    CODES     SHIFT   HGHT FWHM    TDR    VOBS      VREL       VHELIO     VERR
+#U name          image           days            cfr/fun   pixel                       km/s      km/s       km/s       km/s
+#
+                 output/ID2864/20190918_0080_FOC1903_SCI0_ods_ord094_A_lin_IRAF.fits  A  8746.36365  1    BNT/gau   3.161   1.00 13.12   153.82 7.0516    6.6163     5.7870     0.067  

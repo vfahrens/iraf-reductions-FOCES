@@ -12,6 +12,7 @@ import shell_script_maker as shesm
 import paths_and_files as pf
 import small_functions as sf
 from gamse_to_iraf_converter_with_interpol import iraf_converter
+from radvel_make_conffile import make_radvel_conffile
 
 
 in_date = dt.datetime.strftime(dt.datetime.now(), '%Y%m%d')
@@ -270,6 +271,21 @@ if re.match(r'^y', yn_RV_extract, re.I) or re.match(r'^j', yn_RV_extract, re.I):
     RVs_fixerr = sf.fix_missing_errors(redmine_id, 'obj', RVs_stds)
     tel_fixerr = sf.fix_missing_errors(redmine_id, 'tel', tel_stds)
     sf.get_tel_correction(redmine_id, RVs_fixerr, tel_fixerr)
+
+
+# make a plot of the literature values compared to the FOCES data
+print('\n')
+yn_RV_complit = input('Do you want to plot the RV results and compare them to the literature? ')
+
+if re.match(r'^y', yn_RV_complit, re.I) or re.match(r'^j', yn_RV_complit, re.I):
+    print('\n')
+    redmine_id = input('The redmine ID is needed once again: ')
+    n_cand = input('Please enter the number of planet candidates: ')
+    inst_list = input('Give a list of the instruments that were used (separate with space): ')
+    inst_list = inst_list.split(' ')
+    config_file = make_radvel_conffile(redmine_id, n_cand, inst_list)
+    subprocess.call(['radvel', 'fit', '-s', str(config_file), '-d', str(pf.abs_path_rvout)])
+    subprocess.call(['radvel', 'plot', '-t', 'rv', '-s', str(config_file), '-d', str(pf.abs_path_rvout)])
 
 # do the fxcor reduction manually
 print('\n')
