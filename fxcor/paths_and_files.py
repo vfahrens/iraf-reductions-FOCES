@@ -34,6 +34,7 @@ RVs_telcorr = 'RVs_ID{}_telcorr.txt'
 ords_tellurics = 'orders_with_telluric_contamination.txt'
 RVs_compare = 'RVs_ID{}_telcorr_compare.txt'
 literature_params = 'ID{}_literature_params.txt'
+config_file_radvel = 'radvel_ID{}.py'
 
 # initialize all paths and make them platform independent
 location = Path(__file__).parent
@@ -73,3 +74,4 @@ out_RVs_telcorr = os.path.join(abs_path_rvout, RVs_telcorr)
 input_tel_orders = os.path.join(abs_path_IRAF, ords_tellurics)
 out_RVs_compare = os.path.join(abs_path_rvout, RVs_compare)
 lit_planet_params = os.path.join(abs_path_rvout, literature_params)
+radvel_config = os.path.join(abs_path_rvout, config_file_radvel)
