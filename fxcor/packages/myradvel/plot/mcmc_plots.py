@@ -4,7 +4,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib import pyplot as pl
 from matplotlib import rcParams
 
-from radvel import plot
+from myradvel import plot
 
 """
 Module for plotting results of MCMC analysis, including:
@@ -21,8 +21,8 @@ class TrendPlot(object):
     the evolution of the MCMC as a function of step number.
 
     Args:
-        post (radvel.Posterior): Radvel Posterior object
-        chains (DataFrame): MCMC chains output by radvel.mcmc
+        post (myradvel.Posterior): Radvel Posterior object
+        chains (DataFrame): MCMC chains output by myradvel.mcmc
         nwalkers (int): number of walkers used in this particular MCMC run
         outfile (string [optional]): name of output multi-page PDF file
         
@@ -79,7 +79,7 @@ class AutoPlot(object):
     from output autocorrelation times.
 
     Args:
-        auto (DataFrame): Autocorrelation times output by radvel.mcmc
+        auto (DataFrame): Autocorrelation times output by myradvel.mcmc
         saveplot (str, optional): Name of output file, will show as
             interactive matplotlib window if not defined.
 
@@ -124,8 +124,8 @@ class CornerPlot(object):
     MCMC chains and a posterior object.
 
     Args:
-        post (radvel.Posterior): radvel posterior object
-        chains (DataFrame): MCMC chains output by radvel.mcmc
+        post (myradvel.Posterior): myradvel posterior object
+        chains (DataFrame): MCMC chains output by myradvel.mcmc
         saveplot (str, optional):  Name of output file, will show as 
             interactive matplotlib window if not defined.
     
@@ -168,7 +168,7 @@ class DerivedPlot(object):
     from output MCMC chains and a posterior object.
 
     Args:
-        chains (DataFrame): MCMC chains output by radvel.mcmc
+        chains (DataFrame): MCMC chains output by myradvel.mcmc
         P:  object representation of config file
         saveplot (Optional[string]: Name of output file, will show as 
             interactive matplotlib window if not defined.
