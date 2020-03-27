@@ -4,6 +4,8 @@ from matplotlib import rcParams, gridspec
 from matplotlib import pyplot as pl
 from matplotlib.ticker import MaxNLocator
 from astropy.time import Time
+import os
+from pathlib import Path
 
 import myradvel
 from myradvel import plot
@@ -394,6 +396,118 @@ class MultipanelPlot(object):
             bbox=dict(ec='none', fc='w', alpha=0.8)
         )
 
+    def plot_phasefold_nonrvs(self, nonrvdat, nonrvtimes, pnum):
+        """
+        Plot phased orbit plots for values other than RVs (e.g. air mass).
+        copied from plot_phasefold
+
+        Args:
+            pnum (int): the number of the planet to be plotted. Must be
+                the same as the number used to define a planet's
+                Parameter objects (e.g. 'per1' is for planet #1)
+
+        """
+
+        ax = pl.gca()
+
+        # rvdat = self.rawresid + self.model(self.rvtimes, planet_num=pnum) - self.slope_low
+        phase = t_to_phase(self.post.params, nonrvtimes, pnum, cat=True) - 1
+        nonrvdatcat = np.concatenate((nonrvdat, nonrvdat))
+
+        ax.axhline(0, color='0.5', linestyle='--', )
+
+        plot.otherplot(phase, nonrvdatcat, ax)
+
+        if self.phase_limits:
+            ax.set_xlim(self.phase_limits[0], self.phase_limits[1])
+        else:
+            ax.set_xlim(-0.5, 0.5)
+
+        if not self.yscale_auto:
+            scale = np.std(nonrvdatcat)
+            ax.set_ylim(-self.yscale_sigma * scale, self.yscale_sigma * scale)
+
+        keys = [p + str(pnum) for p in ['per', 'k', 'e']]
+
+        labels = [self.post.params.tex_labels().get(k, k) for k in keys]
+        if pnum < self.num_planets:
+            ticks = ax.yaxis.get_majorticklocs()
+            ax.yaxis.set_ticks(ticks[1:-1])
+
+        ax.set_ylabel('RV [{ms:}]'.format(**plot.latex), weight='bold')
+        ax.set_xlabel('Phase', weight='bold')
+
+        print_params = ['per', 'k', 'e']
+        units = {'per': 'days', 'k': plot.latex['ms'], 'e': ''}
+
+        anotext = []
+        for l, p in enumerate(print_params):
+            val = self.post.params["%s%d" % (print_params[l], pnum)].value
+
+            if self.uparams is None:
+                _anotext = r'$\mathregular{%s}$ = %4.2f %s' % (labels[l].replace("$", ""), val, units[p])
+            else:
+                if hasattr(self.post, 'medparams'):
+                    val = self.post.medparams["%s%d" % (print_params[l], pnum)]
+                else:
+                    print("WARNING: medparams attribute not found in " +
+                          "posterior object will annotate with " +
+                          "max-likelihood values and reported uncertainties " +
+                          "may not be appropriate.")
+                err = self.uparams["%s%d" % (print_params[l], pnum)]
+                if err > 1e-15:
+                    val, err, errlow = sigfig(val, err)
+                    _anotext = r'$\mathregular{%s}$ = %s $\mathregular{\pm}$ %s %s' \
+                               % (labels[l].replace("$", ""), val, err, units[p])
+                else:
+                    _anotext = r'$\mathregular{%s}$ = %4.2f %s' % (labels[l].replace("$", ""), val, units[p])
+
+            anotext += [_anotext]
+
+        if hasattr(self.post, 'derived'):
+            chains = pd.read_csv(self.status['derive']['chainfile'])
+            self.post.nplanets = self.num_planets
+            dp = mcmc_plots.DerivedPlot(chains, self.post)
+            labels = dp.labels
+            texlabels = dp.texlabels
+            units = dp.units
+            derived_params = ['mpsini']
+            for l, par in enumerate(derived_params):
+                par_label = par + str(pnum)
+                if par_label in self.post.derived.columns:
+                    index = np.where(np.array(labels) == par_label)[0][0]
+
+                    unit = units[index]
+                    if unit == "M$_{\\rm Jup}$":
+                        conversion_fac = 0.00315
+                    elif unit == "M$_{\\odot}$":
+                        conversion_fac = 0.000954265748
+                    else:
+                        conversion_fac = 1
+
+                    val = self.post.derived["%s%d" % (derived_params[l], pnum)].loc[0.500] * conversion_fac
+                    low = self.post.derived["%s%d" % (derived_params[l], pnum)].loc[0.159] * conversion_fac
+                    high = self.post.derived["%s%d" % (derived_params[l], pnum)].loc[0.841] * conversion_fac
+                    err_low = val - low
+                    err_high = high - val
+                    err = np.mean([err_low, err_high])
+                    err = myradvel.utils.round_sig(err)
+                    if err > 1e-15:
+                        val, err, errlow = sigfig(val, err)
+                        _anotext = r'$\mathregular{%s}$ = %s $\mathregular{\pm}$ %s %s' \
+                                   % (texlabels[index].replace("$", ""), val, err, units[index])
+                    else:
+                        _anotext = r'$\mathregular{%s}$ = %4.2f %s' % (
+                        texlabels[index].replace("$", ""), val, units[index])
+
+                    anotext += [_anotext]
+
+        anotext = '\n'.join(anotext)
+        plot.add_anchored(
+            anotext, loc=1, frameon=True, prop=dict(size=self.phasetext_size, weight='bold'),
+            bbox=dict(ec='none', fc='w', alpha=0.8)
+        )
+
     def plot_multipanel(self, nophase=False, letter_labels=True):
         """
         Provision and plot an RV multipanel plot
@@ -475,6 +589,103 @@ class MultipanelPlot(object):
         if self.saveplot is not None:
             pl.savefig(self.saveplot, dpi=150)
             print("RV multi-panel plot saved to %s" % self.saveplot)
+
+        return fig, self.ax_list
+
+    def plot_multipanel_nonrv(self, nophase=False, letter_labels=True):
+        """
+        Provision and plot an RV multipanel plot
+
+        Args:
+            nophase (bool, optional): if True, don't
+                include phase plots. Default: False.
+
+        Returns:
+            tuple containing:
+                - current matplotlib Figure object
+                - list of Axes objects
+        """
+
+        if nophase:
+            scalefactor = 1
+        else:
+            scalefactor = self.phase_nrows
+
+        figheight = self.ax_rv_height + self.ax_phase_height * scalefactor
+
+        # provision figure
+        fig = pl.figure(figsize=(self.figwidth, figheight))
+
+        fig.subplots_adjust(left=0.12, right=0.95)
+        gs_rv = gridspec.GridSpec(2, 1, height_ratios=[1., 0.5])
+
+        divide = 1 - self.ax_rv_height / figheight
+        gs_rv.update(left=0.12, right=0.93, top=0.93,
+                     bottom=divide + self.rv_phase_space * 0.5, hspace=0.)
+
+        # orbit plot
+        ax_rv = pl.subplot(gs_rv[0, 0])
+        self.ax_list += [ax_rv]
+
+        pl.sca(ax_rv)
+        self.plot_timeseries()
+        if letter_labels:
+            pltletter = ord('a')
+            plot.labelfig(pltletter)
+            pltletter += 1
+
+        # residuals
+        ax_resid = pl.subplot(gs_rv[1, 0])
+        self.ax_list += [ax_resid]
+
+        pl.sca(ax_resid)
+        self.plot_residuals()
+        if letter_labels:
+            plot.labelfig(pltletter)
+            pltletter += 1
+
+        location = '/mnt/e/IRAF/iraf-reductions-FOCES/fxcor/rv_results/'  # Path(__file__).parent
+        # path_rv_results = 'rv_results/'
+        # abs_path_rvout = (location / path_rv_results).resolve()
+        nonrv_data_file = os.path.join(location, 'nonRVs_ID2864.txt')
+        nonrvdat = []
+        nonrvtimes = []
+        with open(nonrv_data_file)as nonrvfile:
+            for line in nonrvfile:
+                if len(line) > 0:
+                    line = line.strip()
+                    line = line.split(' ')
+                    nonrvdat.append(float(line[0]))
+                    nonrvtimes.append(float(line[1]))
+
+
+        # phase-folded plots
+        if not nophase:
+            gs_phase = gridspec.GridSpec(self.phase_nrows, self.phase_ncols)
+
+            if self.phase_ncols == 1:
+                gs_phase.update(left=0.12, right=0.93,
+                                top=divide - self.rv_phase_space * 0.5,
+                                bottom=0.07, hspace=0.003)
+            else:
+                gs_phase.update(left=0.12, right=0.93,
+                                top=divide - self.rv_phase_space * 0.5,
+                                bottom=0.07, hspace=0.25, wspace=0.25)
+
+            for i in range(self.num_planets):
+                i_row = int(i / self.phase_ncols)
+                i_col = int(i - i_row * self.phase_ncols)
+                ax_phase = pl.subplot(gs_phase[i_row, i_col])
+                self.ax_list += [ax_phase]
+
+                pl.sca(ax_phase)
+                # self.plot_phasefold(pltletter, i + 1)
+                pltletter += 1
+                self.plot_phasefold_nonrvs(nonrvdat, nonrvtimes, self.num_planets)
+
+        if self.saveplot is not None:
+            pl.savefig(self.saveplot, dpi=150)
+            print("RV plot with non-RVs saved to %s" % self.saveplot)
 
         return fig, self.ax_list
 
