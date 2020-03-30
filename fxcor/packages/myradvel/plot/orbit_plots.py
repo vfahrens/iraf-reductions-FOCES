@@ -396,7 +396,7 @@ class MultipanelPlot(object):
             bbox=dict(ec='none', fc='w', alpha=0.8)
         )
 
-    def plot_phasefold_nonrvs(self, nonrvdat, nonrvtimes, pnum):
+    def plot_phasefold_nonrvs(self, nonrvdat, nonrvtimes, pltletter, pnum):
         """
         Plot phased orbit plots for values other than RVs (e.g. air mass).
         copied from plot_phasefold
@@ -410,13 +410,40 @@ class MultipanelPlot(object):
 
         ax = pl.gca()
 
-        # rvdat = self.rawresid + self.model(self.rvtimes, planet_num=pnum) - self.slope_low
+        if len(self.post.likelihood.x) < 20:
+            self.nobin = True
+
+        bin_fac = 1.75
+        bin_markersize = bin_fac * rcParams['lines.markersize']
+        bin_markeredgewidth = bin_fac * rcParams['lines.markeredgewidth']
+
+
+        # # rvdat = self.rawresid + self.model(self.rvtimes, planet_num=pnum) - self.slope_low
         phase = t_to_phase(self.post.params, nonrvtimes, pnum, cat=True) - 1
         nonrvdatcat = np.concatenate((nonrvdat, nonrvdat))
+        bint, bindat, binerr = fastbin(phase+1, nonrvdatcat, nbins=25)
+        bint -= 1.0
 
         ax.axhline(0, color='0.5', linestyle='--', )
+        # ax.plot(sorted(modph), rvmod2cat[np.argsort(modph)], 'b-', linewidth=self.fit_linewidth)
+        plot.labelfig(pltletter)
 
-        plot.otherplot(phase, nonrvdatcat, ax)
+        telcat = np.concatenate((self.post.likelihood.telvec, self.post.likelihood.telvec))
+
+        if self.highlight_last:
+            ind = np.argmax(nonrvtimes)
+            hphase = t_to_phase(self.post.params, nonrvtimes[ind], pnum, cat=False)
+            if hphase > 0.5:
+                hphase -= 1
+            pl.plot(hphase, nonrvdatcat[ind], **plot.highlight_format)
+
+        # plot.otherplot(phase, nonrvdatcat, ax)
+        plot.mtelplot_nonrv(phase, nonrvdatcat, telcat, ax, telfmts=self.telfmts)
+        if not self.nobin and len(nonrvdat) > 10:
+            ax.errorbar(
+                bint, bindat, yerr=binerr, fmt='ro', mec='w', ms=bin_markersize,
+                mew=bin_markeredgewidth
+            )
 
         if self.phase_limits:
             ax.set_xlim(self.phase_limits[0], self.phase_limits[1])
@@ -620,33 +647,32 @@ class MultipanelPlot(object):
         gs_rv = gridspec.GridSpec(2, 1, height_ratios=[1., 0.5])
 
         divide = 1 - self.ax_rv_height / figheight
-        gs_rv.update(left=0.12, right=0.93, top=0.93,
-                     bottom=divide + self.rv_phase_space * 0.5, hspace=0.)
-
-        # orbit plot
-        ax_rv = pl.subplot(gs_rv[0, 0])
-        self.ax_list += [ax_rv]
-
-        pl.sca(ax_rv)
-        self.plot_timeseries()
+        # # commenting this out makes the upper non-phasefolded plots vanish
+        # gs_rv.update(left=0.12, right=0.93, top=0.93,
+        #              bottom=divide + self.rv_phase_space * 0.5, hspace=0.)
+        #
+        # # orbit plot
+        # ax_rv = pl.subplot(gs_rv[0, 0])
+        # self.ax_list += [ax_rv]
+        #
+        # pl.sca(ax_rv)
+        # self.plot_timeseries()
         if letter_labels:
             pltletter = ord('a')
             plot.labelfig(pltletter)
             pltletter += 1
-
-        # residuals
-        ax_resid = pl.subplot(gs_rv[1, 0])
-        self.ax_list += [ax_resid]
-
-        pl.sca(ax_resid)
-        self.plot_residuals()
+        #
+        # # residuals
+        # ax_resid = pl.subplot(gs_rv[1, 0])
+        # self.ax_list += [ax_resid]
+        #
+        # pl.sca(ax_resid)
+        # self.plot_residuals()
         if letter_labels:
             plot.labelfig(pltletter)
             pltletter += 1
 
         location = '/mnt/e/IRAF/iraf-reductions-FOCES/fxcor/rv_results/'  # Path(__file__).parent
-        # path_rv_results = 'rv_results/'
-        # abs_path_rvout = (location / path_rv_results).resolve()
         nonrv_data_file = os.path.join(location, 'nonRVs_ID2864.txt')
         nonrvdat = []
         nonrvtimes = []
@@ -655,8 +681,8 @@ class MultipanelPlot(object):
                 if len(line) > 0:
                     line = line.strip()
                     line = line.split(' ')
-                    nonrvdat.append(float(line[0]))
-                    nonrvtimes.append(float(line[1]))
+                    nonrvdat.append(float(line[1]))
+                    nonrvtimes.append(float(line[0]))
 
 
         # phase-folded plots
@@ -680,8 +706,8 @@ class MultipanelPlot(object):
 
                 pl.sca(ax_phase)
                 # self.plot_phasefold(pltletter, i + 1)
+                self.plot_phasefold_nonrvs(nonrvdat, nonrvtimes, pltletter, self.num_planets)
                 pltletter += 1
-                self.plot_phasefold_nonrvs(nonrvdat, nonrvtimes, self.num_planets)
 
         if self.saveplot is not None:
             pl.savefig(self.saveplot, dpi=150)

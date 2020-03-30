@@ -81,7 +81,7 @@ def telplot(x, y, e, tel, ax, lw=1., telfmt={}, rms=0):
 
     if rms:
         kw['label'] += '\nRMS={:.2f} {:s}'.format(rms, latex['ms'])
-        
+
     pl.errorbar(x, y, yerr=e, **kw)
 
 
@@ -141,20 +141,75 @@ def mtelplot(x, y, e, tel, ax, lw=1., telfmts={}, **kwargs):
     )
 
 
-def otherplot(x, y, ax, lw=1.):  # e, tel, ax, lw=1., telfmt={}, rms=0):
+def mtelplot_nonrv(x, y, tel, ax, lw=1., telfmts={}, **kwargs):
+    """
+    Overplot data from from multiple telescopes.
+
+    x (array): Either time or phase
+    y (array): RV
+    tel (array): array of telecsope string keys
+    ax (matplotlib.axes.Axes): current Axes object
+    telfmts (dict): dictionary of dictionaries corresponding to kwargs
+        passed to errorbar. Example:
+
+        telfmts = {
+             'hires': dict(fmt='o',label='HIRES'),
+             'harps-n' dict(fmt='s')
+        }
+    """
+
+    rms_values = kwargs.pop('rms_values', False)
+
+    utel = np.unique(tel)
+
+    ci = 0
+    for t in utel:
+        xt = x[tel == t]
+        yt = y[tel == t]
+        # et = e[tel == t]
+
+        telfmt = {}
+
+        if t in telfmts:
+            telfmt = telfmts[t]
+            if 'color' not in telfmt:
+                telfmt['color'] = default_colors[ci]
+                ci += 1
+        elif t not in telfmts and t not in telfmts_default:
+            telfmt = dict(color=default_colors[ci])
+            ci += 1
+        else:
+            telfmt = {}
+
+        if rms_values:
+            rms = rms_values[t]
+        else:
+            rms = 0
+
+        otherplot(xt, yt, t, ax, lw=1., telfmt=telfmt, rms=rms)
+
+    ax.yaxis.set_major_formatter(
+        matplotlib.ticker.ScalarFormatter(useOffset=False)
+    )
+    ax.xaxis.set_major_formatter(
+        matplotlib.ticker.ScalarFormatter(useOffset=False)
+    )
+
+
+
+def otherplot(x, y, tel, ax, lw=1., telfmt={}, rms=0):
     """Plot data from a single different parameter (e.g. airmass)
     copied from telplot() definition
 
     x (array): Either time or phase
     y (array): whatever parameter
-    # e (array): RV error
-    # tel (string): telescope string key
+    tel (string): telescope string key
     ax (matplotlib.axes.Axes): current Axes object
-    # lw (float): line-width for error bars
-    # telfmt (dict): dictionary corresponding to kwargs 
-    #     passed to errorbar. Example:
+    lw (float): line-width for error bars
+    telfmt (dict): dictionary corresponding to kwargs
+        passed to errorbar. Example:
 
-    #     telfmt = dict(fmt='o',label='HIRES',color='red')
+        telfmt = dict(fmt='o',label='HIRES',color='red')
     """
 
     # Default formatting
@@ -162,25 +217,28 @@ def otherplot(x, y, ax, lw=1.):  # e, tel, ax, lw=1., telfmt={}, rms=0):
         fmt='o', capsize=0, mew=0,
         ecolor='0.6', lw=lw, color='orange',
     )
-    #
-    # # If not explicit format set, look among default formats
-    # if not telfmt and tel in telfmts_default:
-    #     telfmt = telfmts_default[tel]
-    #
-    # for k in telfmt:
-    #     kw[k] = telfmt[k]
-    #
-    # if not 'label' in kw.keys():
-    #     if tel in telfmts_default:
-    #         kw['label'] = telfmts_default[tel]['label']
-    #     else:
-    #         kw['label'] = tel
-    #
-    # if rms:
-    #     kw['label'] += '\nRMS={:.2f} {:s}'.format(rms, latex['ms'])
 
-    # pl.errorbar(x, y, yerr=e, **kw)
-    pl.plot(x, y)  # , **kw)  # yerr=e, **kw)
+    # If not explicit format set, look among default formats
+    if not telfmt and tel in telfmts_default:
+        telfmt = telfmts_default[tel]
+
+    for k in telfmt:
+        kw[k] = telfmt[k]
+
+    if not 'label' in kw.keys():
+        if tel in telfmts_default:
+            kw['label'] = telfmts_default[tel]['label']
+        else:
+            kw['label'] = tel
+
+    if rms:
+        kw['label'] += '\nRMS={:.2f} {:s}'.format(rms, latex['ms'])
+
+    e = np.zeros(shape=np.shape(y))
+
+    pl.errorbar(x, y, yerr=e, **kw)
+    # pl.plot(x, y)  # , **kw)  # yerr=e, **kw)
+
 
 def add_anchored(*args, **kwargs):
     """
