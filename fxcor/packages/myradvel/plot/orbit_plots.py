@@ -424,7 +424,7 @@ class MultipanelPlot(object):
         bint, bindat, binerr = fastbin(phase+1, nonrvdatcat, nbins=25)
         bint -= 1.0
 
-        ax.axhline(0, color='0.5', linestyle='--', )
+        # ax.axhline(0, color='0.5', linestyle='--', )
         # ax.plot(sorted(modph), rvmod2cat[np.argsort(modph)], 'b-', linewidth=self.fit_linewidth)
         plot.labelfig(pltletter)
 
@@ -451,8 +451,11 @@ class MultipanelPlot(object):
             ax.set_xlim(-0.5, 0.5)
 
         if not self.yscale_auto:
-            scale = np.std(nonrvdatcat)
-            ax.set_ylim(-self.yscale_sigma * scale, self.yscale_sigma * scale)
+            y_max = np.max(nonrvdatcat) + 0.5 *np.std(nonrvdatcat)
+            y_min = np.min(nonrvdatcat) - 0.5 *np.std(nonrvdatcat)
+            ax.set_ylim(y_min, y_max)
+            # scale = np.std(nonrvdatcat)
+            # ax.set_ylim(-self.yscale_sigma * scale, self.yscale_sigma * scale)
 
         keys = [p + str(pnum) for p in ['per', 'k', 'e']]
 
@@ -709,7 +712,7 @@ class MultipanelPlot(object):
                     n += 1
                 elif i % 2 == 1:
                     self.plot_phasefold_nonrvs(nonrvdat, nonrvtimes, pltletter, self.num_planets)
-                pltletter += 1
+                    pltletter += 1
 
                 # # original code:
                 # i_row = int(i / self.phase_ncols)
