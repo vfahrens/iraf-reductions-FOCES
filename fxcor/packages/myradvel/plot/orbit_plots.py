@@ -636,7 +636,7 @@ class MultipanelPlot(object):
         if nophase:
             scalefactor = 1
         else:
-            scalefactor = self.phase_nrows
+            scalefactor = 2 * self.phase_nrows  # self.phase_nrows
 
         figheight = self.ax_phase_height * scalefactor * 0.85  # self.ax_rv_height + self.ax_phase_height * scalefactor
 
@@ -646,7 +646,7 @@ class MultipanelPlot(object):
         fig.subplots_adjust(left=0.12, right=0.95)
         # gs_rv = gridspec.GridSpec(2, 1, height_ratios=[1., 0.5])
 
-        divide = 1 - self.ax_rv_height / figheight
+        # divide = 1 - self.ax_rv_height / figheight
         # # commenting this out makes the upper non-phasefolded plots vanish
         # gs_rv.update(left=0.12, right=0.93, top=0.93,
         #              bottom=divide + self.rv_phase_space * 0.5, hspace=0.)
@@ -684,31 +684,31 @@ class MultipanelPlot(object):
                     nonrvdat.append(float(line[1]))
                     nonrvtimes.append(float(line[0]))
 
-
         # phase-folded plots
         if not nophase:
-            gs_phase = gridspec.GridSpec(self.phase_nrows, self.phase_ncols)
+            gs_phase = gridspec.GridSpec(2 * self.phase_nrows, self.phase_ncols)
 
             if self.phase_ncols == 1:
                 gs_phase.update(left=0.12, right=0.93, top=0.95,
                                 bottom=0.07, hspace=0.003)
-                                # top=divide - self.rv_phase_space * 0.5,
             else:
                 gs_phase.update(left=0.12, right=0.93, top=0.95,
                                 bottom=0.07, hspace=0.25, wspace=0.25)
-                                # top=divide - self.rv_phase_space * 0.5,
 
-            for i in range(self.num_planets):
-                print(i)
+            n = 0
+            for i in range(2*self.num_planets):
                 i_row = int(i / self.phase_ncols)
                 i_col = int(i - i_row * self.phase_ncols)
-                print(i_row, i_col)
                 ax_phase = pl.subplot(gs_phase[i_row, i_col])
                 self.ax_list += [ax_phase]
 
                 pl.sca(ax_phase)
-                self.plot_phasefold(pltletter, i + 1)
-                # self.plot_phasefold_nonrvs(nonrvdat, nonrvtimes, pltletter, self.num_planets)
+                if i % 2 == 0:
+                    num_p = range(1, self.num_planets + 1)
+                    self.plot_phasefold(pltletter, num_p[n])
+                    n += 1
+                elif i % 2 == 1:
+                    self.plot_phasefold_nonrvs(nonrvdat, nonrvtimes, pltletter, self.num_planets)
                 pltletter += 1
 
                 # # original code:
