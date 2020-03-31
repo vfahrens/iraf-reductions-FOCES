@@ -64,8 +64,8 @@ class MultipanelPlot(object):
     def __init__(self, post, saveplot=None, epoch=2450000, yscale_auto=False, yscale_sigma=3.0,
                  phase_nrows=None, phase_ncols=None, uparams=None, telfmts={}, legend=True,
                  phase_limits=[], nobin=False, phasetext_size='large', rv_phase_space=0.08,
-                 figwidth=7.5, fit_linewidth=2.0, set_xlim=None, text_size=9, highlight_last=False,
-                 show_rms=False, legend_kwargs=dict(loc='best'), status=None):
+                 figwidth=10, fit_linewidth=2.0, set_xlim=None, text_size=9, highlight_last=False,
+                 show_rms=False, legend_kwargs=dict(loc='best'), status=None):  # figwidth=7.5
 
         self.post = post
         self.saveplot = saveplot
@@ -638,13 +638,13 @@ class MultipanelPlot(object):
         else:
             scalefactor = self.phase_nrows
 
-        figheight = self.ax_rv_height + self.ax_phase_height * scalefactor
+        figheight = self.ax_phase_height * scalefactor * 0.85  # self.ax_rv_height + self.ax_phase_height * scalefactor
 
         # provision figure
         fig = pl.figure(figsize=(self.figwidth, figheight))
 
         fig.subplots_adjust(left=0.12, right=0.95)
-        gs_rv = gridspec.GridSpec(2, 1, height_ratios=[1., 0.5])
+        # gs_rv = gridspec.GridSpec(2, 1, height_ratios=[1., 0.5])
 
         divide = 1 - self.ax_rv_height / figheight
         # # commenting this out makes the upper non-phasefolded plots vanish
@@ -668,9 +668,9 @@ class MultipanelPlot(object):
         #
         # pl.sca(ax_resid)
         # self.plot_residuals()
-        if letter_labels:
-            plot.labelfig(pltletter)
-            pltletter += 1
+        # if letter_labels:
+        #     plot.labelfig(pltletter)
+        #     pltletter += 1
 
         location = '/mnt/e/IRAF/iraf-reductions-FOCES/fxcor/rv_results/'  # Path(__file__).parent
         nonrv_data_file = os.path.join(location, 'nonRVs_ID2864.txt')
@@ -690,28 +690,42 @@ class MultipanelPlot(object):
             gs_phase = gridspec.GridSpec(self.phase_nrows, self.phase_ncols)
 
             if self.phase_ncols == 1:
-                gs_phase.update(left=0.12, right=0.93,
-                                top=divide - self.rv_phase_space * 0.5,
+                gs_phase.update(left=0.12, right=0.93, top=0.95,
                                 bottom=0.07, hspace=0.003)
+                                # top=divide - self.rv_phase_space * 0.5,
             else:
-                gs_phase.update(left=0.12, right=0.93,
-                                top=divide - self.rv_phase_space * 0.5,
+                gs_phase.update(left=0.12, right=0.93, top=0.95,
                                 bottom=0.07, hspace=0.25, wspace=0.25)
+                                # top=divide - self.rv_phase_space * 0.5,
 
             for i in range(self.num_planets):
+                print(i)
                 i_row = int(i / self.phase_ncols)
                 i_col = int(i - i_row * self.phase_ncols)
+                print(i_row, i_col)
                 ax_phase = pl.subplot(gs_phase[i_row, i_col])
                 self.ax_list += [ax_phase]
 
                 pl.sca(ax_phase)
-                # self.plot_phasefold(pltletter, i + 1)
-                self.plot_phasefold_nonrvs(nonrvdat, nonrvtimes, pltletter, self.num_planets)
+                self.plot_phasefold(pltletter, i + 1)
+                # self.plot_phasefold_nonrvs(nonrvdat, nonrvtimes, pltletter, self.num_planets)
                 pltletter += 1
+
+                # # original code:
+                # i_row = int(i / self.phase_ncols)
+                # i_col = int(i - i_row * self.phase_ncols)
+                # ax_phase = pl.subplot(gs_phase[i_row, i_col])
+                # self.ax_list += [ax_phase]
+                #
+                # pl.sca(ax_phase)
+                # self.plot_phasefold(pltletter, i + 1)
+                # # self.plot_phasefold_nonrvs(nonrvdat, nonrvtimes, pltletter, self.num_planets)
+                # pltletter += 1
 
         if self.saveplot is not None:
             pl.savefig(self.saveplot, dpi=150)
             print("RV plot with non-RVs saved to %s" % self.saveplot)
+        pl.show()
 
         return fig, self.ax_list
 
