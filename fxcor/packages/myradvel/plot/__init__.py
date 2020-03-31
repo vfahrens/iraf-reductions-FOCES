@@ -164,29 +164,30 @@ def mtelplot_nonrv(x, y, tel, ax, lw=1., telfmts={}, **kwargs):
 
     ci = 0
     for t in utel:
-        xt = x[tel == t]
-        yt = y[tel == t]
-        # et = e[tel == t]
+        if t == 'foces':
+            xt = x[tel == t]
+            yt = y[tel == t]
+            # et = e[tel == t]
 
-        telfmt = {}
-
-        if t in telfmts:
-            telfmt = telfmts[t]
-            if 'color' not in telfmt:
-                telfmt['color'] = default_colors[ci]
-                ci += 1
-        elif t not in telfmts and t not in telfmts_default:
-            telfmt = dict(color=default_colors[ci])
-            ci += 1
-        else:
             telfmt = {}
 
-        if rms_values:
-            rms = rms_values[t]
-        else:
-            rms = 0
+            if t in telfmts:
+                telfmt = telfmts[t]
+                if 'color' not in telfmt:
+                    telfmt['color'] = default_colors[ci]
+                    ci += 1
+            elif t not in telfmts and t not in telfmts_default:
+                telfmt = dict(color=default_colors[ci])
+                ci += 1
+            else:
+                telfmt = {}
 
-        otherplot(xt, yt, t, ax, lw=1., telfmt=telfmt, rms=rms)
+            if rms_values:
+                rms = rms_values[t]
+            else:
+                rms = 0
+
+            otherplot(xt, yt, t, ax, lw=1., telfmt=telfmt, rms=rms)
 
     ax.yaxis.set_major_formatter(
         matplotlib.ticker.ScalarFormatter(useOffset=False)

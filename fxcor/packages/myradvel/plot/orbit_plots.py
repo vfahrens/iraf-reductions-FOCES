@@ -78,6 +78,12 @@ class MultipanelPlot(object):
             self.phase_nrows = self.post.likelihood.model.num_planets
         self.uparams = uparams
         self.rv_phase_space = rv_phase_space
+
+        telfmts = {'foces': dict(fmt='o',label='HIRES', color='purple'),
+             'hires': dict(fmt='o',label='HIRES'),
+             'harps-n': dict(fmt='s')
+        }
+
         self.telfmts = telfmts
         self.legend = legend
         self.phase_limits = phase_limits
@@ -426,6 +432,7 @@ class MultipanelPlot(object):
 
         # ax.axhline(0, color='0.5', linestyle='--', )
         # ax.plot(sorted(modph), rvmod2cat[np.argsort(modph)], 'b-', linewidth=self.fit_linewidth)
+        # ax.plot(sorted(phase), nonrvdatcat[np.argsort(phase)], 'b-', linewidth=self.fit_linewidth)
         plot.labelfig(pltletter)
 
         telcat = np.concatenate((self.post.likelihood.telvec, self.post.likelihood.telvec))
@@ -451,15 +458,10 @@ class MultipanelPlot(object):
             ax.set_xlim(-0.5, 0.5)
 
         if not self.yscale_auto:
-            y_max = np.max(nonrvdatcat) + 0.5 *np.std(nonrvdatcat)
-            y_min = np.min(nonrvdatcat) - 0.5 *np.std(nonrvdatcat)
+            y_max = np.max(nonrvdatcat) + 0.5 * np.std(nonrvdatcat)
+            y_min = np.min(nonrvdatcat) - 0.5 * np.std(nonrvdatcat)
             ax.set_ylim(y_min, y_max)
-            # scale = np.std(nonrvdatcat)
-            # ax.set_ylim(-self.yscale_sigma * scale, self.yscale_sigma * scale)
 
-        keys = [p + str(pnum) for p in ['per', 'k', 'e']]
-
-        labels = [self.post.params.tex_labels().get(k, k) for k in keys]
         if pnum < self.num_planets:
             ticks = ax.yaxis.get_majorticklocs()
             ax.yaxis.set_ticks(ticks[1:-1])
@@ -467,32 +469,7 @@ class MultipanelPlot(object):
         ax.set_ylabel('RV [{ms:}]'.format(**plot.latex), weight='bold')
         ax.set_xlabel('Phase', weight='bold')
 
-        print_params = ['per', 'k', 'e']
-        units = {'per': 'days', 'k': plot.latex['ms'], 'e': ''}
-
         anotext = []
-        for l, p in enumerate(print_params):
-            val = self.post.params["%s%d" % (print_params[l], pnum)].value
-
-            if self.uparams is None:
-                _anotext = r'$\mathregular{%s}$ = %4.2f %s' % (labels[l].replace("$", ""), val, units[p])
-            else:
-                if hasattr(self.post, 'medparams'):
-                    val = self.post.medparams["%s%d" % (print_params[l], pnum)]
-                else:
-                    print("WARNING: medparams attribute not found in " +
-                          "posterior object will annotate with " +
-                          "max-likelihood values and reported uncertainties " +
-                          "may not be appropriate.")
-                err = self.uparams["%s%d" % (print_params[l], pnum)]
-                if err > 1e-15:
-                    val, err, errlow = sigfig(val, err)
-                    _anotext = r'$\mathregular{%s}$ = %s $\mathregular{\pm}$ %s %s' \
-                               % (labels[l].replace("$", ""), val, err, units[p])
-                else:
-                    _anotext = r'$\mathregular{%s}$ = %4.2f %s' % (labels[l].replace("$", ""), val, units[p])
-
-            anotext += [_anotext]
 
         if hasattr(self.post, 'derived'):
             chains = pd.read_csv(self.status['derive']['chainfile'])
@@ -706,24 +683,13 @@ class MultipanelPlot(object):
                 self.ax_list += [ax_phase]
 
                 pl.sca(ax_phase)
+                num_p = range(1, self.num_planets + 1)
                 if i % 2 == 0:
-                    num_p = range(1, self.num_planets + 1)
                     self.plot_phasefold(pltletter, num_p[n])
-                    n += 1
                 elif i % 2 == 1:
-                    self.plot_phasefold_nonrvs(nonrvdat, nonrvtimes, pltletter, self.num_planets)
+                    self.plot_phasefold_nonrvs(nonrvdat, nonrvtimes, pltletter,  num_p[n])
                     pltletter += 1
-
-                # # original code:
-                # i_row = int(i / self.phase_ncols)
-                # i_col = int(i - i_row * self.phase_ncols)
-                # ax_phase = pl.subplot(gs_phase[i_row, i_col])
-                # self.ax_list += [ax_phase]
-                #
-                # pl.sca(ax_phase)
-                # self.plot_phasefold(pltletter, i + 1)
-                # # self.plot_phasefold_nonrvs(nonrvdat, nonrvtimes, pltletter, self.num_planets)
-                # pltletter += 1
+                    n += 1
 
         if self.saveplot is not None:
             pl.savefig(self.saveplot, dpi=150)
