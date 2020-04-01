@@ -63,7 +63,7 @@ class MultipanelPlot(object):
     """
     def __init__(self, post, saveplot=None, epoch=2450000, yscale_auto=False, yscale_sigma=3.0,
                  phase_nrows=None, phase_ncols=None, uparams=None, telfmts={}, legend=True,
-                 phase_limits=[], nobin=False, phasetext_size='large', rv_phase_space=0.08,
+                 phase_limits=[0.0, 1.0], nobin=False, phasetext_size='large', rv_phase_space=0.08,
                  figwidth=10, fit_linewidth=2.0, set_xlim=None, text_size=9, highlight_last=False,
                  show_rms=False, legend_kwargs=dict(loc='best'), status=None):  # figwidth=7.5
 
@@ -79,10 +79,12 @@ class MultipanelPlot(object):
         self.uparams = uparams
         self.rv_phase_space = rv_phase_space
 
-        telfmts = {'foces': dict(fmt='o',label='HIRES', color='purple'),
-             'hires': dict(fmt='o',label='HIRES'),
-             'harps-n': dict(fmt='s')
-        }
+        telfmts = {'foces': dict(fmt='o', label='FOCES', color='purple'),
+                   'elodie': dict(fmt='s', label='ELODIE', color='forestgreen'),
+                   'lick': dict(fmt='d', label='LICK', color='chocolate'),
+                   'hires': dict(fmt='o', fillstyle='none', label='HIRES', color='steelblue'),
+                   'harps-n': dict(fmt='s', fillstyle='none', label='HARPS-N', color='steelblue'),
+                   'harps': dict(fmt='d', fillstyle='none', label='HARPS', color='darkred')}
 
         self.telfmts = telfmts
         self.legend = legend
@@ -318,9 +320,12 @@ class MultipanelPlot(object):
         else:
             ax.set_xlim(-0.5, 0.5)
 
-        if not self.yscale_auto: 
-            scale = np.std(rvdatcat)
-            ax.set_ylim(-self.yscale_sigma*scale, self.yscale_sigma*scale)
+        if not self.yscale_auto:
+            y_max = np.max(rvdatcat) + 0.5 * np.std(rvdatcat)
+            y_min = np.min(rvdatcat) - 0.5 * np.std(rvdatcat)
+            ax.set_ylim(y_min, y_max)
+            # scale = np.std(rvdatcat)
+            # ax.set_ylim(-self.yscale_sigma*scale, self.yscale_sigma*scale)
         
         keys = [p+str(pnum) for p in ['per', 'k', 'e']]
 
@@ -402,7 +407,7 @@ class MultipanelPlot(object):
             bbox=dict(ec='none', fc='w', alpha=0.8)
         )
 
-    def plot_phasefold_nonrvs(self, nonrvdat, nonrvtimes, pltletter, pnum):
+    def plot_phasefold_nonrvs(self, nonrvdat, nonrvtimes, pltletter, pnum, nobin=True):
         """
         Plot phased orbit plots for values other than RVs (e.g. air mass).
         copied from plot_phasefold
@@ -423,15 +428,15 @@ class MultipanelPlot(object):
         bin_markersize = bin_fac * rcParams['lines.markersize']
         bin_markeredgewidth = bin_fac * rcParams['lines.markeredgewidth']
 
-
         # # rvdat = self.rawresid + self.model(self.rvtimes, planet_num=pnum) - self.slope_low
         phase = t_to_phase(self.post.params, nonrvtimes, pnum, cat=True) - 1
         nonrvdatcat = np.concatenate((nonrvdat, nonrvdat))
         bint, bindat, binerr = fastbin(phase+1, nonrvdatcat, nbins=25)
         bint -= 1.0
 
+        # gives horizontal line at y zero position
         # ax.axhline(0, color='0.5', linestyle='--', )
-        # ax.plot(sorted(modph), rvmod2cat[np.argsort(modph)], 'b-', linewidth=self.fit_linewidth)
+        # this connects the data points with a line
         # ax.plot(sorted(phase), nonrvdatcat[np.argsort(phase)], 'b-', linewidth=self.fit_linewidth)
         plot.labelfig(pltletter)
 
@@ -444,9 +449,8 @@ class MultipanelPlot(object):
                 hphase -= 1
             pl.plot(hphase, nonrvdatcat[ind], **plot.highlight_format)
 
-        # plot.otherplot(phase, nonrvdatcat, ax)
         plot.mtelplot_nonrv(phase, nonrvdatcat, telcat, ax, telfmts=self.telfmts)
-        if not self.nobin and len(nonrvdat) > 10:
+        if not nobin and len(nonrvdat) > 10:
             ax.errorbar(
                 bint, bindat, yerr=binerr, fmt='ro', mec='w', ms=bin_markersize,
                 mew=bin_markeredgewidth
@@ -686,10 +690,19 @@ class MultipanelPlot(object):
                 num_p = range(1, self.num_planets + 1)
                 if i % 2 == 0:
                     self.plot_phasefold(pltletter, num_p[n])
+                    if i == 0:
+                        ax_phase.legend(ncol=len(self.telfmts), bbox_to_anchor=(0, 1.1), loc='lower left', fontsize='small')
                 elif i % 2 == 1:
                     self.plot_phasefold_nonrvs(nonrvdat, nonrvtimes, pltletter,  num_p[n])
                     pltletter += 1
                     n += 1
+
+                if i == list(range(2*self.num_planets))[-1]:
+                    pl.tick_params(axis='x', which='both', bottom=True, top=True, labelbottom=True)
+                elif i == 0:
+                    pl.tick_params(axis='x', which='both', bottom=False, top=True, labelbottom=False, labeltop=True)
+                else:
+                    pl.tick_params(axis='x', which='both', bottom=False, top=True, labelbottom=False)
 
         if self.saveplot is not None:
             pl.savefig(self.saveplot, dpi=150)

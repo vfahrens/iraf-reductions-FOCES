@@ -187,7 +187,7 @@ def mtelplot_nonrv(x, y, tel, ax, lw=1., telfmts={}, **kwargs):
             else:
                 rms = 0
 
-            otherplot(xt, yt, t, ax, lw=1., telfmt=telfmt, rms=rms)
+            otherplot(xt, yt, t, lw=1., telfmt=telfmt, rms=rms)
 
     ax.yaxis.set_major_formatter(
         matplotlib.ticker.ScalarFormatter(useOffset=False)
@@ -198,7 +198,7 @@ def mtelplot_nonrv(x, y, tel, ax, lw=1., telfmts={}, **kwargs):
 
 
 
-def otherplot(x, y, tel, ax, lw=1., telfmt={}, rms=0):
+def otherplot(x, y, tel, lw=1., telfmt={}, rms=0):
     """Plot data from a single different parameter (e.g. airmass)
     copied from telplot() definition
 
