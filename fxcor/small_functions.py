@@ -358,9 +358,71 @@ def plot_single_orders(redmine_id):
     return
 
 
+# extract a specific value from the logfile for plotting against RVs
+def extract_nonrv_data(redmine_id):
+    want_value = input('What kind of data do you want to extract from the logfile? '
+                       '(supported: ra, dec, azi, alt, airmass, posangle, exptime) ')
+
+    if want_value == 'ra':
+        pos = 2
+    elif want_value == 'dec':
+        pos = 3
+    elif want_value == 'azi':
+        pos = 4
+    elif want_value == 'alt':
+        pos = 5
+    elif want_value == 'airmass':
+        pos = 6
+    elif want_value == 'posangle':
+        pos = 7
+    elif want_value == 'exptime':
+        pos = 10
+    else:
+        print('WARNING: The chosen type of data is not supported. Set data type to airmass.')
+        pos = 6
+
+    # read the results from the grep command
+    with open(pf.grep_redID_out.format(redmine_id), 'r') as grepfile:
+        string_with_value = []
+        for line in grepfile:
+            # remove whitespaces in the beginning and end of the string
+            line = line.strip()
+            # remove whitespaces inside the string
+            line = line.replace(' ', '')
+            # split the string into its single entries
+            line = line.split('|')
+            if line[0][0] != '#':
+                # extract the name of each file from the grep results
+                file_name = line[0]
+                value = line[pos]
+                if want_value == 'ra' or want_value == 'dec':
+                    value = value.split(':')
+                    value = float(value[0]) + float(value[1]) / 60 + float(value[2]) / 3600
+                new_entry = [file_name, value]
+                string_with_value.append(new_entry)
+
+    with open(pf.out_RVs_weighted.format(redmine_id), 'r') as rvoutfile:
+        julian_dates = []
+        for line in rvoutfile:
+            line = line.strip()
+            line = line.split(' ')
+            julian_dates.append(line[0])
+
+    string_with_value = sorted(string_with_value, key=itemgetter(0))
+    julian_dates = sorted(julian_dates, key=itemgetter(0))
+
+    with open(pf.out_nonRV_data.format(redmine_id), 'w') as nonrv_out:
+        for i in range(len(julian_dates)):
+            string_out = julian_dates[i] + ' ' + string_with_value[i][1] + '\n'
+            nonrv_out.write(string_out)
+
+
+    return
+
+
 # make a plot of the data, phase-folded with the literature orbit
 
-# plot_single_orders(2864)
+extract_nonrv_data(2864)
 
 # def plot_single_RVs():
 #
