@@ -165,9 +165,13 @@ def mtelplot_nonrv(x, y, tel, ax, lw=1., telfmts={}, **kwargs):
     ci = 0
     for t in utel:
         if t == 'foces':
-            xt = x[tel == t]
-            yt = y[tel == t]
-            # et = e[tel == t]
+            # print(t)
+            # print(tel)
+            # print(tel == t)
+            # print(x)
+            # xt = x[tel == t]
+            # yt = y[tel == t]
+            # # et = e[tel == t]
 
             telfmt = {}
 
@@ -187,7 +191,7 @@ def mtelplot_nonrv(x, y, tel, ax, lw=1., telfmts={}, **kwargs):
             else:
                 rms = 0
 
-            otherplot(xt, yt, t, lw=1., telfmt=telfmt, rms=rms)
+            otherplot(x, y, t, lw=1., telfmt=telfmt, rms=rms)  # (xt, yt, t, lw=1., telfmt=telfmt, rms=rms)
 
     ax.yaxis.set_major_formatter(
         matplotlib.ticker.ScalarFormatter(useOffset=False)

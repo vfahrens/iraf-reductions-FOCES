@@ -413,7 +413,7 @@ def extract_nonrv_data(redmine_id):
 
     with open(pf.out_nonRV_data.format(redmine_id), 'w') as nonrv_out:
         for i in range(len(julian_dates)):
-            string_out = julian_dates[i] + ' ' + string_with_value[i][1] + '\n'
+            string_out = julian_dates[i] + ' ' + str(string_with_value[i][1]) + '\n'
             nonrv_out.write(string_out)
 
 
