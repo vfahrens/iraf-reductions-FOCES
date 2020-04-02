@@ -656,8 +656,10 @@ class MultipanelPlot(object):
         #     plot.labelfig(pltletter)
         #     pltletter += 1
 
+        redmine = input('Please give me the redmine ID of the object: ')
+
         location = '/mnt/e/IRAF/iraf-reductions-FOCES/fxcor/rv_results/'  # Path(__file__).parent
-        nonrv_data_file = os.path.join(location, 'nonRVs_ID2864.txt')
+        nonrv_data_file = os.path.join(location, 'nonRVs_ID{}.txt'.format(redmine))
         nonrvdat = []
         nonrvtimes = []
         with open(nonrv_data_file)as nonrvfile:

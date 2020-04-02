@@ -262,7 +262,7 @@ if re.match(r'^y', yn_RV_extract, re.I) or re.match(r'^j', yn_RV_extract, re.I):
     tels_single_med, telserr_single_med = sf.rv_and_err_median(tels_single, 'tel')
 
     yn_plot_singleorders = input('Do you want to plot the RV results for the single orders?')
-    if re.match(r'^y', yn_RV_extract, re.I) or re.match(r'^j', yn_RV_extract, re.I):
+    if re.match(r'^y', yn_plot_singleorders, re.I) or re.match(r'^j', yn_plot_singleorders, re.I):
         print('\n')
         sf.plot_single_orders(redmine_id)
 
@@ -286,6 +286,19 @@ if re.match(r'^y', yn_RV_complit, re.I) or re.match(r'^j', yn_RV_complit, re.I):
     config_file = make_radvel_conffile(redmine_id, n_cand, inst_list)
     subprocess.call(['radvel', 'fit', '-s', str(config_file), '-d', str(pf.abs_path_rvout)])
     subprocess.call(['radvel', 'plot', '-t', 'rv', '-s', str(config_file), '-d', str(pf.abs_path_rvout)])
+
+
+# make a plot of the RV values compared to other data (e.g. airmass)
+print('\n')
+yn_RV_nonRV = input('Do you want to plot the RV results and compare them to some other non-RV data? ')
+
+if re.match(r'^y', yn_RV_nonRV, re.I) or re.match(r'^j', yn_RV_nonRV, re.I):
+    print('\n')
+    redmine_id = input('The redmine ID is needed once again: ')
+    sf.extract_nonrv_data(redmine_id)
+    config_file = pf.radvel_config.format(redmine_id)
+    subprocess.call(['radvel', 'fit', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
+    subprocess.call(['radvel', 'plot', '-t', 'nonrv', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
 
 # do the fxcor reduction manually
 print('\n')

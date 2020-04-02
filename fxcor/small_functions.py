@@ -422,7 +422,7 @@ def extract_nonrv_data(redmine_id):
 
 # make a plot of the data, phase-folded with the literature orbit
 
-extract_nonrv_data(2864)
+# extract_nonrv_data(2864)
 
 # def plot_single_RVs():
 #

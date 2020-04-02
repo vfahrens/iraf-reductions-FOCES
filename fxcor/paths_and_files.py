@@ -11,6 +11,7 @@ path_IRAF_datainput = 'data/'
 path_gamse_results = 'onedspec'
 path_gamse_reduce = 'red_{}'
 path_rv_results = 'rv_results/'
+path_rv_plots = 'RV_plots/'
 
 # definition of many filenames
 file_script_USM = 'sync_obslogfiles_USM.sh'
@@ -46,6 +47,7 @@ abs_path_data = (location / path_data_local).resolve()
 abs_path_red_gamse = (location / path_reduce_gamse).resolve()
 abs_path_IRAF = (location / path_IRAF_datainput).resolve()
 abs_path_rvout = (location / path_rv_results).resolve()
+abs_path_rvplots = (location / path_rv_plots).resolve()
 
 # other paths
 gamse_reduce_folder = os.path.join(abs_path_red_gamse, path_gamse_reduce)
