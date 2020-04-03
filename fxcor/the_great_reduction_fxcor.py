@@ -284,8 +284,8 @@ if re.match(r'^y', yn_RV_complit, re.I) or re.match(r'^j', yn_RV_complit, re.I):
     inst_list = input('Give a list of the instruments that were used (separate with space): ')
     inst_list = inst_list.split(' ')
     config_file = make_radvel_conffile(redmine_id, n_cand, inst_list)
-    subprocess.call(['radvel', 'fit', '-s', str(config_file), '-d', str(pf.abs_path_rvout)])
-    subprocess.call(['radvel', 'plot', '-t', 'rv', '-s', str(config_file), '-d', str(pf.abs_path_rvout)])
+    subprocess.call(['myradvel', 'fit', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
+    subprocess.call(['myradvel', 'plot', '-t', 'rv', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
 
 
 # make a plot of the RV values compared to other data (e.g. airmass)
@@ -297,8 +297,8 @@ if re.match(r'^y', yn_RV_nonRV, re.I) or re.match(r'^j', yn_RV_nonRV, re.I):
     redmine_id = input('The redmine ID is needed once again: ')
     sf.extract_nonrv_data(redmine_id)
     config_file = pf.radvel_config.format(redmine_id)
-    subprocess.call(['radvel', 'fit', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
-    subprocess.call(['radvel', 'plot', '-t', 'nonrv', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
+    subprocess.call(['myradvel', 'fit', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
+    subprocess.call(['myradvel', 'plot', '-t', 'nonrv', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
 
 # do the fxcor reduction manually
 print('\n')

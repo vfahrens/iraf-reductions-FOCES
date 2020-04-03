@@ -3,11 +3,11 @@ import paths_and_files as pf
 import pandas as pd
 import numpy as np
 
-redmine_id = 2908
-starname = 'ID2908'
-nplanets = 3
-instnames = ['foces', 'lick', 'elodie', 'mcdonald', 'tillinghast']
-ntels = 5
+redmine_id = 2894
+starname = 'ID2894'
+nplanets = 1
+instnames = ['foces']
+ntels = 1
 fitting_basis = 'per tc e w k'
 bjd0 = 0
 planet_letters = {}

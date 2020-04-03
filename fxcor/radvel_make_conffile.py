@@ -1,14 +1,14 @@
 # make a Keplerian fit configuration file
 
 # Required packages for setup
-# radvel is available via Ubuntu, but not in the Windows anaconda environments
-# import radvel
+# myradvel is available via Ubuntu, but not in the Windows anaconda environments
+# import myradvel
 import paths_and_files as pf
 
 
 def make_radvel_conffile(redmine_id, n_cand, inst_list):
     with open(pf.radvel_config.format(redmine_id), 'w') as conffile:
-        conffile.write("import radvel\n")
+        conffile.write("import myradvel\n")
         conffile.write("import paths_and_files as pf\n")
         conffile.write("import pandas as pd\n")
         conffile.write("import numpy as np\n")
@@ -24,7 +24,7 @@ def make_radvel_conffile(redmine_id, n_cand, inst_list):
         conffile.write("instnames = {}\n".format(list(inst_list)))
         # number of instruments with unique velocity zero-points
         conffile.write("ntels = {}\n".format(len(instnames)))
-        # Fitting basis, see radvel.basis.BASIS_NAMES for available basis names
+        # Fitting basis, see myradvel.basis.BASIS_NAMES for available basis names
         conffile.write("fitting_basis = 'per tc e w k'\n")
         # reference epoch for RV timestamps (i.e. this number has been subtracted off your timestamps)
         conffile.write("bjd0 = 0\n")
@@ -36,7 +36,7 @@ def make_radvel_conffile(redmine_id, n_cand, inst_list):
 
         # Define prior centers (initial guesses) in a basis of your choice (need not be in the fitting basis)
         # initialize Parameters object
-        conffile.write("anybasis_params = radvel.Parameters(nplanets, "
+        conffile.write("anybasis_params = myradvel.Parameters(nplanets, "
                        "basis='per tc e w k', planet_letters=planet_letters)\n")
 
         conffile.write("lit_params = []\n")
@@ -50,30 +50,30 @@ def make_radvel_conffile(redmine_id, n_cand, inst_list):
         conffile.write("for n in range(nplanets):\n")
         # period of n-th planet
         conffile.write("    anybasis_params['per{}'.format(str(n+1))] = "
-                       "radvel.Parameter(value=float(lit_params[n][0]))\n")
+                       "myradvel.Parameter(value=float(lit_params[n][0]))\n")
         # time of inferior conjunction of n-th planet
-        conffile.write("    anybasis_params['tc{}'.format(str(n+1))] = radvel.Parameter(value=lit_params[n][1])\n")
+        conffile.write("    anybasis_params['tc{}'.format(str(n+1))] = myradvel.Parameter(value=lit_params[n][1])\n")
         # eccentricity of n-th planet
-        conffile.write("    anybasis_params['e{}'.format(str(n+1))] = radvel.Parameter(value=lit_params[n][2])\n")
+        conffile.write("    anybasis_params['e{}'.format(str(n+1))] = myradvel.Parameter(value=lit_params[n][2])\n")
         # argument of periastron of the star's orbit for n-th planet
         conffile.write("    anybasis_params['w{}'.format(str(n+1))] = "
-                       "radvel.Parameter(value=(2.0 * np.pi * lit_params[n][3] / 360.0))\n")
+                       "myradvel.Parameter(value=(2.0 * np.pi * lit_params[n][3] / 360.0))\n")
         # velocity semi-amplitude for n-th planet
-        conffile.write("    anybasis_params['k{}'.format(str(n+1))] = radvel.Parameter(value=lit_params[n][4])\n")
+        conffile.write("    anybasis_params['k{}'.format(str(n+1))] = myradvel.Parameter(value=lit_params[n][4])\n")
 
         # abscissa for slope and curvature terms (should be near mid-point of time baseline)
         conffile.write("time_base = 2456778\n")
         # slope: (If rv is m/s and time is days then [dvdt] is m/s/day)
-        conffile.write("anybasis_params['dvdt'] = radvel.Parameter(value=0.0)\n")
+        conffile.write("anybasis_params['dvdt'] = myradvel.Parameter(value=0.0)\n")
         # curvature: (If rv is m/s and time is days then [curv] is m/s/day^2)
-        conffile.write("anybasis_params['curv'] = radvel.Parameter(value=0.0)\n")
+        conffile.write("anybasis_params['curv'] = myradvel.Parameter(value=0.0)\n")
 
         # analytically calculate gamma if vary=False and linear=True
         conffile.write("for inst in instnames:\n")
         # velocity zero-point for each instrument
-        conffile.write("    anybasis_params['gamma_{}'.format(inst)] = radvel.Parameter(value=0.0)\n")
+        conffile.write("    anybasis_params['gamma_{}'.format(inst)] = myradvel.Parameter(value=0.0)\n")
         # jitter for each instrument
-        conffile.write("    anybasis_params['jit_{}'.format(inst)] = radvel.Parameter(value=2.6)\n")
+        conffile.write("    anybasis_params['jit_{}'.format(inst)] = myradvel.Parameter(value=2.6)\n")
 
         # Convert input orbital parameters into the fitting basis
         conffile.write("params = anybasis_params.basis.to_any_basis(anybasis_params, fitting_basis)\n")
@@ -98,13 +98,13 @@ def make_radvel_conffile(redmine_id, n_cand, inst_list):
         # Define prior shapes and widths here.
         conffile.write("priors = [\n")
         # Keeps eccentricity < 1
-        conffile.write("    radvel.prior.EccentricityPrior(nplanets),\n")
+        conffile.write("    myradvel.prior.EccentricityPrior(nplanets),\n")
         # Gaussian prior on tc1 with center at tc1 and width 300 days
-        conffile.write("    radvel.prior.Gaussian('tc1', params['tc1'].value, 300.0)\n")
+        conffile.write("    myradvel.prior.Gaussian('tc1', params['tc1'].value, 300.0)\n")
         conffile.write("]\n")
 
         conffile.write("for inst in instnames:\n")
-        conffile.write("    priors.append(radvel.prior.HardBounds('jit_{}'.format(inst), 0.0, 10.0))\n")
+        conffile.write("    priors.append(myradvel.prior.HardBounds('jit_{}'.format(inst), 0.0, 10.0))\n")
 
         # print(priors)
 
