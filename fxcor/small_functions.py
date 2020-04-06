@@ -359,27 +359,25 @@ def plot_single_orders(redmine_id):
 
 
 # extract a specific value from the logfile for plotting against RVs
-def extract_nonrv_data(redmine_id):
-    want_value = input('What kind of data do you want to extract from the logfile? '
-                       '(supported: ra, dec, azi, alt, airmass, posangle, exptime) ')
+def extract_nonrv_data(redmine_id, want_value, pos):
 
-    if want_value == 'ra':
-        pos = 2
-    elif want_value == 'dec':
-        pos = 3
-    elif want_value == 'azi':
-        pos = 4
-    elif want_value == 'alt':
-        pos = 5
-    elif want_value == 'airmass':
-        pos = 6
-    elif want_value == 'posangle':
-        pos = 7
-    elif want_value == 'exptime':
-        pos = 10
-    else:
-        print('WARNING: The chosen type of data is not supported. Set data type to airmass.')
-        pos = 6
+    # if want_value == 'ra':
+    #     pos = 2
+    # elif want_value == 'dec':
+    #     pos = 3
+    # elif want_value == 'azi':
+    #     pos = 4
+    # elif want_value == 'alt':
+    #     pos = 5
+    # elif want_value == 'airmass':
+    #     pos = 6
+    # elif want_value == 'posangle':
+    #     pos = 7
+    # elif want_value == 'exptime':
+    #     pos = 10
+    # else:
+    #     print('WARNING: The chosen type of data is not supported. Set data type to airmass.')
+    #     pos = 6
 
     # read the results from the grep command
     with open(pf.grep_redID_out.format(redmine_id), 'r') as grepfile:
@@ -420,9 +418,47 @@ def extract_nonrv_data(redmine_id):
     return
 
 
+# ask which type of non-RV data should be used for plotting
+def get_nonrv_type():
+    want_value = input('What kind of data do you want to extract from the logfile? '
+                       '("list" for overview of supported data types) ')
+
+    # all available data types and their descriptions
+    dict_nonrv_types = {'ra': 'right ascension',
+                        'dec': 'declination',
+                        'azi': 'telescope azimuth',
+                        'alt': 'telescope altitude',
+                        'airmass': 'airmass during observation',
+                        'posangle': 'position angle of the object on the sky',
+                        'exptime': 'exposure time [s]',
+                        'ut': 'UT timestamp when observation was started',
+                        'temp_m1': 'M1 mirror temperature [°C]',
+                        'temp_rod': 'telescope tuberod temperature [°C]',
+                        'temp_m2': 'M2 mirror temperature [°C]',
+                        'temp_m3': 'M3 mirror temperature [°C]',
+                        'temp_fork': 'telescope fork temperature [°C]',
+                        'hex_x': 'hexapod x position', 'hex_y': 'hexapod y position',
+                        'hex_z': 'hexapod z position',
+                        'hex_u': 'hexapod u position', 'hex_v': 'hexapod v position'}
+
+    # all data types that can be extracted from the logfiles of  one night
+    dict_nonrv_logfile = {'ra': 2, 'dec': 3, 'azi': 4, 'alt': 5, 'airmass': 6, 'posangle': 7, 'exptime': 10, 'ut': 9,
+                          'temp_m1': 11, 'temp_rod': 12, 'temp_m2': 13, 'temp_m3': 14, 'temp_fork': 15, 'hex_x': 16,
+                          'hex_y': 17, 'hex_z': 18, 'hex_u': 19, 'hex_v': 20}
+
+    if want_value == 'list':
+        for d in dict_nonrv_types:
+            print(d + ': ' + dict_nonrv_types[d])
+        want_value = input('What kind of data do you want to extract from the logfile? ')
+
+    if want_value in dict_nonrv_logfile:
+        pos = dict_nonrv_logfile[want_value]
+
+    return want_value, pos
+
 # make a plot of the data, phase-folded with the literature orbit
 
-# extract_nonrv_data(2864)
+# get_nonrv_type()
 
 # def plot_single_RVs():
 #

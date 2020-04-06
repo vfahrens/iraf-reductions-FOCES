@@ -1,13 +1,13 @@
 """
-Driver functions for the radvel pipeline.\
+Driver functions for the myradvel pipeline.\
 These functions are meant to be used only with\
 the `cli.py` command line interface.
 """
 from __future__ import print_function
 
-import radvel
-from radvel.plot import orbit_plots, mcmc_plots
-from radvel.mcmc import statevars
+import myradvel
+from myradvel.plot import orbit_plots, mcmc_plots
+from myradvel.mcmc import statevars
 
 import os
 import sys
@@ -36,17 +36,17 @@ def plots(args):
     config_file = args.setupfn
     conf_base = os.path.basename(config_file).split('.')[0]
     statfile = os.path.join(
-        args.outputdir, "{}_radvel.stat".format(conf_base)
+        args.outputdir, "{}_myradvel.stat".format(conf_base)
     )
 
     status = load_status(statfile)
 
-    P, post = radvel.utils.initialize_posterior(config_file,
+    P, post = myradvel.utils.initialize_posterior(config_file,
                                                 decorr=args.decorr)
 
     assert status.getboolean('fit', 'run'), \
         "Must perform max-liklihood fit before plotting"
-    post = radvel.posterior.load(status.get('fit', 'postfile'))
+    post = myradvel.posterior.load(status.get('fit', 'postfile'))
 
     for ptype in args.type:
         print("Creating {} plot for {}".format(ptype, conf_base))
@@ -61,7 +61,7 @@ def plots(args):
             else:
                 saveto = args.plotkw['saveplot']
                 args.plotkw.pop('saveplot')
-            P, _ = radvel.utils.initialize_posterior(config_file)
+            P, _ = myradvel.utils.initialize_posterior(config_file)
             if hasattr(P, 'bjd0'):
                 args.plotkw['epoch'] = P.bjd0
 
@@ -77,12 +77,12 @@ def plots(args):
                 RVPlot.plot_multipanel()
 
                 # check to make sure that Posterior is not GP, print warning if it is
-                if isinstance(post.likelihood, radvel.likelihood.CompositeLikelihood):
+                if isinstance(post.likelihood, myradvel.likelihood.CompositeLikelihood):
                     like_list = post.likelihood.like_list
                 else:
                     like_list = [post.likelihood]
                 for like in like_list:
-                    if isinstance(like, radvel.likelihood.GPLikelihood):
+                    if isinstance(like, myradvel.likelihood.GPLikelihood):
                         print("WARNING: GP Likelihood(s) detected. \
 You may want to use the '--gp' flag when making these plots.")
                         break
@@ -90,14 +90,15 @@ You may want to use the '--gp' flag when making these plots.")
         if ptype == 'nonrv':
             args.plotkw['uparams'] = post.uparams
             args.plotkw['status'] = status
+            file_extension = input('Please give a file extension for saving the plot: ("{}_rv_<yourchoice>") '.format(conf_base))
             if 'saveplot' not in args.plotkw:
                 saveto = os.path.join(
-                    args.outputdir, conf_base+'_rv_nonrv.pdf'
+                    args.outputdir, conf_base+'_rv_{}.pdf'.format(file_extension)
                 )
             else:
                 saveto = args.plotkw['saveplot']
                 args.plotkw.pop('saveplot')
-            P, _ = radvel.utils.initialize_posterior(config_file)
+            P, _ = myradvel.utils.initialize_posterior(config_file)
             if hasattr(P, 'bjd0'):
                 args.plotkw['epoch'] = P.bjd0
 
@@ -133,9 +134,9 @@ You may want to use the '--gp' flag when making these plots.")
 
         if ptype == 'derived':
             assert status.has_section('derive'), \
-                "Must run `radvel derive` before plotting derived parameters"
+                "Must run `myradvel derive` before plotting derived parameters"
 
-            P, _ = radvel.utils.initialize_posterior(config_file)
+            P, _ = myradvel.utils.initialize_posterior(config_file)
             chains = pd.read_csv(status.get('derive', 'chainfile'))
             saveto = os.path.join(
                 args.outputdir, conf_base+'_corner_derived_pars.pdf'
@@ -159,9 +160,9 @@ def fit(args):
     conf_base = os.path.basename(config_file).split('.')[0]
     print("Performing maximum a posteriori fitting for {}".format(conf_base))
 
-    P, post = radvel.utils.initialize_posterior(config_file, decorr=args.decorr)
+    P, post = myradvel.utils.initialize_posterior(config_file, decorr=args.decorr)
 
-    post = radvel.fitting.maxlike_fitting(post, verbose=True)
+    post = myradvel.fitting.maxlike_fitting(post, verbose=True)
 
     postfile = os.path.join(args.outputdir,
                             '{}_post_obj.pkl'.format(conf_base))
@@ -170,7 +171,7 @@ def fit(args):
     savestate = {'run': True,
                  'postfile': os.path.relpath(postfile)}
     save_status(os.path.join(args.outputdir,
-                '{}_radvel.stat'.format(conf_base)),
+                '{}_myradvel.stat'.format(conf_base)),
                 'fit', savestate)
 
 
@@ -184,7 +185,7 @@ def mcmc(args):
     config_file = args.setupfn
     conf_base = os.path.basename(config_file).split('.')[0]
     statfile = os.path.join(args.outputdir,
-                            "{}_radvel.stat".format(conf_base))
+                            "{}_myradvel.stat".format(conf_base))
 
     if args.save or args.proceed:
         backend_loc = os.path.join(args.outputdir, conf_base+'_rawchain.h5')
@@ -192,13 +193,13 @@ def mcmc(args):
         backend_loc = None
 
     status = load_status(statfile)
-    P, post = radvel.utils.initialize_posterior(config_file,
+    P, post = myradvel.utils.initialize_posterior(config_file,
                                                 decorr=args.decorr)
 
     if status.getboolean('fit', 'run'):
         print("Loading starting positions from previous MAP fit")
 
-        post = radvel.posterior.load(status.get('fit', 'postfile'))
+        post = myradvel.posterior.load(status.get('fit', 'postfile'))
 
     msg1 = (
             "Running MCMC for {}, N_walkers = {}, N_steps = {}, N_ensembles = {}, Min Auto Factor = {}, "
@@ -210,7 +211,7 @@ def mcmc(args):
 
     print(msg1 + '\n' + msg2)
 
-    chains = radvel.mcmc(post, nwalkers=args.nwalkers, nrun=args.nsteps, ensembles=args.ensembles,
+    chains = myradvel.mcmc(post, nwalkers=args.nwalkers, nrun=args.nsteps, ensembles=args.ensembles,
                          minAfactor=args.minAfactor, maxArchange=args.maxArchange, burnAfactor=args.burnAfactor,
                          burnGR=args.burnGR, maxGR=args.maxGR, minTz=args.minTz, minsteps=args.minsteps,
                          minpercent=args.minpercent, thin=args.thin, serial=args.serial, save=args.save,
@@ -239,7 +240,7 @@ def mcmc(args):
             post.params[k].value = post_summary[k][0.5]
 
     print("Performing post-MCMC maximum likelihood fit...")
-    post = radvel.fitting.maxlike_fitting(post, verbose=False)
+    post = myradvel.fitting.maxlike_fitting(post, verbose=False)
 
     final_logprob = post.logprob()
     final_residuals = post.likelihood.residuals().std()
@@ -262,10 +263,10 @@ def mcmc(args):
         if maxlike == -np.inf and med == -np.inf and np.isnan(low) and np.isnan(high):
             err = 0.0
         else:
-            err = radvel.utils.round_sig(err)
+            err = myradvel.utils.round_sig(err)
         if err > 0.0:
-            med, err, errhigh = radvel.utils.sigfig(med, err)
-            maxlike, err, errhigh = radvel.utils.sigfig(maxlike, err)
+            med, err, errhigh = myradvel.utils.sigfig(med, err)
+            maxlike, err, errhigh = myradvel.utils.sigfig(maxlike, err)
         post.uparams[par] = err
         post.medparams[par] = med
         post.maxparams[par] = maxlike
@@ -326,16 +327,16 @@ def ic_compare(args):
     config_file = args.setupfn
     conf_base = os.path.basename(config_file).split('.')[0]
     statfile = os.path.join(args.outputdir,
-                            "{}_radvel.stat".format(conf_base))
+                            "{}_myradvel.stat".format(conf_base))
 
     status = load_status(statfile)
 
-    P, post = radvel.utils.initialize_posterior(config_file,
+    P, post = myradvel.utils.initialize_posterior(config_file,
                                                 decorr=args.decorr)
 
     assert status.getboolean('fit', 'run'), \
         "Must perform max-liklihood fit before running Information Criteria comparisons"
-    post = radvel.posterior.load(status.get('fit', 'postfile'))
+    post = myradvel.posterior.load(status.get('fit', 'postfile'))
 
     choices = ['nplanets', 'e', 'trend', 'jit', 'gp']
     statsdictlist = []
@@ -345,7 +346,7 @@ def ic_compare(args):
     ipost = copy.deepcopy(post)
 
     if args.simple:
-        statsdictlist += radvel.fitting.model_comp(ipost, params=[], verbose=args.verbose)
+        statsdictlist += myradvel.fitting.model_comp(ipost, params=[], verbose=args.verbose)
     else:
         if hasattr(args, 'fixjitter') and args.fixjitter:
             for param in ipost.params:
@@ -358,7 +359,7 @@ def ic_compare(args):
                 + " ".join(choices)
             paramlist.append(compareparam)
             if hasattr(args, 'mixed') and not args.mixed:
-                statsdictlist += radvel.fitting.model_comp(ipost, params=[compareparam], verbose=args.verbose)
+                statsdictlist += myradvel.fitting.model_comp(ipost, params=[compareparam], verbose=args.verbose)
         if hasattr(args, 'mixed') and not args.mixed:
             new_statsdictlist = []
             for dicti in statsdictlist:
@@ -373,7 +374,7 @@ def ic_compare(args):
             statsdictlist = new_statsdictlist
 
         if not hasattr(args, 'mixed') or (hasattr(args, 'mixed') and args.mixed):
-            statsdictlist += radvel.fitting.model_comp(ipost, params=paramlist, verbose=args.verbose)
+            statsdictlist += myradvel.fitting.model_comp(ipost, params=paramlist, verbose=args.verbose)
 
     savestate = {'ic': statsdictlist}
     save_status(statfile, 'ic_compare', savestate)
@@ -389,14 +390,14 @@ def tables(args):
     config_file = args.setupfn
     conf_base = os.path.basename(config_file).split('.')[0]
     statfile = os.path.join(args.outputdir,
-                            "{}_radvel.stat".format(conf_base))
+                            "{}_myradvel.stat".format(conf_base))
     status = load_status(statfile)
 
     assert status.getboolean('mcmc', 'run'), \
         "Must run MCMC before making tables"
 
-    P, post = radvel.utils.initialize_posterior(config_file)
-    post = radvel.posterior.load(status.get('fit', 'postfile'))
+    P, post = myradvel.utils.initialize_posterior(config_file)
+    post = myradvel.posterior.load(status.get('fit', 'postfile'))
     chains = pd.read_csv(status.get('mcmc', 'chainfile'))
     minafactor = status.get('mcmc', 'minafactor')
     maxarchange = status.get('mcmc', 'maxarchange')
@@ -408,8 +409,8 @@ def tables(args):
         derived = True
     else:
         derived = False
-    report = radvel.report.RadvelReport(P, post, chains, minafactor, maxarchange, maxgr, mintz, derived=derived)
-    tabletex = radvel.report.TexTable(report)
+    report = myradvel.report.RadvelReport(P, post, chains, minafactor, maxarchange, maxgr, mintz, derived=derived)
+    tabletex = myradvel.report.TexTable(report)
     attrdict = {'priors': 'tab_prior_summary', 'rv': 'tab_rv',
                 'params': 'tab_params', 'derived': 'tab_derived',
                 'crit': 'tab_crit'}
@@ -421,10 +422,10 @@ def tables(args):
                 "Must run Information Criteria comparison before making comparison tables"
 
             compstats = eval(status.get('ic_compare', 'ic'))
-            report = radvel.report.RadvelReport(
+            report = myradvel.report.RadvelReport(
                 P, post, chains, minafactor, maxarchange, maxgr, mintz, compstats=compstats
             )
-            tabletex = radvel.report.TexTable(report)
+            tabletex = myradvel.report.TexTable(report)
             tex = tabletex.tab_comparison()
         elif tabtype == 'rv':
             tex = getattr(tabletex, attrdict[tabtype])(name_in_title=args.name_in_title, max_lines=None)
@@ -433,7 +434,7 @@ def tables(args):
         else:
             if tabtype == 'derived':
                 assert status.has_option('derive', 'run'), \
-                    "Must run `radvel derive` before making derived parameter table"
+                    "Must run `myradvel derive` before making derived parameter table"
             assert tabtype in attrdict, 'Invalid Table Type %s ' % tabtype
             tex = getattr(tabletex, attrdict[tabtype])(name_in_title=args.name_in_title)
 
@@ -457,7 +458,7 @@ def derive(args):
     config_file = args.setupfn
     conf_base = os.path.basename(config_file).split('.')[0]
     statfile = os.path.join(args.outputdir,
-                            "{}_radvel.stat".format(conf_base))
+                            "{}_myradvel.stat".format(conf_base))
     status = load_status(statfile)
 
     msg = "Multiplying mcmc chains by physical parameters for {}".format(
@@ -467,8 +468,8 @@ def derive(args):
 
     assert status.getboolean('mcmc', 'run'), "Must run MCMC before making tables"
 
-    P, post = radvel.utils.initialize_posterior(config_file)
-    post = radvel.posterior.load(status.get('fit', 'postfile'))
+    P, post = myradvel.utils.initialize_posterior(config_file)
+    post = myradvel.posterior.load(status.get('fit', 'postfile'))
     chains = pd.read_csv(status.get('mcmc', 'chainfile'))
 
     try:
@@ -519,12 +520,12 @@ values. Interpret posterior with caution.".format(num_nan, nan_perc))
         k = _get_param('k')
         e = _get_param('e')
 
-        mpsini = radvel.utils.Msini(k, per, mstar, e, Msini_units='earth')
+        mpsini = myradvel.utils.Msini(k, per, mstar, e, Msini_units='earth')
         _set_param('mpsini', mpsini)
         outcols.append(_get_colname('mpsini'))
 
         mtotal = mstar + (mpsini * c.M_earth.value) / c.M_sun.value      # get total star plus planet mass
-        a = radvel.utils.semi_major_axis(per, mtotal)               # changed from mstar to mtotal
+        a = myradvel.utils.semi_major_axis(per, mtotal)               # changed from mstar to mtotal
         
         _set_param('a', a)
         outcols.append(_get_colname('a'))
@@ -541,7 +542,7 @@ values. Interpret posterior with caution.".format(num_nan, nan_perc))
             )
 
             _set_param('rp', rp)
-            _set_param('rhop', radvel.utils.density(mpsini, rp))
+            _set_param('rhop', myradvel.utils.density(mpsini, rp))
 
             outcols.append(_get_colname('rhop'))
         except (AttributeError, KeyError):
@@ -581,12 +582,12 @@ def report(args):
     print("Assembling report for {}".format(conf_base))
 
     statfile = os.path.join(args.outputdir,
-                            "{}_radvel.stat".format(conf_base))
+                            "{}_myradvel.stat".format(conf_base))
 
     status = load_status(statfile)
 
-    P, post = radvel.utils.initialize_posterior(config_file)
-    post = radvel.posterior.load(status.get('fit', 'postfile'))
+    P, post = myradvel.utils.initialize_posterior(config_file)
+    post = myradvel.posterior.load(status.get('fit', 'postfile'))
     chains = pd.read_csv(status.get('mcmc', 'chainfile'))
     minafactor = status.get('mcmc', 'minafactor')
     maxarchange = status.get('mcmc', 'maxarchange')
@@ -602,7 +603,7 @@ def report(args):
         compstats = eval(status.get('ic_compare', args.comptype))
     except:
         print("WARNING: Could not find {} model comparison \
-in {}.\nPlease make sure that you have run `radvel ic -t {}` (or, e.g., `radvel \
+in {}.\nPlease make sure that you have run `myradvel ic -t {}` (or, e.g., `myradvel \
 ic -t nplanets e trend jit gp`)\
 \nif you would like to include the model comparison table in the \
 report.".format(args.comptype,
@@ -610,7 +611,7 @@ report.".format(args.comptype,
                 args.comptype))
         compstats = None
 
-    report = radvel.report.RadvelReport(P, post, chains, minafactor, maxarchange, maxgr, mintz, compstats=compstats,
+    report = myradvel.report.RadvelReport(P, post, chains, minafactor, maxarchange, maxgr, mintz, compstats=compstats,
                                         derived=derived)
     report.runname = conf_base
 
@@ -618,7 +619,7 @@ report.".format(args.comptype,
     for ptype, pfile in status.items('plot'):
         report_depfiles.append(pfile)
 
-    with radvel.utils.working_directory(args.outputdir):
+    with myradvel.utils.working_directory(args.outputdir):
         rfile = os.path.join(conf_base+"_results.pdf")
         report_depfiles = [os.path.basename(p) for p in report_depfiles]
         report.compile(
