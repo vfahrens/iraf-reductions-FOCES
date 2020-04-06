@@ -1,0 +1,51 @@
+SIMPLE  =                    T / Standard FITS format: NOST 100-2.0
+BITPIX  =                  -32 / No. of bits per pixel
+NAXIS   =                    1 / No. of axes in image
+NAXIS1  =                  733 / No. of pixels
+EXTEND  =                    T / FITS extension may be present
+
+
+CRPIX1  =                   1. / Reference pixel
+CRVAL1  =        8.51232057335 / Coordinate at reference pixel
+CDELT1  =    0.000143432301621 / Coord. incr. per pixel (original value)
+CTYPE1  = '                '   / Units of coordinate
+BUNIT   = '                '   / Units of data values
+DATAMAX =        1569.34802246 / Maximum data value
+DATAMIN =         933.91973877 / Minimum data value
+
+ORIGIN  = 'ESO-MIDAS'          / Written by MIDAS
+DATE    = '2019-11-06T16:11:05' /  [UTC] Date of writing
+FILENAME= 'junk.bdf'           / Original file base-name
+MIDASFTP= 'IMAGE   '           / MIDAS File Type
+
+OBJECT  = 'NGC0307 '           / MIDAS desc.: IDENT(1)
+RA      =                   0. / MIDAS desc.: O_POS(1)
+DEC     =                   0. / MIDAS desc.: O_POS(2)
+DATE-OBS= '01/01/00'           / MIDAS desc.: O_TIME(1)
+TM-START=                   0. / MIDAS desc.: O_TIME(5)
+EXPTIME =                   0. / MIDAS desc.: O_TIME(7)
+COMMENT NOST 100-2.0: Hanisch,R. et al. 2001, Astron. & Astrophys. 376, 559
+HISTORY MINIMUM S/N RATIO
+HISTORY                                                               COMPUTE/I\
+HISTORY MAG junk = ssN307MJ.fits[<,@1:>,@1]
+
+HISTORY  ESO-DESCRIPTORS START   ................
+HISTORY  'RADII','R*4',1,28,'5E14.7'
+HISTORY  -2.0825584E+01-1.3676829E+01-9.1417713E+00-6.4766941E+00-4.5950260E+00
+HISTORY  -3.3605521E+00-2.4917016E+00-1.8765450E+00-1.3726104E+00-1.0089999E+00
+HISTORY  -7.5800002E-01-5.0700003E-01-2.5600001E-01-4.9999999E-03 2.4600001E-01
+HISTORY   4.9699998E-01 7.4799997E-01 9.9900001E-01 1.2500001E+00 1.6143113E+00
+HISTORY   2.1181750E+00 2.7342410E+00 3.7113514E+00 5.2098069E+00 7.3328447E+00
+HISTORY   1.0429485E+01 1.6201859E+01 3.0860277E+01
+HISTORY
+HISTORY  'IBI','I*4',1,29,'7I10'
+HISTORY           2        35        60        73        82        88        92
+HISTORY          95        97        99       100       101       102       103
+HISTORY         104       105       106       107       108       109       111
+HISTORY         113       116       121       128       138       154       186
+HISTORY         350
+HISTORY
+HISTORY  'LHCUTS','R*4',1,4,'5E14.7'
+HISTORY   0.0000000E+00 0.0000000E+00 9.3391974E+02 1.5693480E+03
+HISTORY
+HISTORY  ESO-DESCRIPTORS END     ................
