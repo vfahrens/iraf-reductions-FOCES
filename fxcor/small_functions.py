@@ -359,29 +359,12 @@ def plot_single_orders(redmine_id):
 
 
 # extract a specific value from the logfile for plotting against RVs
-def extract_nonrv_data(redmine_id, want_value, pos):
-
-    # if want_value == 'ra':
-    #     pos = 2
-    # elif want_value == 'dec':
-    #     pos = 3
-    # elif want_value == 'azi':
-    #     pos = 4
-    # elif want_value == 'alt':
-    #     pos = 5
-    # elif want_value == 'airmass':
-    #     pos = 6
-    # elif want_value == 'posangle':
-    #     pos = 7
-    # elif want_value == 'exptime':
-    #     pos = 10
-    # else:
-    #     print('WARNING: The chosen type of data is not supported. Set data type to airmass.')
-    #     pos = 6
+def extract_nonrv_data(redmine_id, want_value, pos, filetype):
 
     # read the results from the grep command
     with open(pf.grep_redID_out.format(redmine_id), 'r') as grepfile:
         string_with_value = []
+        filename_used = []
         for line in grepfile:
             # remove whitespaces in the beginning and end of the string
             line = line.strip()
@@ -392,12 +375,37 @@ def extract_nonrv_data(redmine_id, want_value, pos):
             if line[0][0] != '#':
                 # extract the name of each file from the grep results
                 file_name = line[0]
-                value = line[pos]
-                if want_value == 'ra' or want_value == 'dec':
-                    value = value.split(':')
-                    value = float(value[0]) + float(value[1]) / 60 + float(value[2]) / 3600
-                new_entry = [file_name, value]
-                string_with_value.append(new_entry)
+
+                if filetype == 'log':
+                    value = line[pos]
+                    if want_value == 'ra' or want_value == 'dec':
+                        value = value.split(':')
+                        value = float(value[0]) + float(value[1]) / 60 + float(value[2]) / 3600
+                    new_entry = [file_name, value]
+                    string_with_value.append(new_entry)
+                if filetype == 'tab':
+                    filename_used.append(file_name)
+                    file_time = dt.datetime.strptime(line[0][4:18], '%Y%m%d%H%M%S')
+
+                    # get the correct date for the night of observation
+                    folder_date = dt.datetime.strftime(file_time, '%Y%m%d')
+                    if file_time.hour <= 12:
+                        day_before = file_time - dt.timedelta(days=1)
+                        str_day_before = dt.datetime.strftime(day_before, '%Y%m%d')
+                        folder_date = str_day_before
+                    # get the path of the .tab file corresponding to the .fits file
+                    data_folder_path = os.path.join(pf.abs_path_data, folder_date)
+                    tab_file_path = os.path.join(data_folder_path, file_name + '.tab')
+
+                    # from the .tab file extract the desired meta data
+                    with open(tab_file_path, 'r') as tabfile:
+                        for linex in tabfile:
+                            if pos in linex:
+                                linex = linex.strip()
+                                linex = linex.split('=')
+                                tab_data = linex[1]
+                                new_entry = [file_name, tab_data]
+                                string_with_value.append(new_entry)
 
     with open(pf.out_RVs_weighted.format(redmine_id), 'r') as rvoutfile:
         julian_dates = []
@@ -428,7 +436,7 @@ def get_nonrv_type():
                         'dec': 'declination',
                         'azi': 'telescope azimuth',
                         'alt': 'telescope altitude',
-                        'airmass': 'airmass during observation',
+                        'airmass': 'airmass at beginning of observation',
                         'posangle': 'position angle of the object on the sky',
                         'exptime': 'exposure time [s]',
                         'ut': 'UT timestamp when observation was started',
@@ -441,12 +449,41 @@ def get_nonrv_type():
                         'hex_y': 'hexapod y position',
                         'hex_z': 'hexapod z position',
                         'hex_u': 'hexapod u position',
-                        'hex_v': 'hexapod v position'}
+                        'hex_v': 'hexapod v position',
+                        'dero': 'derotator absolute position (encoder)',
+                        'dero_dist': 'derotator target distance',
+                        'out_temp': 'meteo 5 min median temperature',
+                        'out_press': 'meteo 5 min median pressure',
+                        'dero_cur_off': 'current derotator offset',
+                        'focus_cur_off': 'current focus offset',
+                        'airmass_long': 'airmass at start of observation (higher precision)',
+                        'refraction': 'pointing model correction due to atmospheric refraction',
+                        'dero_off': 'derotator offset (instrumental)',
+                        'temp_m1side': 'M1 mirror temperature, measured under the mirror [°C]',
+                        'temp_m1bend1': 'Bending sensor 1 at M1 mirror mount [V]',
+                        'temp_m1bend2': 'Bending sensor 2 at M1 mirror mount [V]',
+                        'temp_m1bend3': 'Bending sensor 3 at M1 mirror mount [V]',
+                        'temp_m1bend4': 'Bending sensor 4 at M1 mirror mount [V]'}
 
     # all data types that can be extracted from the logfiles of  one night
     dict_nonrv_logfile = {'ra': 2, 'dec': 3, 'azi': 4, 'alt': 5, 'airmass': 6, 'posangle': 7, 'exptime': 10, 'ut': 9,
                           'temp_m1': 11, 'temp_rod': 12, 'temp_m2': 13, 'temp_m3': 14, 'temp_fork': 15, 'hex_x': 16,
                           'hex_y': 17, 'hex_z': 18, 'hex_u': 19, 'hex_v': 20}
+
+    dict_nonrv_tabfile = {'dero': 'POSITION.INSTRUMENTAL.DEROTATOR[2].REALPOS',
+                          'dero_dist': 'POSITION.INSTRUMENTAL.DEROTATOR[2].TARGETDISTANCE',
+                          'out_temp': 'TELESCOPE.CONFIG.ENVIRONMENT.TEMPERATURE',
+                          'out_press': 'TELESCOPE.CONFIG.ENVIRONMENT.PRESSURE',
+                          'dero_cur_off': 'CURRENT.DEROTATOR_OFFSET',
+                          'focus_cur_off': 'CURRENT.FOCUS_OFFSET',
+                          'airmass_long': 'CURRENT.OBJECT.HORIZONTAL.AIR_MASS',
+                          'refraction': 'CURRENT.OBJECT.HORIZONTAL.REFRACTION',
+                          'dero_off': 'POSITION.INSTRUMENTAL.DEROTATOR[2].OFFSET',
+                          'temp_m1side': 'AUXILIARY.SENSOR[4].VALUE',
+                          'temp_m1bend1': 'AUXILIARY.SENSOR[15].VALUE',
+                          'temp_m1bend2': 'AUXILIARY.SENSOR[16].VALUE',
+                          'temp_m1bend3': 'AUXILIARY.SENSOR[17].VALUE',
+                          'temp_m1bend4': 'AUXILIARY.SENSOR[18].VALUE'}
 
     if want_value == 'list':
         for d in dict_nonrv_types:
@@ -455,8 +492,12 @@ def get_nonrv_type():
 
     if want_value in dict_nonrv_logfile:
         pos = dict_nonrv_logfile[want_value]
+        filetype = 'log'
+    if want_value in dict_nonrv_tabfile:
+        pos = dict_nonrv_tabfile[want_value]
+        filetype = 'tab'
 
-    return want_value, pos
+    return want_value, pos, filetype
 
 # make a plot of the data, phase-folded with the literature orbit
 
