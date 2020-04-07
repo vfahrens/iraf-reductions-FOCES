@@ -437,9 +437,11 @@ def get_nonrv_type():
                         'temp_m2': 'M2 mirror temperature [°C]',
                         'temp_m3': 'M3 mirror temperature [°C]',
                         'temp_fork': 'telescope fork temperature [°C]',
-                        'hex_x': 'hexapod x position', 'hex_y': 'hexapod y position',
+                        'hex_x': 'hexapod x position',
+                        'hex_y': 'hexapod y position',
                         'hex_z': 'hexapod z position',
-                        'hex_u': 'hexapod u position', 'hex_v': 'hexapod v position'}
+                        'hex_u': 'hexapod u position',
+                        'hex_v': 'hexapod v position'}
 
     # all data types that can be extracted from the logfiles of  one night
     dict_nonrv_logfile = {'ra': 2, 'dec': 3, 'azi': 4, 'alt': 5, 'airmass': 6, 'posangle': 7, 'exptime': 10, 'ut': 9,
