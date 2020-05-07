@@ -1,7 +1,9 @@
 #!/usr/bin/bash
 
 rm /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_ID2864.txt
-cat /mnt/e/logfiles/observations/logfile.190903 | awk '{if($24=="object|"){print $0}}' >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_ID2864.txt
+cat /mnt/e/logfiles/observations/logfile.190831 | awk '{if($24=="object|"){print $0}}' >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_ID2864.txt
+cat /mnt/e/logfiles/observations/logfile.190831 | awk '{if($24=="2864|"){print $0}}' >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_ID2864.txt
+cat /mnt/e/logfiles/observations/logfile.190902 | awk '{if($24=="2864|"){print $0}}' >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_ID2864.txt
 cat /mnt/e/logfiles/observations/logfile.190903 | awk '{if($24=="2864|"){print $0}}' >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_ID2864.txt
 cat /mnt/e/logfiles/observations/logfile.190904 | awk '{if($24=="2864|"){print $0}}' >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_ID2864.txt
 cat /mnt/e/logfiles/observations/logfile.190905 | awk '{if($24=="2864|"){print $0}}' >> /mnt/e/IRAF/iraf-reductions-FOCES/fxcor/output/grep_ID2864.txt

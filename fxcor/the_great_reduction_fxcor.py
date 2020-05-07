@@ -189,7 +189,7 @@ else:
     print('\n')
 
 
-# convert the GAMSE data to IRAF readable form if desired
+# convert the GAMSE data to IRAF readable form if required
 print('\n')
 yn_iraf_convert = input('Do you want to convert the wavelength calibrated data to IRAF readable form? ')
 
@@ -284,6 +284,7 @@ if re.match(r'^y', yn_RV_complit, re.I) or re.match(r'^j', yn_RV_complit, re.I):
     inst_list = input('Give a list of the instruments that were used (separate with space): ')
     inst_list = inst_list.split(' ')
     config_file = make_radvel_conffile(redmine_id, n_cand, inst_list)
+    os.chdir(str(pf.location.resolve()))
     subprocess.call(['myradvel', 'fit', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
     subprocess.call(['myradvel', 'plot', '-t', 'rv', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
 
@@ -298,6 +299,7 @@ if re.match(r'^y', yn_RV_nonRV, re.I) or re.match(r'^j', yn_RV_nonRV, re.I):
     want_value, pos, filetype = sf.get_nonrv_type()
     sf.extract_nonrv_data(redmine_id, want_value, pos, filetype)
     config_file = pf.radvel_config.format(redmine_id)
+    os.chdir(str(pf.location.resolve()))
     subprocess.call(['myradvel', 'fit', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
     subprocess.call(['myradvel', 'plot', '-t', 'nonrv', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
 

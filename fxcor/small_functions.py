@@ -150,7 +150,12 @@ def get_rvs(redmine_id, fxcor_outname):
                     else:
                         print('Warning: Date {} has unexpected format.'.format(date_str))
                     date = julian.to_jd(date_dt, fmt='jd')
+                    # get the RV corrected for heliocentric velocity from the header
                     rv_value = header['VHELIO'] * 1000.0
+                    # get the observed RV without heliocentric correction
+                    v_obs = header['VOBS'] * 1000.0
+                    # get the heliocentric julian date (old date format, now BJD)
+                    hjd_head = header['HJD']
                 phys_ord = fname[34:37]
 
             # get the corresponding RV error (converted to m/s) and VREL from the fxcor result file
@@ -164,8 +169,8 @@ def get_rvs(redmine_id, fxcor_outname):
 
             # save all the results for the single orders to a file
             if 'HJD' in header:
-                output_singleorders = str(date) + ' ' + str(rv_value) + ' ' + str(rv_err) + ' ' + \
-                                      str(rv_rel) + ' ' + str(phys_ord) + '\n'
+                output_singleorders = str(date) + ' ' + str(hjd_head) + ' ' + str(rv_value) + ' ' + str(rv_err) + ' ' + \
+                                      str(rv_rel) + ' ' + str(v_obs) + ' ' + str(phys_ord) + '\n'
                 # print(output_singleorders)
                 outfile.write(output_singleorders)
 
@@ -216,12 +221,12 @@ def make_rv_array(rv_list):
 def rv_and_err_median(rvs_array, rv_type):
     # for normal RVs, use RV with heliocentric correction
     if rv_type != 'tel':
-        med_rv = np.median(rvs_array[1])
+        med_rv = np.median(rvs_array[2])
     # for tellurics, use relative velocity without heliocentric correction
     else:
-        med_rv = np.median(rvs_array[3])
+        med_rv = np.median(rvs_array[4])
     # for both cases use the fxcor error to get a median error of all RV values
-    med_err = np.median(rvs_array[2])
+    med_err = np.median(rvs_array[3])
     return med_rv, med_err
 
 
@@ -242,14 +247,14 @@ def rv_weightedmean(redmine_id, rvs_array, med_rv, med_err, rv_type):
                 # only use the rows of the array that contain RV data from one observation date
                 if rvs_array[0, j] == date:
                     if rv_type != 'tel':
-                        vels_onedate.append(rvs_array[1, j])
+                        vels_onedate.append(rvs_array[2, j])
                     else:
                         # for tellurics, use the relative RV without heliocentric correction
-                        vels_onedate.append(rvs_array[3, j])
+                        vels_onedate.append(rvs_array[4, j])
 
                     # if the RV error given by fxcor is zero, use the median RV error instead
                     if rvs_array[2, j] != 0.0:
-                        v_err.append(rvs_array[2, j])
+                        v_err.append(rvs_array[3, j])
                     else:
                         v_err.append(med_err)
 
@@ -341,8 +346,8 @@ def plot_single_orders(redmine_id):
         for g in range(len(dates_rv_array[0])):
             if dates_rv_array[0, g] == onedate:
                 order_list.append(dates_rv_array[-1, g])
-                rv_list.append(dates_rv_array[1, g])
-                err_list.append(dates_rv_array[2, g])
+                rv_list.append(dates_rv_array[2, g])
+                err_list.append(dates_rv_array[3, g])
 
         onedate_norm = julian.from_jd(onedate, fmt='jd')
         date_out = dt.datetime.strftime(onedate_norm, '%m.%d_%H:%M:%S')

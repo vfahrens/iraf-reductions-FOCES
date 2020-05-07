@@ -67,7 +67,7 @@ def iraf_converter(redmine_id, objname):
                         exp_endtime = datetime.strptime(headyyy['FRAME'], '%Y-%m-%dT%H:%M:%S.%f')
                         exp_midtime = exp_endtime - 0.5*dt.timedelta(seconds=headyyy['EXPOSURE']) - \
                                       dt.timedelta(seconds=CCD_readtime)
-                        print(exp_midtime)
+                        # print(exp_midtime)
 
                         # make a header for the new fits file
                         new_headyyy = headyyy
@@ -94,10 +94,15 @@ def iraf_converter(redmine_id, objname):
                             objcoord_dec = radec_table['DEC'][0].replace(' ', ':')
                             new_headyyy['RA'] = (objcoord_ra, 'Right ascension coordinate')
                             new_headyyy['DEC'] = (objcoord_dec, 'Declination coordinate')
-                            print('Header entry added.')
+                            # print('Header entry added.')
 
                         new_headyyy['EQUINOX'] = (2000.0, 'Epoch of observation')
-                        new_headyyy['UTMID'] = (datetime.isoformat(exp_midtime),'UT of midpoint of observation')
+                        new_headyyy['UTMID'] = (datetime.isoformat(exp_midtime), 'UT of midpoint of observation')
+
+                        # add systemic velocity for the template
+                        if fname == '20190903_0114_FOC1903_SCI0_ods.fits':
+                            new_headyyy['VHELIO'] = (-33.165, 'Peculiar velocity of standard star')
+                            
 
                         # make a new fits file with the header and data BOTH as primary HDU,
                         # because this is what IRAF expects
