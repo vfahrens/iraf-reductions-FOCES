@@ -12,6 +12,7 @@ path_gamse_results = 'onedspec'
 path_gamse_reduce = 'red_{}'
 path_rv_results = 'rv_results/'
 path_rv_plots = 'RV_plots/'
+path_smd = 'ID{}_same_min_diff/'
 
 # definition of many filenames
 file_script_USM = 'sync_obslogfiles_USM.sh'
@@ -54,6 +55,7 @@ gamse_reduce_folder = os.path.join(abs_path_red_gamse, path_gamse_reduce)
 gamse_results_folder = os.path.join(gamse_reduce_folder, path_gamse_results)
 iraf_data_folder = os.path.join(abs_path_IRAF, 'ID{}')
 iraf_output_folder = os.path.join(abs_path_output, 'ID{}')
+iraf_smd_folder = os.path.join(abs_path_output, path_smd)
 
 # make absolute paths to the files
 script_USM = os.path.join(abs_path_scripts, file_script_USM)
