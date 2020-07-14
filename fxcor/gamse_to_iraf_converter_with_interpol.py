@@ -2,7 +2,6 @@
 import os
 import numpy as np
 import astropy.io.fits as fits
-from pathlib import Path
 from datetime import datetime
 import datetime as dt
 from astroquery.simbad import Simbad

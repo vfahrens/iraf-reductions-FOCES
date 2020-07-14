@@ -1,6 +1,7 @@
 import os
 import datetime as dt
 import shutil
+import subprocess
 import astropy.io.fits as fits
 import numpy as np
 from operator import itemgetter
@@ -9,6 +10,40 @@ import matplotlib.pyplot as plt
 
 # import statements for other python scripts
 import paths_and_files as pf
+
+
+# update FITS files with rsync
+def rsync_fits_update(only, after):
+    address_focespc = 'foces@195.37.68.140'
+    fits_path_focespc = '/data/FOCES/{}'
+    fcslinks_path_focespc = '/data/fcs_links/{}'
+    fits_update_cmd = 'rsync -avlu {}:{} {}'
+
+    if only is None and after is None:
+        print('\n')
+        print('WARNING: You did not specify any date, so I will not update any FITS or logfiles.')
+
+    if only == 'today':
+        date = dt.datetime.strftime(dt.datetime.now(), '%Y%m%d')
+        fits_cmd = fits_update_cmd.format(address_focespc, fcslinks_path_focespc.format(date), pf.abs_path_data)
+        cmd_list = fits_cmd.split(' ')
+        print('\n')
+        print('I am updating the FITS files for you...')
+        print('Please enter your password for ltsp01:')
+        subprocess.run(cmd_list)
+    elif only is not None:
+        fits_cmd = fits_update_cmd.format(address_focespc, fcslinks_path_focespc.format(only), pf.abs_path_data)
+        cmd_list = fits_cmd.split(' ')
+        print('\n')
+        print('I am updating the FITS files for you...')
+        print('Please enter your password for ltsp01:')
+        subprocess.run(cmd_list)
+
+    if after is not None:
+        print('\n')
+        print('I am updating the FITS files for you...')
+
+    return
 
 
 # distinguish between logfile and comment file paths, filenames and years

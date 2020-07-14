@@ -6,39 +6,60 @@ import subprocess
 import re  # module for regular expressions
 import datetime as dt
 import shutil
+import argparse
 
 # import statements for other python scripts
 import shell_script_maker as shesm
 import paths_and_files as pf
 import small_functions as sf
-from gamse_to_iraf_converter_with_interpol import iraf_converter
+from gamse_convert import iraf_converter
 from radvel_make_conffile import make_radvel_conffile
 
+
+##################################################################
+# general variables and option defaults
 
 in_date = dt.datetime.strftime(dt.datetime.now(), '%Y%m%d')
 in_opt1 = '-o'
 in_opt2 = '-ld'
 
+###################################################################
+# argument parser definitions
+
+# create command line argument parser
+parser = argparse.ArgumentParser(description='RV calculation for FOCES with fxcor: This program takes raw frames for '
+                                             'a certain object of the FOCES spectrograph, performs a wacelength '
+                                             'calibration with the GAMSE software, converts the files to MEF files and '
+                                             'computes radial velocities by using IRAF\'s fxcor package. There are '
+                                             'different options to choose which parts of the program should be '
+                                             'executed.')
+
+# add optional command line arguments
+parser.add_argument('-fu', '--fitsupdate', help='update the local raw FITS files', action='store_true')
+parser.add_argument('-lu', '--logsupdate', help='update the local observation logfiles', action='store_true')
+# create a group of options that exclude their simultaneous usage
+processing_dates = parser.add_mutually_exclusive_group()
+processing_dates.add_argument('-o', '--only', help='process data only for the date specified, date format: YYYYMMDD or '
+                                                   '"today"', type=str)
+processing_dates.add_argument('-a', '--after', help='process data for all dates starting with and after the one '
+                                                    'specified, date format: YYYYMMDD', type=str)
+
+# actually parse the arguments given in the command line in the current execution of this script
+args = parser.parse_args()
+print(args)
+
+#####################################################################
+# actual calls of functions
+
 # Welcome message for the user
 print('Hello! I see you want to reduce some data.')
 
 # check whether an update of the data and logfiles is needed
-print('\n')
-yn_update = input('Do you want to update the data and logfile directories? ')
+if args.fitsupdate:
+    sf.rsync_fits_update(args.only, args.after)
 
-# if update is needed, execute shell scripts
-# regular expressions: check if string starts with y/j (re.I = ignore case)
-if re.match(r'^y', yn_update, re.I) or re.match(r'^j', yn_update, re.I):
-    # ask the user for the desired date and options
-    print('\n')
-    print('Please enter "today" or specify a date:')
-    date_restrict = input('(yyyymmdd; option1: -a = after, -o = only, -e = everything; '
-                          'option2: -lo = logs/comments only, -do = data frames only, -ld = both)\n')
-    if date_restrict != 'today':
-        # split the input into its parts
-        in_date = date_restrict[:8]
-        in_opt1 = date_restrict[-6:-4]
-        in_opt2 = date_restrict[-3:]
+
+    # if update is needed, execute shell scripts
 
     # create a script for syncing the desired dates
     if re.search(r'-lo', date_restrict, re.I):

@@ -7,7 +7,7 @@ import astropy.io.fits as fits
 
 
 # extract the single orders from the GAMSE result files, add header entries with wavelength calibration information
-def iraf_converter(infolder, calib_fiber=False):
+def iraf_converter(infolder, calib_fiber=False, raw_flux=False):
     # define the folders for reading the data and saving the new files
     # this looks a bit complicated, but ensures true cross-platform compatibility
     location = Path(__file__).parent
@@ -45,7 +45,8 @@ def iraf_converter(infolder, calib_fiber=False):
             # save the original GAMSE header as primary header of the MEF file (primary data section is empty)
             empty_primary = fits.PrimaryHDU(header=head)
             hdu_list_fred = fits.HDUList([empty_primary])
-            hdu_list_fraw = fits.HDUList([empty_primary])
+            if raw_flux:
+                hdu_list_fraw = fits.HDUList([empty_primary])
 
             # check if the data are single or multi fiber: it is required that the reduction was made with
             # double-fiber configuration, even if the observation was without simultaneous calibration; this is
@@ -88,7 +89,8 @@ def iraf_converter(infolder, calib_fiber=False):
                             order = row['order']
                             wave = row['wavelength']  # all wavelength values for the current order (aperture)
                             flux_reduced = row['flux']  # all flux values as produced by GAMSE
-                            flux_raw = row['flux_raw']  # raw flux values without flat/background/etc subtraction
+                            if raw_flux:
+                                flux_raw = row['flux_raw']  # raw flux values without flat/background/etc subtraction
 
                             # definition of other parameters that IRAF needs for correct interpretation
                             # of the wavelength calibration
@@ -138,23 +140,26 @@ def iraf_converter(infolder, calib_fiber=False):
 
                             # convert the flux values to arrays for saving in a FITS file
                             flux_np = np.array(flux_reduced)
-                            flux_raw_np = np.array(flux_raw)
+                            if raw_flux:
+                                flux_raw_np = np.array(flux_raw)
 
                             # create multi-extension FITS files, one for the reduced and one for the raw flux
                             image_hdu_fred = fits.ImageHDU(data=flux_np, header=ext_head)
                             hdu_list_fred.append(image_hdu_fred)
 
-                            image_hdu_fraw = fits.ImageHDU(data=flux_raw_np, header=ext_head)
-                            hdu_list_fraw.append(image_hdu_fraw)
+                            if raw_flux:
+                                image_hdu_fraw = fits.ImageHDU(data=flux_raw_np, header=ext_head)
+                                hdu_list_fraw.append(image_hdu_fraw)
 
                     # save the new IRAF compatible multi-extension FITS files with the reduced and raw flux
                     fname_fred = '{}_ods_fred.fits'.format(fname[:13])
                     out_fred = os.path.join(path_out, fname_fred)
                     hdu_list_fred.writeto(out_fred, overwrite=True)
 
-                    fname_fraw = '{}_ods_fraw.fits'.format(fname[:13])
-                    out_fraw = os.path.join(path_out, fname_fraw)
-                    hdu_list_fraw.writeto(out_fraw, overwrite=True)
+                    if raw_flux:
+                        fname_fraw = '{}_ods_fraw.fits'.format(fname[:13])
+                        out_fraw = os.path.join(path_out, fname_fraw)
+                        hdu_list_fraw.writeto(out_fraw, overwrite=True)
 
             else:
                 print('Warning: This file was reduced with the single fiber configuration: {}. In this case, '
@@ -164,4 +169,4 @@ def iraf_converter(infolder, calib_fiber=False):
     return
 
 
-iraf_converter('20200318')
+# iraf_converter('20200318')
