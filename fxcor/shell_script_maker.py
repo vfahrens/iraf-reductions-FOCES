@@ -176,7 +176,7 @@ def script_data_update(date, option):
                 # handle USM to local part
                 scriptout3x.write(cmd3.format('temp_frames/{}'.format(str(date))) + ' ' + str(pf.abs_path_data) + '\n')
 
-            # make logfile syncing script starting with specific date
+            # make data syncing script starting with specific date
             if option == '-a':
                 for yr in years_data:
                     # this is how to handle the year when the request starts

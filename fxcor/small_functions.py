@@ -1,5 +1,6 @@
 import os
 import datetime as dt
+import calendar
 import shutil
 import subprocess
 import astropy.io.fits as fits
@@ -14,36 +15,81 @@ import paths_and_files as pf
 
 # update FITS files with rsync
 def rsync_fits_update(only, after):
-    address_focespc = 'foces@195.37.68.140'
-    fits_path_focespc = '/data/FOCES/{}'
-    fcslinks_path_focespc = '/data/fcs_links/{}'
-    fits_update_cmd = 'rsync -avlu {}:{} {}'
-
+    # if date specification is missing, skip updating
     if only is None and after is None:
         print('\n')
         print('WARNING: You did not specify any date, so I will not update any FITS or logfiles.')
 
     if only == 'today':
-        date = dt.datetime.strftime(dt.datetime.now(), '%Y%m%d')
-        fits_cmd = fits_update_cmd.format(address_focespc, fcslinks_path_focespc.format(date), pf.abs_path_data)
-        cmd_list = fits_cmd.split(' ')
-        print('\n')
-        print('I am updating the FITS files for you...')
-        print('Please enter your password for ltsp01:')
-        subprocess.run(cmd_list)
+        today = dt.datetime.strftime(dt.datetime.now(), '%Y%m%d')
+        sync_fits(today)
+    # if an explicit date is given, use that date
     elif only is not None:
-        fits_cmd = fits_update_cmd.format(address_focespc, fcslinks_path_focespc.format(only), pf.abs_path_data)
-        cmd_list = fits_cmd.split(' ')
-        print('\n')
-        print('I am updating the FITS files for you...')
-        print('Please enter your password for ltsp01:')
-        subprocess.run(cmd_list)
+        sync_fits(only)
 
+    # if explicit date is given for "after" option, make list of dates for syncing
     if after is not None:
-        print('\n')
-        print('I am updating the FITS files for you...')
+        startdate = dt.datetime.strptime(after, '%Y%m%d')
+
+        dates_lst = ['list', 'here']
+        sync_fits(dates_lst)
 
     return
+
+
+# make the rsync command line text and execute it
+def sync_fits(date):
+    print(type(date))
+
+    # define the required adresses, paths and base commands
+    address_focespc = 'foces@195.37.68.140'
+    # fits_path_focespc = '/data/FOCES/{}'
+    fcslinks_path_focespc = '/data/fcs_links/{}'
+    fits_update_cmd = 'rsync -avlu'  # {}:{} {}
+
+    # subprocess needs a list of strings, so start with the base command
+    cmd_list = fits_update_cmd.split(' ')
+
+    # for "only" option, the date will be given as a single string
+    if type(date) is str:
+        cmd_list.append(address_focespc + ':' + fcslinks_path_focespc.format(date))
+        cmd_list.append(pf.abs_path_data)
+
+    # for "after" option, sync the whole list of dates with one command
+    elif type(date) is list:
+        for date_str in date:
+            cmd_list.append(address_focespc + ':' + fcslinks_path_focespc.format(date_str))
+        cmd_list.append(pf.abs_path_data)
+
+    print('\n')
+    print('I am updating the FITS files for you...')
+    print('Please enter your password for ltsp01:')
+    subprocess.run(cmd_list)
+
+    return
+
+
+def get_after_dateslist(startdate):
+    now = dt.datetime.now()
+    # list of years where data is available in fcs_links
+    years_data = list(range(2019, now.year + 1))
+
+    if startdate < dt.datetime.strptime(str(20190430), '%Y%m%d'):
+        print('Warning: The date you chose is before the start of automatic data collection (20190430). Expect '
+              'incompatibilities and errors at all places.')
+
+    for yr in years_data:
+        # this is how to handle the year when the request starts
+        if yr == startdate.year:
+            # handle the rest of the starting month
+            startmonth = str(startdate.year) + str('{:02d}').format(startdate.month)
+            # add all days that are still left from the starting month
+            if startdate.year == now.year and startdate.month == now.month:
+                days = list(range(startdate.day, now.day + 1))
+            else:
+                end_of_month = calendar.monthrange(yr, startdate.month)[1]
+                days = list(range(startdate.day, end_of_month + 1))
+
 
 
 # distinguish between logfile and comment file paths, filenames and years
