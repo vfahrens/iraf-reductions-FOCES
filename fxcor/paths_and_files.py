@@ -81,3 +81,10 @@ out_RVs_compare = os.path.join(abs_path_rvout, RVs_compare)
 lit_planet_params = os.path.join(abs_path_rvout, literature_params)
 radvel_config = os.path.join(abs_path_rvout, config_file_radvel)
 out_nonRV_data = os.path.join(abs_path_rvout, nonRV_data)
+
+# define the remote hosts and paths for rsync
+address_focespc = 'foces@195.37.68.140'
+address_ohiaaipc = 'wstobserver@195.37.68.19'
+# fits_path_focespc = '/data/FOCES/{}'
+fcslinks_path_focespc = '/data/fcs_links/{}'
+log_path_ohiaaipc = '/data/3kk/{}'

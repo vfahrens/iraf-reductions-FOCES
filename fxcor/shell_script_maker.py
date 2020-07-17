@@ -148,95 +148,95 @@ def script_logs_update(date, option):
     return pf.file_script_USM, pf.file_script_local
 
 
-# function to create script for syncing all requested data files (FITS frames) to USM PC
-def script_data_update(date, option):
-    startdate = dt.datetime.strptime(str(date), '%Y%m%d')
-    if startdate < dt.datetime.strptime(str(20190430), '%Y%m%d'):
-        print('Warning: The date you chose is before the start of automatic data collection (20190430).')
-    with open(pf.script2_USM, 'w') as scriptout2:
-        scriptout2.write('#!/usr/bin/bash\n')
-        scriptout2.write('\n')
-
-        with open(pf.script2_local, 'w') as scriptout3x:
-            scriptout3x.write('#!/usr/bin/bash\n')
-            scriptout3x.write('\n')
-            # add commands to execute the remote script
-            scriptout3x.write(msg_sync_to_usm.format('data'))
-            scriptout3x.write(msg_pw_usm)
-            scriptout3x.write(cmd4.format(pf.script2_USM))
-            scriptout3x.write(msg_sync_to_local.format('data'))
-            scriptout3x.write(msg_pw_usm)
-
-            # make data syncing script for single date
-            if option == '-o':
-                # handle ohiaai to USM part
-                rsync_cmd2_usm = cmd2 + '{} ~/temp_frames\n'.format(str(date))
-                scriptout2.write(rsync_cmd2_usm)
-
-                # handle USM to local part
-                scriptout3x.write(cmd3.format('temp_frames/{}'.format(str(date))) + ' ' + str(pf.abs_path_data) + '\n')
-
-            # make data syncing script starting with specific date
-            if option == '-a':
-                for yr in years_data:
-                    # this is how to handle the year when the request starts
-                    if yr == startdate.year:
-                        # handle the rest of the starting month
-                        startmonth = str(startdate.year) + str('{:02d}').format(startdate.month)
-                        # add all days that are still left from the starting month
-                        if startdate.year == now.year and startdate.month == now.month:
-                            days = list(range(startdate.day, now.day + 1))
-                        else:
-                            end_of_month = calendar.monthrange(yr, startdate.month)[1]
-                            days = list(range(startdate.day, end_of_month + 1))
-
-                        # add a rsync command for all individual days of the starting month
-                        for single_day in days:
-                            expl_date = (startmonth + '{:02d}'.format(single_day))
-
-                            # handle ohiaai to USM part
-                            rsync_cmd2_usm = cmd2 + '{} ~/temp_frames\n'.format(expl_date)
-                            scriptout2.write(rsync_cmd2_usm)
-                            # handle USM to local part
-                            scriptout3x.write(cmd3.format('temp_frames/{}'.format(expl_date)) + ' ' + str(pf.abs_path_data) + '\n')
-
-                        # handle the other months of the starting year
-                        if startdate.year < now.year:
-                            months = list(range(startdate.month + 1, 13))
-                        if startdate.year == now.year and startdate.month <= now.month:
-                            months = list(range(startdate.month + 1, now.month + 1))
-                        for single_month in months:
-                            cur_month = str(startdate.year) + '{:02d}'.format(single_month)
-
-                            # handle ohiaai to USM part
-                            rsync_cmd2_usm = cmd2 + '{} ~/temp_frames\n'.format((cur_month + '*'))
-                            scriptout2.write(rsync_cmd2_usm)
-                            # handle USM to local part
-                            scriptout3x.write(cmd3.format('temp_frames/{}'.format((cur_month + '*'))) + ' ' + str(pf.abs_path_data) + '\n')
-
-                    # for all years after that, copy all folders of each year
-                    if yr > startdate.year:
-                        # handle ohiaai to USM part
-                        rsync_cmd2_usm = cmd2 + '{} ~/temp_frames\n'.format((str(yr) + '*'))
-                        scriptout2.write(rsync_cmd2_usm)
-                        # handle USM to local part
-                        scriptout3x.write(cmd3.format('temp_frames/{}'.format((str(yr) + '*'))) + ' ' + str(pf.abs_path_data) + '\n')
-
-            if option == '-e':
-                # copy the complete folders of all years
-                for yr in years_data:
-                    # handle ohiaai to USM part
-                    rsync_cmd2_usm = cmd2 + '{} ~/temp_frames\n'.format((str(yr) + '*'))
-                    scriptout2.write(rsync_cmd2_usm)
-                    # handle USM to local part
-                    scriptout3x.write(cmd3.format('temp_frames/{}'.format((str(yr) + '*'))) + ' ' + str(pf.abs_path_data) + '\n')
-
-        # add a nice message to indicate the regular end of the sync process
-        scriptout2.write('echo "Finished syncing data to USM!"\n')
-        print('Sync script for data successfully created!')
-
-    # return the file name of the script that was created for copying etc.
-    return pf.data_script_USM, pf.data_script_local
+# # function to create script for syncing all requested data files (FITS frames) to USM PC
+# def script_data_update(date, option):
+#     startdate = dt.datetime.strptime(str(date), '%Y%m%d')
+#     if startdate < dt.datetime.strptime(str(20190430), '%Y%m%d'):
+#         print('Warning: The date you chose is before the start of automatic data collection (20190430).')
+#     with open(pf.script2_USM, 'w') as scriptout2:
+#         scriptout2.write('#!/usr/bin/bash\n')
+#         scriptout2.write('\n')
+#
+#         with open(pf.script2_local, 'w') as scriptout3x:
+#             scriptout3x.write('#!/usr/bin/bash\n')
+#             scriptout3x.write('\n')
+#             # add commands to execute the remote script
+#             scriptout3x.write(msg_sync_to_usm.format('data'))
+#             scriptout3x.write(msg_pw_usm)
+#             scriptout3x.write(cmd4.format(pf.script2_USM))
+#             scriptout3x.write(msg_sync_to_local.format('data'))
+#             scriptout3x.write(msg_pw_usm)
+#
+#             # make data syncing script for single date
+#             if option == '-o':
+#                 # handle ohiaai to USM part
+#                 rsync_cmd2_usm = cmd2 + '{} ~/temp_frames\n'.format(str(date))
+#                 scriptout2.write(rsync_cmd2_usm)
+#
+#                 # handle USM to local part
+#                 scriptout3x.write(cmd3.format('temp_frames/{}'.format(str(date))) + ' ' + str(pf.abs_path_data) + '\n')
+#
+#             # make data syncing script starting with specific date
+#             if option == '-a':
+#                 for yr in years_data:
+#                     # this is how to handle the year when the request starts
+#                     if yr == startdate.year:
+#                         # handle the rest of the starting month
+#                         startmonth = str(startdate.year) + str('{:02d}').format(startdate.month)
+#                         # add all days that are still left from the starting month
+#                         if startdate.year == now.year and startdate.month == now.month:
+#                             days = list(range(startdate.day, now.day + 1))
+#                         else:
+#                             end_of_month = calendar.monthrange(yr, startdate.month)[1]
+#                             days = list(range(startdate.day, end_of_month + 1))
+#
+#                         # add a rsync command for all individual days of the starting month
+#                         for single_day in days:
+#                             expl_date = (startmonth + '{:02d}'.format(single_day))
+#
+#                             # handle ohiaai to USM part
+#                             rsync_cmd2_usm = cmd2 + '{} ~/temp_frames\n'.format(expl_date)
+#                             scriptout2.write(rsync_cmd2_usm)
+#                             # handle USM to local part
+#                             scriptout3x.write(cmd3.format('temp_frames/{}'.format(expl_date)) + ' ' + str(pf.abs_path_data) + '\n')
+#
+#                         # handle the other months of the starting year
+#                         if startdate.year < now.year:
+#                             months = list(range(startdate.month + 1, 13))
+#                         if startdate.year == now.year and startdate.month <= now.month:
+#                             months = list(range(startdate.month + 1, now.month + 1))
+#                         for single_month in months:
+#                             cur_month = str(startdate.year) + '{:02d}'.format(single_month)
+#
+#                             # handle ohiaai to USM part
+#                             rsync_cmd2_usm = cmd2 + '{} ~/temp_frames\n'.format((cur_month + '*'))
+#                             scriptout2.write(rsync_cmd2_usm)
+#                             # handle USM to local part
+#                             scriptout3x.write(cmd3.format('temp_frames/{}'.format((cur_month + '*'))) + ' ' + str(pf.abs_path_data) + '\n')
+#
+#                     # for all years after that, copy all folders of each year
+#                     if yr > startdate.year:
+#                         # handle ohiaai to USM part
+#                         rsync_cmd2_usm = cmd2 + '{} ~/temp_frames\n'.format((str(yr) + '*'))
+#                         scriptout2.write(rsync_cmd2_usm)
+#                         # handle USM to local part
+#                         scriptout3x.write(cmd3.format('temp_frames/{}'.format((str(yr) + '*'))) + ' ' + str(pf.abs_path_data) + '\n')
+#
+#             if option == '-e':
+#                 # copy the complete folders of all years
+#                 for yr in years_data:
+#                     # handle ohiaai to USM part
+#                     rsync_cmd2_usm = cmd2 + '{} ~/temp_frames\n'.format((str(yr) + '*'))
+#                     scriptout2.write(rsync_cmd2_usm)
+#                     # handle USM to local part
+#                     scriptout3x.write(cmd3.format('temp_frames/{}'.format((str(yr) + '*'))) + ' ' + str(pf.abs_path_data) + '\n')
+#
+#         # add a nice message to indicate the regular end of the sync process
+#         scriptout2.write('echo "Finished syncing data to USM!"\n')
+#         print('Sync script for data successfully created!')
+#
+#     # return the file name of the script that was created for copying etc.
+#     return pf.data_script_USM, pf.data_script_local
 
 
 # make script to automatically add the project ID etc. to the FITS header

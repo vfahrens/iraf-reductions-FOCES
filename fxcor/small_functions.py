@@ -13,8 +13,8 @@ import matplotlib.pyplot as plt
 import paths_and_files as pf
 
 
-# update FITS files with rsync
-def rsync_fits_update(only, after):
+# update FITS or log/comment files with rsync
+def rsync_files_update(only, after, filetype):
     # if date specification is missing, skip updating
     if only is None and after is None:
         print('\n')
@@ -22,49 +22,75 @@ def rsync_fits_update(only, after):
 
     if only == 'today':
         today = dt.datetime.strftime(dt.datetime.now(), '%Y%m%d')
-        sync_fits(today)
+        sync_fits(today, filetype)
     # if an explicit date is given, use that date
     elif only is not None:
-        sync_fits(only)
+        sync_fits(only, filetype)
 
     # if explicit date is given for "after" option, make list of dates for syncing
     if after is not None:
         startdate = dt.datetime.strptime(after, '%Y%m%d')
-
-        dates_lst = ['list', 'here']
-        sync_fits(dates_lst)
+        dates_lst = get_after_dateslist(startdate)
+        # actually sync the requested data
+        sync_fits(dates_lst, filetype)
 
     return
 
 
 # make the rsync command line text and execute it
-def sync_fits(date):
-    print(type(date))
+def sync_fits(date, filetype):
 
-    # define the required adresses, paths and base commands
-    address_focespc = 'foces@195.37.68.140'
-    # fits_path_focespc = '/data/FOCES/{}'
-    fcslinks_path_focespc = '/data/fcs_links/{}'
     fits_update_cmd = 'rsync -avlu'  # {}:{} {}
 
     # subprocess needs a list of strings, so start with the base command
     cmd_list = fits_update_cmd.split(' ')
 
+    # distinguish between log and comment files
+    if filetype == 'logs':
+        years_list, directory, file1 = get_category()
+        cmd_list_log = []
+        cmd_list_comment = []
+
     # for "only" option, the date will be given as a single string
     if type(date) is str:
-        cmd_list.append(address_focespc + ':' + fcslinks_path_focespc.format(date))
-        cmd_list.append(pf.abs_path_data)
+        if filetype == 'fits':
+            cmd_list.append(pf.address_focespc + ':' + pf.fcslinks_path_focespc.format(date))
+            cmd_list.append(pf.abs_path_data)
+        if filetype == 'logs':
+            cmd_list_log.append(pf.address_ohiaaipc + ':' + pf.log_path_ohiaaipc.format(directory[0]) +
+                                '/{}/{}.{}'.format(date[:4], file1[0], date[2:]))
+            cmd_list_comment.append(pf.address_ohiaaipc + ':' + pf.log_path_ohiaaipc.format(directory[1]) +
+                                    '/{}/{}.{}'.format(date[:4], file1[1], date[2:]))
+            cmd_list_log.append(pf.abs_path_obslog)
+            cmd_list_comment.append(pf.abs_path_obslog)
+            cmd_list_log = cmd_list + cmd_list_log
+            cmd_list_comment = cmd_list + cmd_list_comment
 
     # for "after" option, sync the whole list of dates with one command
     elif type(date) is list:
-        for date_str in date:
-            cmd_list.append(address_focespc + ':' + fcslinks_path_focespc.format(date_str))
-        cmd_list.append(pf.abs_path_data)
+        if filetype == 'fits':
+            for date_str in date:
+                cmd_list.append(pf.address_focespc + ':' + pf.fcslinks_path_focespc.format(date_str))
+            cmd_list.append(pf.abs_path_data)
+        if filetype == 'logs':
+            for date_str in date:
+                cmd_list_log.append(pf.address_ohiaaipc + ':' + pf.log_path_ohiaaipc.format(directory[0]) +
+                                    '/{}/{}.{}'.format(date_str[:4], file1[0], date_str[2:]))
+                cmd_list_comment.append(pf.address_ohiaaipc + ':' + pf.log_path_ohiaaipc.format(directory[1]) +
+                                        '/{}/{}.{}'.format(date_str[:4], file1[1], date_str[2:]))
+            cmd_list_log.append(pf.abs_path_obslog)
+            cmd_list_comment.append(pf.abs_path_obslog)
+            cmd_list_log = cmd_list + cmd_list_log
+            cmd_list_comment = cmd_list + cmd_list_comment
 
     print('\n')
     print('I am updating the FITS files for you...')
     print('Please enter your password for ltsp01:')
-    subprocess.run(cmd_list)
+    if filetype == 'fits':
+        subprocess.run(cmd_list)
+    if filetype == 'logs':
+        subprocess.run(cmd_list_log)
+        subprocess.run(cmd_list_comment)
 
     return
 
@@ -74,6 +100,8 @@ def get_after_dateslist(startdate):
     # list of years where data is available in fcs_links
     years_data = list(range(2019, now.year + 1))
 
+    dateslist = []
+
     if startdate < dt.datetime.strptime(str(20190430), '%Y%m%d'):
         print('Warning: The date you chose is before the start of automatic data collection (20190430). Expect '
               'incompatibilities and errors at all places.')
@@ -82,7 +110,7 @@ def get_after_dateslist(startdate):
         # this is how to handle the year when the request starts
         if yr == startdate.year:
             # handle the rest of the starting month
-            startmonth = str(startdate.year) + str('{:02d}').format(startdate.month)
+            startmonth = str(startdate.year) + '{:02d}'.format(startdate.month)
             # add all days that are still left from the starting month
             if startdate.year == now.year and startdate.month == now.month:
                 days = list(range(startdate.day, now.day + 1))
@@ -90,6 +118,24 @@ def get_after_dateslist(startdate):
                 end_of_month = calendar.monthrange(yr, startdate.month)[1]
                 days = list(range(startdate.day, end_of_month + 1))
 
+            # add a string to the list for all individual days of the starting month
+            for single_day in days:
+                dateslist.append(startmonth + '{:02d}'.format(single_day))
+
+            # handle the other months of the starting year
+            if startdate.year < now.year:
+                months = list(range(startdate.month + 1, 13))
+            if startdate.year == now.year and startdate.month <= now.month:
+                months = list(range(startdate.month + 1, now.month + 1))
+            # add a string to the list for all individual months of the starting year
+            for single_month in months:
+                dateslist.append(str(startdate.year) + '{:02d}'.format(single_month) + '*')
+
+        # for all years after that, copy all folders of each year
+        if yr > startdate.year:
+            dateslist.append(str(yr) + '*')
+
+    return dateslist
 
 
 # distinguish between logfile and comment file paths, filenames and years
