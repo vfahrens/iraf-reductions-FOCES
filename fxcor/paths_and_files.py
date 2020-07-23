@@ -39,6 +39,7 @@ literature_params = 'ID{}_literature_params.txt'
 config_file_radvel = 'radvel_ID{}.py'
 nonRV_data = 'nonRVs_ID{}.txt'
 awk_logfiles = 'grep_redID.awk'
+templates_fxcor = 'templates_ID{}.lis'
 
 # initialize all paths and make them platform independent
 location = Path(__file__).parent
@@ -83,6 +84,7 @@ lit_planet_params = os.path.join(abs_path_rvout, literature_params)
 radvel_config = os.path.join(abs_path_rvout, config_file_radvel)
 out_nonRV_data = os.path.join(abs_path_rvout, nonRV_data)
 awk_script = os.path.join(abs_path_scripts, awk_logfiles)
+template_list = os.path.join(iraf_output_folder, templates_fxcor)
 
 # define the remote hosts and paths for rsync
 address_focespc = 'foces@195.37.68.140'

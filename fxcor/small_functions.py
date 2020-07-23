@@ -254,6 +254,14 @@ def script_copy_reduced_data(redmine_id):
     return
 
 
+# make a list of all single extensions of the template file
+def make_template_list(fname_template, redmine_id):
+    with open(pf.template_list.format(redmine_id, redmine_id), 'w') as template_file:
+        for ordnum in range(1, 85):
+            template_file.write('{}_ods_fred.fits[{}]\n'.format(fname_template, ordnum))
+    return
+
+
 # get the RVs (VHELIO, VREL) and RVerrs from the image header and fxcor result file
 def get_rvs(redmine_id, fxcor_outname):
     fname_lst = sorted(os.listdir(pf.iraf_output_folder.format(redmine_id)))

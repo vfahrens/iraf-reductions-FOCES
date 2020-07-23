@@ -185,7 +185,8 @@ if args.fxcor:
     # print('List of frames for this object: {}'.format(pf.all_used_frames.format(args.redmine_id)))  # this file is not created anywhere
     template = input('Please choose a template that should be used for the cross correlation: '
                      '(e.g.: 20190903_0114) ')
-    outname = input('Please give a name for the fxcor output file: (e.g.: RVs_200319) ')
+    sf.make_template_list(template, args.redmine_id)
+    outname = input('Please give a name for the fxcor output file: (e.g.: RVs_200723) ')
     shesm.script_fxcor_lists(args.redmine_id, template, outname)
     subprocess.run(['dos2unix', str(pf.make_cl_fxcor.format(args.redmine_id))])
     subprocess.run(['bash', str(pf.make_cl_fxcor.format(args.redmine_id))])
@@ -197,11 +198,11 @@ if args.fxcor:
     print('vocl> reset obsdb=home$obsdb.dat')
     input('vocl> rv')
     print('Now navigate to the folder containing the data: \n')
-    input('rv> cd {}'.format(pf.iraf_output_folder))
-    print('make a list of all the spectra used as templates: \n')
-    input('rv> files {}_*_A_*.fits > templates_ID{}.lis'.format(template, args.redmine_id))
-    print('now do the heliocentric correction for the template spectra: enter the given command or open '
-          '"epar rvcorrect" and put the template list as entry for '
+    input('rv> cd {}'.format(pf.iraf_output_folder.format(args.redmine_id)))
+    # print('make a list of all the spectra used as templates: \n')
+    # input('rv> files {}_*_A_*.fits > templates_ID{}.lis'.format(template, args.redmine_id))
+    print('do the heliocentric correction for the template spectra: enter the given command or open '
+          '"epar rvcorrect" and put the template filename list as entry for '
           '"images": "images = @templates_ID{}.lis"\n'.format(args.redmine_id))
     input('rv> rvcorrect images=@templates_ID{}.lis'.format(args.redmine_id))
     print('please check with "epar fxcor" if the name of the save file and the CCF settings are correct')
@@ -209,7 +210,7 @@ if args.fxcor:
     input('cl < fxcor_with_lists.cl')
 
     # extract the RVs from the fxcor results
-    outname = input('Tell me which fxcor output file to use: (e.g.: out_allRVs_200319) ')
+    outname = input('Tell me which fxcor output file to use: (e.g.: RVs_200723) ')
     sf.get_rvs(args.redmine_id, outname)
     RVs_single, tels_single = sf.split_rvs_tel(args.redmine_id)
     RVs_single_med, RVerr_single_med = sf.rv_and_err_median(RVs_single, 'obj')
