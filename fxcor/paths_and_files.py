@@ -38,6 +38,7 @@ RVs_compare = 'RVs_ID{}_telcorr_compare.txt'
 literature_params = 'ID{}_literature_params.txt'
 config_file_radvel = 'radvel_ID{}.py'
 nonRV_data = 'nonRVs_ID{}.txt'
+awk_logfiles = 'grep_redID.awk'
 
 # initialize all paths and make them platform independent
 location = Path(__file__).parent
@@ -81,6 +82,7 @@ out_RVs_compare = os.path.join(abs_path_rvout, RVs_compare)
 lit_planet_params = os.path.join(abs_path_rvout, literature_params)
 radvel_config = os.path.join(abs_path_rvout, config_file_radvel)
 out_nonRV_data = os.path.join(abs_path_rvout, nonRV_data)
+awk_script = os.path.join(abs_path_scripts, awk_logfiles)
 
 # define the remote hosts and paths for rsync
 address_focespc = 'foces@195.37.68.140'

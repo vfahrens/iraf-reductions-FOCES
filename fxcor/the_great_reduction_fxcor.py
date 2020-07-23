@@ -150,12 +150,12 @@ if args.gamse:
         print('\n')
         print('Data reduction started for : {}'.format(i))
         # subprocess.run('bash -c "conda activate git-gamse"', shell=True)
-        subprocess.run(['conda activate git-gamse'], shell=True)
+        # subprocess.run(['conda activate git-gamse'], shell=True)
         subprocess.run(['gamse', 'config'])
         subprocess.run(['emacs', 'FOCES.*.cfg'])
         subprocess.run(['gamse', 'list'])
         subprocess.run(['gamse', 'reduce'])
-        subprocess.run(['conda', 'deactivate'])
+        # subprocess.run(['conda', 'deactivate'])
 
     sf.script_copy_reduced_data(args.redmine_id)
 else:
@@ -166,10 +166,7 @@ else:
 
 # convert the GAMSE data to IRAF readable form if required
 if args.iraf_conv:
-    print('\n')
-    objname = input('Please enter the name of the object, as for an identifier search at SIMBAD: ')
-    objname = objname.strip()
-    iraf_converter(args.redmine_id, objname)
+    iraf_converter(pf.iraf_data_folder.format(args.redmine_id), args.redmine_id)
 
 else:
     print('\n')

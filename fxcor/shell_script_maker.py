@@ -28,6 +28,8 @@ cmd5 = 'bash /mnt/e/FOCES_data/add_radec.sh {}\n'
 # standard command for grepping the redmine ID of a project
 # cmd6 = 'grep -l -R "PROJECT[[:blank:]]*=[[:blank:]]*{}" '  # for grepping in the FITS headers
 cmd6 = 'cat {0}/logfile.{1} | awk \'{{if($24=="{2}|"){{print $0}}}}\' >> {3}\n'  # prints the output only to the file
+cmd61 = 'awk -v redmineid={0} -f {1} {2}/logfile.{3} >> {4}\n'  # call the awk script to sort the logfile entries for the redmine ID
+# cmd61 = 'cat {0}/logfile.{1} | awk \'/fcs_/{{if($24=="{2}|"){{print $0}}}}\' >> {3}\n'  # prints the output only to the file
 # cmd6 = '(cat {0}/logfile.{1} | grep "{2}") | tee {3}\n'  # prints the output also to console
 # standard commands for preparing the GAMSE reduction
 cmd7 = 'mkdir {}\n'
@@ -302,7 +304,7 @@ def script_grep_redmineid(redmine_id, date, option):
         # make script for searching in a single date
         if option == '-o':
             str_expl_date = dt.datetime.strftime(startdate, '%Y%m%d')
-            grep_cmd = cmd6.format(str(pf.abs_path_obslog), str_expl_date[2:], redmine_id,
+            grep_cmd = cmd61.format(redmine_id, str(pf.awk_script), str(pf.abs_path_obslog), str_expl_date[2:],
                                    str(pf.grep_redID_out.format(redmine_id)))
             scriptout5.write(grep_cmd)
 
@@ -317,7 +319,7 @@ def script_grep_redmineid(redmine_id, date, option):
                     logfile_path = os.path.join(pf.abs_path_obslog, 'logfile.{}'.format(str_expl_date[2:]))
                     # check if a logfile exists for that date and add a command to the script
                     if os.path.exists(str(logfile_path)):
-                        grep_cmd = cmd6.format(str(pf.abs_path_obslog), str_expl_date[2:], redmine_id,
+                        grep_cmd = cmd61.format(redmine_id, str(pf.awk_script), str(pf.abs_path_obslog), str_expl_date[2:],
                                                str(pf.grep_redID_out.format(redmine_id)))
                         scriptout5.write(grep_cmd)
 
@@ -332,7 +334,7 @@ def script_grep_redmineid(redmine_id, date, option):
                 logfile_path = os.path.join(pf.abs_path_obslog, 'logfile.{}'.format(str_expl_date[2:]))
                 # check if a logfile exists for that date and add a command to the script
                 if os.path.exists(str(logfile_path)):
-                    grep_cmd = cmd6.format(str(pf.abs_path_obslog), str_expl_date[2:], redmine_id,
+                    grep_cmd = cmd61.format(redmine_id, str(pf.awk_script), str(pf.abs_path_obslog), str_expl_date[2:],
                                            str(pf.grep_redID_out.format(redmine_id)))
                     scriptout5.write(grep_cmd)
 

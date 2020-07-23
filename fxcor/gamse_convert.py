@@ -4,21 +4,16 @@ from pathlib import Path
 import os
 import numpy as np
 import astropy.io.fits as fits
+# import other python scripts
+import paths_and_files as pf
 
 
 # extract the single orders from the GAMSE result files, add header entries with wavelength calibration information
-def iraf_converter(infolder, calib_fiber=False, raw_flux=False):
+def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
+    print('Started IRAF conversion for redmine project {}...'.format(redmine_id))
     # define the folders for reading the data and saving the new files
-    # this looks a bit complicated, but ensures true cross-platform compatibility
-    location = Path(__file__).parent
-
-    path_datain = infolder
-    abs_path_datain = (location / path_datain).resolve()
-    path_in = os.path.join(abs_path_datain, 'onedspec')
-
-    path_dataout = 'iraf_prep/'
-    abs_path_dataout = (location / path_dataout).resolve()
-    path_out = os.path.join(abs_path_dataout, path_datain)
+    path_in = infolder
+    path_out = pf.iraf_output_folder.format(redmine_id)
 
     # check if the input directory exists, give a warning if not
     if not os.path.exists(path_in):
@@ -167,6 +162,3 @@ def iraf_converter(infolder, calib_fiber=False, raw_flux=False):
 
     print('IRAF conversion completed.')
     return
-
-
-# iraf_converter('20200318')
