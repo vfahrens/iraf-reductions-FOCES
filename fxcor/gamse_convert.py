@@ -4,6 +4,9 @@ from pathlib import Path
 import os
 import numpy as np
 import astropy.io.fits as fits
+from datetime import datetime
+import datetime as dt
+from astroquery.simbad import Simbad
 # import other python scripts
 import paths_and_files as pf
 
@@ -11,6 +14,10 @@ import paths_and_files as pf
 # extract the single orders from the GAMSE result files, add header entries with wavelength calibration information
 def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
     print('Started IRAF conversion for redmine project {}...'.format(redmine_id))
+
+    # give the readout time of the camera for the calculation of the mid-time of observation
+    ccd_readtime = 87.5
+
     # define the folders for reading the data and saving the new files
     path_in = infolder
     path_out = pf.iraf_output_folder.format(redmine_id)
@@ -43,6 +50,27 @@ def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
             if raw_flux:
                 hdu_list_fraw = fits.HDUList([empty_primary])
 
+            # calculate the midtime of observation
+            # ATTENTION: the timestamp in the header is the time when the file is saved,
+            # after exposure and readout time
+            exp_endtime = datetime.strptime(head['FRAME'], '%Y-%m-%dT%H:%M:%S.%f')
+            exp_midtime = exp_endtime - 0.5 * dt.timedelta(seconds=head['EXPOSURE']) - \
+                          dt.timedelta(seconds=ccd_readtime)
+
+            print(head['PERA2000'])
+            # add ra/dec coordinates to header if not present
+            if 'PERA2000' not in head or 'PEDE2000' not in head:  #
+                objname = input('Please give the name of the object for a coordinate search with SIMBAD: ')
+                radec_table = Simbad.query_object(objname)
+                objcoord_ra = radec_table['PERA2000'][0].replace(' ', ':')
+                objcoord_dec = radec_table['PEDE2000'][0].replace(' ', ':')
+                head['PERA2000'] = (objcoord_ra, 'Right ascension coordinate')
+                head['PEDE2000'] = (objcoord_dec, 'Declination coordinate')
+                print('Ra/Dec coordinates added to header.')
+
+            head['EQUINOX'] = (2000.0, 'Epoch of observation')
+            head['UTMID'] = (datetime.isoformat(exp_midtime), 'UT of midpoint of observation')
+
             # check if the data are single or multi fiber: it is required that the reduction was made with
             # double-fiber configuration, even if the observation was without simultaneous calibration; this is
             # only the case, if the keyword 'fiber' is present in the data frame
@@ -56,6 +84,15 @@ def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
                     else:
                         # make a new (empty) header for this extension
                         ext_head = fits.Header()
+
+                        # add all the header entries required for the CCF calculation
+                        ext_head['PERA2000'] = head['PERA2000']
+                        ext_head['PEDE2000'] = head['PEDE2000']
+                        ext_head['FRAME'] = head['FRAME']
+                        ext_head['UTMID'] = head['UTMID']
+                        ext_head['EXPOSURE'] = head['EXPOSURE']
+                        ext_head['EQUINOX'] = head['EQUINOX']
+
                         # add the required standard header entries for IRAF wavelength calibration
                         ext_head['WCSDIM'] = 2
                         ext_head['CTYPE1'] = 'MULTISPE'
@@ -91,7 +128,7 @@ def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
                             # of the wavelength calibration
                             dtype = 2  # non-linear dispersion function
                             wave1 = wave[0]  # wavelength coordinate of the first pixel
-                            delta_wave = (wave[-1] - wave[0])/len(wave)  # average dispersion interval per pixel
+                            delta_wave = (wave[-1] - wave[0]) / len(wave)  # average dispersion interval per pixel
                             num_pix = len(wave)  # number of valid pixels
                             z_corr = 0.  # Doppler correction factor
                             aplow = 0.0  # dummy value for the lower aperture extraction limit
@@ -122,7 +159,7 @@ def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
 
                                 # find the right part of the string to write into the header
                                 if new_str_start <= len(longstring) \
-                                        and len(longstring) - new_str_start > 81 - 5 - len(head_key.format(i+1)):
+                                        and len(longstring) - new_str_start > 81 - 5 - len(head_key.format(i + 1)):
                                     string_part = longstring[new_str_start:new_str_start + longstr_len]
                                     new_str_start = new_str_start + longstr_len
                                     ext_head[head_key_num] = string_part

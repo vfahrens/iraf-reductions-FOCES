@@ -256,6 +256,7 @@ def script_copy_reduced_data(redmine_id):
 
 # make a list of all single extensions of the template file
 def make_template_list(fname_template, redmine_id):
+    print(fname_template)
     with open(pf.template_list.format(redmine_id, redmine_id), 'w') as template_file:
         for ordnum in range(1, 85):
             template_file.write('{}_ods_fred.fits[{}]\n'.format(fname_template, ordnum))
