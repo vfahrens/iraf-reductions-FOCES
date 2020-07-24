@@ -13,6 +13,7 @@ import shell_script_maker as shesm
 import paths_and_files as pf
 import small_functions as sf
 from gamse_convert import iraf_converter
+from gamse_convert_comb import iraf_converter_comb
 from radvel_make_conffile import make_radvel_conffile
 
 
@@ -43,6 +44,7 @@ parser.add_argument('-i', '--iraf_conv', help='convert the gamse data to multi-e
                     action='store_true')
 parser.add_argument('-fx', '--fxcor', help='compute RVs from wavelength calibrated data with IRAF\'s fxcor',
                     action='store_true')
+parser.add_argument('-c', '--comb', help='use the comb corrected wavelength calibration', action='store_true')
 # create a group of options that exclude their simultaneous usage
 processing_dates = parser.add_mutually_exclusive_group()
 processing_dates.add_argument('-o', '--only', help='process data only for the date specified, date format: YYYYMMDD or '
@@ -166,7 +168,10 @@ else:
 
 # convert the GAMSE data to IRAF readable form if required
 if args.iraf_conv:
-    iraf_converter(pf.iraf_data_folder.format(args.redmine_id), args.redmine_id)
+    if args.comb:
+        iraf_converter_comb(pf.iraf_data_folder.format(args.redmine_id), args.redmine_id)
+    else:
+        iraf_converter(pf.iraf_data_folder.format(args.redmine_id), args.redmine_id)
 
 else:
     print('\n')

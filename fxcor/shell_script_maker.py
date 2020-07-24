@@ -421,8 +421,8 @@ def script_fxcor_lists(redmine_id, template_name, output_name):
         scriptout_fx.write('  let k=i+64\n')
         scriptout_fx.write('  for j in `ls $name1$k$name2`\n')
         scriptout_fx.write('  do\n')
-        scriptout_fx.write('    echo "fxcor @"$j "{}_ods_fred.fits["$i"] output={}" '
-                           '>> fxcor_with_lists.cl\n'.format(template_name, output_name))
+        scriptout_fx.write('    echo "fxcor @"$j "{}_ods_fred.fits["$i"] output={} osample=p150-1998 '
+                           'rsample=p150-1998" >> fxcor_with_lists.cl\n'.format(template_name, output_name))
         scriptout_fx.write('  done\n')
         scriptout_fx.write('done\n')
 

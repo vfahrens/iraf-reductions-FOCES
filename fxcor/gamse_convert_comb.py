@@ -7,12 +7,13 @@ import astropy.io.fits as fits
 from datetime import datetime
 import datetime as dt
 from astroquery.simbad import Simbad
+from collections import defaultdict
 # import other python scripts
 import paths_and_files as pf
 
 
 # extract the single orders from the GAMSE result files, add header entries with wavelength calibration information
-def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
+def iraf_converter_comb(infolder, redmine_id, calib_fiber=False, raw_flux=False):
     print('Started IRAF conversion for redmine project {}...'.format(redmine_id))
 
     # give the readout time of the camera for the calculation of the mid-time of observation
@@ -38,6 +39,27 @@ def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
         if fname[-5:] != '.fits':
             continue
         else:
+            # read in the data from the comb correction file
+            fname_combcorr = fname[:-5] + '.txt'
+            file_in_combcorr = os.path.join(path_in, fname_combcorr)
+
+            # make a dictionary with a list of wavelengths per pixel for each order
+            wlcalib_comb_dict = defaultdict(list)
+
+            with open(file_in_combcorr, 'r') as combfile:
+                for cline in combfile:
+                    cline = cline.strip()
+                    cline = cline.split()
+                    # the header line contains the orders that are comb-calibrated
+                    if cline[0] == '#':
+                        # save all used orders in a list, leave out the '#' at the beginning of the line
+                        comb_orders = cline[1:]
+                        print(comb_orders)
+                    # all other lines contain the comb-calibrated wavelengths, pixel by pixel
+                    else:
+                        for corder in comb_orders:
+                            wlcalib_comb_dict[corder].append(float(cline[int(corder) - int(comb_orders[0])]))
+
             file_in = os.path.join(path_in, fname)
 
             # open the GAMSE fits file and read the general header and the data section
@@ -114,76 +136,82 @@ def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
 
                         # read the data row by row (aperture by aperture)
                         for row in data[mask]:
+
                             # each order has to be stored in a separate extension, so in each extension the
                             # data is in aperture 1
                             aperture = 1
                             order = row['order']
-                            wave = row['wavelength']  # all wavelength values for the current order (aperture)
+                            # wave = row['wavelength']  # all wavelength values for the current order (aperture)
                             flux_reduced = row['flux_sum']  # all flux values as produced by GAMSE
                             if raw_flux:
                                 flux_raw = row['flux_raw']  # raw flux values without flat/background/etc subtraction
 
-                            # add the physical order number to the header
-                            ext_head['PHYSORD'] = (order, 'Physical order of aperture')
+                            if str(order) in comb_orders:
+                                print('Creating order {} now.'.format(order))
+                                wave = wlcalib_comb_dict[str(order)]
+                                # add the physical order number to the header
+                                ext_head['PHYSORD'] = (order, 'Physical order of aperture')
 
-                            # definition of other parameters that IRAF needs for correct interpretation
-                            # of the wavelength calibration
-                            dtype = 2  # non-linear dispersion function
-                            wave1 = wave[0]  # wavelength coordinate of the first pixel
-                            delta_wave = (wave[-1] - wave[0]) / len(wave)  # average dispersion interval per pixel
-                            num_pix = len(wave)  # number of valid pixels
-                            z_corr = 0.  # Doppler correction factor
-                            aplow = 0.0  # dummy value for the lower aperture extraction limit
-                            aphigh = 0.0  # dummy value for the upper aperture extraction limit
-                            weight_i = 1.  # weight of this dispersion function
-                            zero_off_i = 0.  # zero point offset of this dispersion function
-                            ftype_i = 5  # pixel coordinate array is used as dispersion information
+                                # definition of other parameters that IRAF needs for correct interpretation
+                                # of the wavelength calibration
+                                dtype = 2  # non-linear dispersion function
+                                wave1 = wave[0]  # wavelength coordinate of the first pixel
+                                print('First pixel: {} Angstrom'.format(wave1))
 
-                            # put the whole string together
-                            separ = ' '
-                            wave_str = separ.join(str(wl) for wl in wave)  # converts the wave array to a string
-                            wlcalib_paramlst = [aperture, order, dtype, wave1, delta_wave, num_pix, z_corr, aplow,
-                                                aphigh, weight_i, zero_off_i, ftype_i, num_pix, wave_str]
-                            wlcalib_str = separ.join(str(item) for item in wlcalib_paramlst)
+                                delta_wave = (wave[-1] - wave[0]) / len(wave)  # average dispersion interval per pixel
+                                num_pix = len(wave)  # number of valid pixels
+                                z_corr = 0.  # Doppler correction factor
+                                aplow = 0.0  # dummy value for the lower aperture extraction limit
+                                aphigh = 0.0  # dummy value for the upper aperture extraction limit
+                                weight_i = 1.  # weight of this dispersion function
+                                zero_off_i = 0.  # zero point offset of this dispersion function
+                                ftype_i = 5  # pixel coordinate array is used as dispersion information
 
-                            longstring = 'wtype=multispec spec{} = "{}" '.format(aperture, wlcalib_str)
+                                # put the whole string together
+                                separ = ' '
+                                wave_str = separ.join(str(wl) for wl in wave)  # converts the wave array to a string
+                                wlcalib_paramlst = [aperture, order, dtype, wave1, delta_wave, num_pix, z_corr, aplow,
+                                                    aphigh, weight_i, zero_off_i, ftype_i, num_pix, wave_str]
+                                wlcalib_str = separ.join(str(item) for item in wlcalib_paramlst)
 
-                            # define the keyword for each header entry and fill it with the corresponding
-                            # part of the long string
-                            head_key = 'WAT2_{:03d}'
-                            i = 0
-                            new_str_start = 0
-                            for x in range(len(longstring)):
-                                i += 1
-                                head_key_num = head_key.format(i)
-                                # calculate the maximum length of the string in the header
-                                longstr_len = 81 - len(head_key_num) - 5
+                                longstring = 'wtype=multispec spec{} = "{}" '.format(aperture, wlcalib_str)
 
-                                # find the right part of the string to write into the header
-                                if new_str_start <= len(longstring) \
-                                        and len(longstring) - new_str_start > 81 - 5 - len(head_key.format(i + 1)):
-                                    string_part = longstring[new_str_start:new_str_start + longstr_len]
-                                    new_str_start = new_str_start + longstr_len
-                                    ext_head[head_key_num] = string_part
+                                # define the keyword for each header entry and fill it with the corresponding
+                                # part of the long string
+                                head_key = 'WAT2_{:03d}'
+                                i = 0
+                                new_str_start = 0
+                                for x in range(len(longstring)):
+                                    i += 1
+                                    head_key_num = head_key.format(i)
+                                    # calculate the maximum length of the string in the header
+                                    longstr_len = 81 - len(head_key_num) - 5
 
-                                # at the end of the string, use the rest and leave the for loop
-                                else:
-                                    string_part = longstring[new_str_start:]
-                                    ext_head[head_key_num] = string_part
-                                    break
+                                    # find the right part of the string to write into the header
+                                    if new_str_start <= len(longstring) \
+                                            and len(longstring) - new_str_start > 81 - 5 - len(head_key.format(i + 1)):
+                                        string_part = longstring[new_str_start:new_str_start + longstr_len]
+                                        new_str_start = new_str_start + longstr_len
+                                        ext_head[head_key_num] = string_part
 
-                            # convert the flux values to arrays for saving in a FITS file
-                            flux_np = np.array(flux_reduced)
-                            if raw_flux:
-                                flux_raw_np = np.array(flux_raw)
+                                    # at the end of the string, use the rest and leave the for loop
+                                    else:
+                                        string_part = longstring[new_str_start:]
+                                        ext_head[head_key_num] = string_part
+                                        break
 
-                            # create multi-extension FITS files, one for the reduced and one for the raw flux
-                            image_hdu_fred = fits.ImageHDU(data=flux_np, header=ext_head)
-                            hdu_list_fred.append(image_hdu_fred)
+                                # convert the flux values to arrays for saving in a FITS file
+                                flux_np = np.array(flux_reduced)
+                                if raw_flux:
+                                    flux_raw_np = np.array(flux_raw)
 
-                            if raw_flux:
-                                image_hdu_fraw = fits.ImageHDU(data=flux_raw_np, header=ext_head)
-                                hdu_list_fraw.append(image_hdu_fraw)
+                                # create multi-extension FITS files, one for the reduced and one for the raw flux
+                                image_hdu_fred = fits.ImageHDU(data=flux_np, header=ext_head)
+                                hdu_list_fred.append(image_hdu_fred)
+
+                                if raw_flux:
+                                    image_hdu_fraw = fits.ImageHDU(data=flux_raw_np, header=ext_head)
+                                    hdu_list_fraw.append(image_hdu_fraw)
 
                     # save the new IRAF compatible multi-extension FITS files with the reduced and raw flux
                     fname_fred = '{}_ods_fred.fits'.format(fname[:13])
@@ -201,3 +229,6 @@ def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
 
     print('IRAF conversion completed.')
     return
+
+
+# iraf_converter_comb(pf.iraf_data_folder.format('8888'), '8888')
