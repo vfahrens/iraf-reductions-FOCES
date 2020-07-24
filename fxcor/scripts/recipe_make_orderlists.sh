@@ -1,11 +1,12 @@
 #!/bin/bash
 
 fname="*_ods_fred.fits"
-for j in `echo $fname`
+for i in {1..84..1}
 do
-    for i in {1..84..1}
-    do
 	let k=i+64
-	echo $j[$i] >> fxcor_ord$k.lis
+  rm fxcor_ord$k.lis
+  for j in `echo $fname`
+    do
+	    echo $j[$i] >> fxcor_ord$k.lis
     done
 done

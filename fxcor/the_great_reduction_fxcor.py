@@ -205,12 +205,13 @@ if args.fxcor:
           '"epar rvcorrect" and put the template filename list as entry for '
           '"images": "images = @templates_ID{}.lis"\n'.format(args.redmine_id))
     input('rv> rvcorrect images=@templates_ID{}.lis'.format(args.redmine_id))
-    print('please check with "epar fxcor" if the name of the save file and the CCF settings are correct')
+    print('please check with "epar fxcor" if the name of the save file ({}) and the CCF settings are '
+          'correct'.format(outname))
     print('finally, execute fxcor: (may take a while, please hit ENTER here when finished)\n')
     input('cl < fxcor_with_lists.cl')
 
     # extract the RVs from the fxcor results
-    outname = input('Tell me which fxcor output file to use: (e.g.: RVs_200723) ')
+    # outname = input('Tell me which fxcor output file to use: (e.g.: RVs_200723) ')
     sf.get_rvs(args.redmine_id, outname)
     RVs_single, tels_single = sf.split_rvs_tel(args.redmine_id)
     RVs_single_med, RVerr_single_med = sf.rv_and_err_median(RVs_single, 'obj')

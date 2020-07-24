@@ -44,12 +44,6 @@ def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
             head = fits.getheader(file_in, 0)
             data = fits.getdata(file_in)
 
-            # save the original GAMSE header as primary header of the MEF file (primary data section is empty)
-            empty_primary = fits.PrimaryHDU(header=head)
-            hdu_list_fred = fits.HDUList([empty_primary])
-            if raw_flux:
-                hdu_list_fraw = fits.HDUList([empty_primary])
-
             # calculate the midtime of observation
             # ATTENTION: the timestamp in the header is the time when the file is saved,
             # after exposure and readout time
@@ -57,9 +51,8 @@ def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
             exp_midtime = exp_endtime - 0.5 * dt.timedelta(seconds=head['EXPOSURE']) - \
                           dt.timedelta(seconds=ccd_readtime)
 
-            print(head['PERA2000'])
             # add ra/dec coordinates to header if not present
-            if 'PERA2000' not in head or 'PEDE2000' not in head:  #
+            if 'PERA2000' not in head or 'PEDE2000' not in head:
                 objname = input('Please give the name of the object for a coordinate search with SIMBAD: ')
                 radec_table = Simbad.query_object(objname)
                 objcoord_ra = radec_table['PERA2000'][0].replace(' ', ':')
@@ -70,6 +63,12 @@ def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
 
             head['EQUINOX'] = (2000.0, 'Epoch of observation')
             head['UTMID'] = (datetime.isoformat(exp_midtime), 'UT of midpoint of observation')
+
+            # save the original GAMSE header as primary header of the MEF file (primary data section is empty)
+            empty_primary = fits.PrimaryHDU(header=head)
+            hdu_list_fred = fits.HDUList([empty_primary])
+            if raw_flux:
+                hdu_list_fraw = fits.HDUList([empty_primary])
 
             # check if the data are single or multi fiber: it is required that the reduction was made with
             # double-fiber configuration, even if the observation was without simultaneous calibration; this is
@@ -82,7 +81,7 @@ def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
                         continue
 
                     else:
-                        # make a new (empty) header for this extension
+                        # make a new (empty) header for this extension, add the physical order number
                         ext_head = fits.Header()
 
                         # add all the header entries required for the CCF calculation
@@ -123,6 +122,9 @@ def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
                             flux_reduced = row['flux']  # all flux values as produced by GAMSE
                             if raw_flux:
                                 flux_raw = row['flux_raw']  # raw flux values without flat/background/etc subtraction
+
+                            # add the physical order number to the header
+                            ext_head['PHYSORD'] = (order, 'Physical order of aperture')
 
                             # definition of other parameters that IRAF needs for correct interpretation
                             # of the wavelength calibration

@@ -256,7 +256,6 @@ def script_copy_reduced_data(redmine_id):
 
 # make a list of all single extensions of the template file
 def make_template_list(fname_template, redmine_id):
-    print(fname_template)
     with open(pf.template_list.format(redmine_id, redmine_id), 'w') as template_file:
         for ordnum in range(1, 85):
             template_file.write('{}_ods_fred.fits[{}]\n'.format(fname_template, ordnum))
@@ -270,45 +269,56 @@ def get_rvs(redmine_id, fxcor_outname):
     with open(pf.out_RVs_single.format(redmine_id), 'w') as outfile:
         for fname in fname_lst:
             # only use the science fiber frames
-            if fname[-16:] != '_A_lin_IRAF.fits':
+            if fname[-14:] != '_ods_fred.fits':
                 continue
+
+            # get the RV error (converted to m/s) and VREL for one input FITS file from the fxcor result file
+            fxcor_output = os.path.join(pf.iraf_output_folder.format(redmine_id), fxcor_outname + '.txt')
+            with open(fxcor_output, 'r') as fxfile:
+                rv_err_rel_dict = {}
+                for line in fxfile:
+                    line = line.split()
+                    for ordnum in range(1, 85):
+                        fname_ord = fname + '[{}]'.format(ordnum)
+                        if fname_ord in line and line[-1] != 'INDEF':
+                            rv_err = float(line[-1]) * 1000.0
+                            rv_rel = float(line[-3]) * 1000.0
+                            rv_err_rel_dict['rv_err_{}'.format(ordnum)] = rv_err
+                            rv_err_rel_dict['rv_rel_{}'.format(ordnum)] = rv_rel
 
             # get the RV (converted to m/s) and the physical order number from the header
             open_filepath = os.path.join(pf.iraf_output_folder.format(redmine_id), fname)
+            print('Opening {}.'.format(open_filepath))
             with fits.open(open_filepath) as datei:
                 header = datei[0].header
-                if 'VHELIO' in header:
-                    date_str = header['UTMID']
-                    if len(date_str) == 19:
-                        date_dt = dt.datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S')
-                    elif len(date_str) > 19:
-                        date_dt = dt.datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S.%f')
-                    else:
-                        print('Warning: Date {} has unexpected format.'.format(date_str))
-                    date = julian.to_jd(date_dt, fmt='jd')
-                    # get the RV corrected for heliocentric velocity from the header
-                    rv_value = header['VHELIO'] * 1000.0
-                    # get the observed RV without heliocentric correction
-                    v_obs = header['VOBS'] * 1000.0
-                    # get the heliocentric julian date (old date format, now BJD)
-                    hjd_head = header['HJD']
-                phys_ord = fname[34:37]
 
-            # get the corresponding RV error (converted to m/s) and VREL from the fxcor result file
-            fxcor_output = os.path.join(pf.iraf_output_folder.format(redmine_id), fxcor_outname + '.txt')
-            with open(fxcor_output, 'r') as fxfile:
-                for line in fxfile:
-                    line = line.split()
-                    if fname in line and line[-1] != 'INDEF':
-                        rv_err = float(line[-1]) * 1000.0
-                        rv_rel = float(line[-3]) * 1000.0
+                for ordnum in range(1, 85):
+                    head_ord = datei[ordnum].header
+                    phys_ord = head_ord['PHYSORD']
+                    if 'VHELIO' in head_ord:
+                        date_str = header['UTMID']
+                        if len(date_str) == 19:
+                            date_dt = dt.datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S')
+                        elif len(date_str) > 19:
+                            date_dt = dt.datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S.%f')
+                        else:
+                            print('Warning: Date {} has unexpected format.'.format(date_str))
+                        date = julian.to_jd(date_dt, fmt='jd')
+                        # get the RV corrected for heliocentric velocity from the header
+                        rv_value = head_ord['VHELIO'] * 1000.0
+                        # get the observed RV without heliocentric correction
+                        v_obs = head_ord['VOBS'] * 1000.0
+                        # get the heliocentric julian date (old date format, now BJD)
+                        hjd_head = head_ord['HJD']
 
-            # save all the results for the single orders to a file
-            if 'HJD' in header:
-                output_singleorders = str(date) + ' ' + str(hjd_head) + ' ' + str(rv_value) + ' ' + str(rv_err) + ' ' + \
-                                      str(rv_rel) + ' ' + str(v_obs) + ' ' + str(phys_ord) + '\n'
-                # print(output_singleorders)
-                outfile.write(output_singleorders)
+                # save all the results for the single orders to a file
+                # if 'HJD' in head_ord:
+                        output_singleorders = str(date) + ' ' + str(hjd_head) + ' ' + str(rv_value) + ' ' \
+                                              + str(rv_err_rel_dict['rv_err_{}'.format(ordnum)]) + ' ' + \
+                                              str(rv_err_rel_dict['rv_rel_{}'.format(ordnum)]) + ' ' + str(v_obs) \
+                                              + ' ' + str(phys_ord) + '\n'
+                        # print(output_singleorders)
+                        outfile.write(output_singleorders)
 
     return
 
