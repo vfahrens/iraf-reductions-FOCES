@@ -262,6 +262,28 @@ def make_template_list(fname_template, redmine_id):
     return
 
 
+# get the number of orders that are in each IRAF-converted file (e.g. if only comb orders are used)
+def get_number_of_orders(redmine_id):
+    # list all files that were converted to IRAF format
+    fname_lst = sorted(os.listdir(pf.iraf_output_folder.format(redmine_id)))
+    order_numbers_dict = {}
+
+    for fname in fname_lst:
+        # only use fits files, ignore the rest
+        if fname[-14:] != '_ods_fred.fits':
+            continue
+
+        # open the fits file
+        open_file = os.path.join(pf.iraf_output_folder.format(redmine_id), fname)
+        hdu_list = fits.open(open_file)
+        print(len(hdu_list))
+        # get the number of orders from the length of the HDU list (subtract the empty Primary HDU)
+        num_of_orders = len(hdu_list) - 1
+        order_numbers_dict[fname[:-5]] = num_of_orders
+
+    return order_numbers_dict
+
+
 # get the RVs (VHELIO, VREL) and RVerrs from the image header and fxcor result file
 def get_rvs(redmine_id, fxcor_outname):
     fname_lst = sorted(os.listdir(pf.iraf_output_folder.format(redmine_id)))
@@ -285,6 +307,8 @@ def get_rvs(redmine_id, fxcor_outname):
                             rv_rel = float(line[-3]) * 1000.0
                             rv_err_rel_dict['rv_err_{}'.format(ordnum)] = rv_err
                             rv_err_rel_dict['rv_rel_{}'.format(ordnum)] = rv_rel
+
+            print(list(rv_err_rel_dict.keys()))
 
             # get the RV (converted to m/s) and the physical order number from the header
             open_filepath = os.path.join(pf.iraf_output_folder.format(redmine_id), fname)

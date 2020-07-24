@@ -181,6 +181,9 @@ else:
 
 # prepare data for fxcor and give instructions for IRAF execution
 if args.fxcor:
+    num_orders = sf.get_number_of_orders(args.redmine_id)
+    print(num_orders)
+    input('Want to cancel? ')
     shutil.copy(pf.make_orderlists, pf.iraf_output_folder.format(args.redmine_id))
     orderlists_path = os.path.join(pf.iraf_output_folder.format(args.redmine_id), pf.recipe_orderlists)
     os.chdir(str(pf.iraf_output_folder.format(args.redmine_id)))
