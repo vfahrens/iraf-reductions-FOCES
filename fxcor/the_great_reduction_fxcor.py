@@ -187,7 +187,7 @@ if args.fxcor:
     print('List of frames for this object: {}'.format(pf.all_used_frames.format(args.redmine_id)))
     template = input('Please choose a template that should be used for the cross correlation: '
                      '(e.g.: 20190903_0114) ')
-    sf.make_template_list(template, args.redmine_id)
+    sf.make_template_list(template, args.redmine_id, used_orders)
     outname = input('Please give a name for the fxcor output file: (e.g.: RVs_200723) ')
     shesm.script_fxcor_lists(args.redmine_id, template, outname)
     subprocess.run(['dos2unix', str(pf.make_cl_fxcor.format(args.redmine_id))])

@@ -255,10 +255,11 @@ def script_copy_reduced_data(redmine_id):
 
 
 # make a list of all single extensions of the template file
-def make_template_list(fname_template, redmine_id):
+def make_template_list(fname_template, redmine_id, used_orders_dict):
+    template_orders = used_orders_dict[fname_template + '_phys_ords']
     with open(pf.template_list.format(redmine_id, redmine_id), 'w') as template_file:
-        for ordnum in range(1, 85):
-            template_file.write('{}_ods_fred.fits[{}]\n'.format(fname_template, ordnum))
+        for index, ordnum in enumerate(template_orders):
+            template_file.write('{}_ods_fred.fits[{}]\n'.format(fname_template, str(index + 1)))
     return
 
 
