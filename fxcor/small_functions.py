@@ -269,19 +269,64 @@ def get_number_of_orders(redmine_id):
     order_numbers_dict = {}
 
     for fname in fname_lst:
+        phys_ords_used = []
+        ext_numbers = []
         # only use fits files, ignore the rest
         if fname[-14:] != '_ods_fred.fits':
             continue
 
         # open the fits file
         open_file = os.path.join(pf.iraf_output_folder.format(redmine_id), fname)
-        hdu_list = fits.open(open_file)
-        print(len(hdu_list))
-        # get the number of orders from the length of the HDU list (subtract the empty Primary HDU)
-        num_of_orders = len(hdu_list) - 1
-        order_numbers_dict[fname[:-5]] = num_of_orders
+        with fits.open(open_file) as hdu_list:
+            # get the number of orders from the length of the HDU list (subtract the empty Primary HDU)
+            num_of_orders = len(hdu_list) - 1
+            for hdu_num in range(1, len(hdu_list)):
+                head = hdu_list[hdu_num].header
+                phys_ords_used.append(head['PHYSORD'])
+                ext_numbers.append(hdu_num)
+        order_numbers_dict[fname[:-14] + '_num_ords'] = num_of_orders
+        order_numbers_dict[fname[:-14] + '_phys_ords'] = phys_ords_used
+        # order_numbers_dict[fname[:-14] + '_ext_nums'] = ext_numbers
 
     return order_numbers_dict
+
+
+# generate lists with all spectra, sorted by orders
+def make_orderlists(redmine_id, used_orders_dict):
+    # get a list of all files in the folder
+    fname_lst = sorted(os.listdir(pf.iraf_output_folder.format(redmine_id)))
+
+    # delete all orderlist files that are already present
+    for fname in fname_lst:
+        if fname[:9] == 'fxcor_ord' and fname[-4:] == '.lis':
+            path_of_list = os.path.join(pf.iraf_output_folder.format(redmine_id), fname)
+            if os.path.exists(path_of_list):
+                os.remove(path_of_list)
+
+    # make a list of all filenames again, now after deleting some files
+    fname_lst = sorted(os.listdir(pf.iraf_output_folder.format(redmine_id)))
+
+    # remove all files from the list that are not the FITS files that should be used for fxcor
+    for fname in fname_lst:
+        if fname[-14:] != '_ods_fred.fits':
+            fname_lst.remove(fname)
+
+    # save all the used filenames also in a file
+    frames_list = os.path.join(pf.iraf_output_folder.format(redmine_id), pf.all_used_frames.format(redmine_id))
+    with open(frames_list, 'w') as used_files_list:
+        for filename in fname_lst:
+            used_files_list.write(filename + '\n')
+
+    # generate a file for each physical order that lists all the frames containing data of that order
+    orderlists_path = os.path.join(pf.iraf_output_folder.format(redmine_id), 'fxcor_ord{}.lis')
+    for fname in fname_lst:
+        all_used_orders = used_orders_dict[fname[:-14] + '_phys_ords']
+        for indx, phys_ord in enumerate(all_used_orders):
+            with open(orderlists_path.format(str(phys_ord)), 'a+') as ordlis:
+                # for fxcor identification use the index in the MEF, not the physical order number!
+                ordlis.write(fname + '[{}]\n'.format(str(int(indx) + 1)))
+
+    return
 
 
 # get the RVs (VHELIO, VREL) and RVerrs from the image header and fxcor result file

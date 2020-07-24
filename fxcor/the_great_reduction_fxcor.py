@@ -181,16 +181,10 @@ else:
 
 # prepare data for fxcor and give instructions for IRAF execution
 if args.fxcor:
-    num_orders = sf.get_number_of_orders(args.redmine_id)
-    print(num_orders)
-    input('Want to cancel? ')
-    shutil.copy(pf.make_orderlists, pf.iraf_output_folder.format(args.redmine_id))
-    orderlists_path = os.path.join(pf.iraf_output_folder.format(args.redmine_id), pf.recipe_orderlists)
-    os.chdir(str(pf.iraf_output_folder.format(args.redmine_id)))
-    subprocess.run(['dos2unix', str(orderlists_path)])
-    subprocess.run(['bash', str(orderlists_path)])
+    used_orders = sf.get_number_of_orders(args.redmine_id)
+    sf.make_orderlists(args.redmine_id, used_orders)
 
-    # print('List of frames for this object: {}'.format(pf.all_used_frames.format(args.redmine_id)))  # this file is not created anywhere
+    print('List of frames for this object: {}'.format(pf.all_used_frames.format(args.redmine_id)))
     template = input('Please choose a template that should be used for the cross correlation: '
                      '(e.g.: 20190903_0114) ')
     sf.make_template_list(template, args.redmine_id)
@@ -198,6 +192,7 @@ if args.fxcor:
     shesm.script_fxcor_lists(args.redmine_id, template, outname)
     subprocess.run(['dos2unix', str(pf.make_cl_fxcor.format(args.redmine_id))])
     subprocess.run(['bash', str(pf.make_cl_fxcor.format(args.redmine_id))])
+    input('Want to cancel? ')
 
     print('Please open a terminal now and type "xterm". Then go to the new window.')
     print('Type the following command in the xterm window: \n')
