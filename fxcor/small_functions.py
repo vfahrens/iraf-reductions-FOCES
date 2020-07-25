@@ -255,8 +255,7 @@ def script_copy_reduced_data(redmine_id):
 
 
 # make a list of all single extensions of the template file
-def make_template_list(fname_template, redmine_id, used_orders_dict):
-    template_orders = used_orders_dict[fname_template + '_phys_ords']
+def make_template_list(fname_template, redmine_id, template_orders):
     with open(pf.template_list.format(redmine_id, redmine_id), 'w') as template_file:
         for index, ordnum in enumerate(template_orders):
             template_file.write('{}_ods_fred.fits[{}]\n'.format(fname_template, str(index + 1)))
@@ -287,7 +286,6 @@ def get_number_of_orders(redmine_id):
                 ext_numbers.append(hdu_num)
         order_numbers_dict[fname[:-14] + '_num_ords'] = num_of_orders
         order_numbers_dict[fname[:-14] + '_phys_ords'] = phys_ords_used
-        # order_numbers_dict[fname[:-14] + '_ext_nums'] = ext_numbers
 
     return order_numbers_dict
 
@@ -308,9 +306,12 @@ def make_orderlists(redmine_id, used_orders_dict):
     fname_lst = sorted(os.listdir(pf.iraf_output_folder.format(redmine_id)))
 
     # remove all files from the list that are not the FITS files that should be used for fxcor
+    other_files = []
     for fname in fname_lst:
         if fname[-14:] != '_ods_fred.fits':
-            fname_lst.remove(fname)
+            other_files.append(fname)
+    for ff in range(len(other_files)):
+        fname_lst.remove(other_files[ff])
 
     # save all the used filenames also in a file
     frames_list = os.path.join(pf.iraf_output_folder.format(redmine_id), pf.all_used_frames.format(redmine_id))
@@ -330,9 +331,22 @@ def make_orderlists(redmine_id, used_orders_dict):
     return
 
 
+# make a script to generate a input cl file for fxcor
+def make_script_fxcor(redmine_id, template_name, output_name, template_orders):
+    fxcor_script_list = os.path.join(pf.iraf_output_folder.format(redmine_id), pf.fxcor_script)
+
+    with open(fxcor_script_list, 'w') as script_fxcor:
+        for indx, tempord in enumerate(template_orders):
+            script_fxcor.write('fxcor @fxcor_ord{}.lis {}_ods_fred.fits[{}] output={} osample=p150-1998 '
+                               'rsample=p150-1998\n'.format(tempord, template_name, str(indx + 1), output_name))
+
+    return
+
+
 # get the RVs (VHELIO, VREL) and RVerrs from the image header and fxcor result file
-def get_rvs(redmine_id, fxcor_outname):
+def get_rvs(redmine_id, fxcor_outname, template_orders):
     fname_lst = sorted(os.listdir(pf.iraf_output_folder.format(redmine_id)))
+    # get all physical orders for which a template spectrum exists and therefore a CCF was calculated
 
     with open(pf.out_RVs_single.format(redmine_id), 'w') as outfile:
         for fname in fname_lst:
@@ -346,25 +360,26 @@ def get_rvs(redmine_id, fxcor_outname):
                 rv_err_rel_dict = {}
                 for line in fxfile:
                     line = line.split()
-                    for ordnum in range(1, 85):
-                        fname_ord = fname + '[{}]'.format(ordnum)
+                    for indx, ordnum in enumerate(template_orders):
+                        fname_ord = fname + '[{}]'.format(str(indx + 1))
                         if fname_ord in line and line[-1] != 'INDEF':
                             rv_err = float(line[-1]) * 1000.0
                             rv_rel = float(line[-3]) * 1000.0
                             rv_err_rel_dict['rv_err_{}'.format(ordnum)] = rv_err
                             rv_err_rel_dict['rv_rel_{}'.format(ordnum)] = rv_rel
 
-            print(list(rv_err_rel_dict.keys()))
-
             # get the RV (converted to m/s) and the physical order number from the header
             open_filepath = os.path.join(pf.iraf_output_folder.format(redmine_id), fname)
-            print('Opening {}.'.format(open_filepath))
+            print('Extracting RVs from {}.'.format(fname))
             with fits.open(open_filepath) as datei:
                 header = datei[0].header
 
-                for ordnum in range(1, 85):
-                    head_ord = datei[ordnum].header
+                for indx, ordnum in enumerate(template_orders):
+                # for ordnum in range(1, 85):
+                    head_ord = datei[indx + 1].header
                     phys_ord = head_ord['PHYSORD']
+                    if phys_ord != ordnum:
+                        print('WARNING: Something went wrong with the order identification during RV extraction! ')
                     if 'VHELIO' in head_ord:
                         date_str = header['UTMID']
                         if len(date_str) == 19:
@@ -381,8 +396,7 @@ def get_rvs(redmine_id, fxcor_outname):
                         # get the heliocentric julian date (old date format, now BJD)
                         hjd_head = head_ord['HJD']
 
-                # save all the results for the single orders to a file
-                # if 'HJD' in head_ord:
+                        # save all the results for the single orders to a file
                         output_singleorders = str(date) + ' ' + str(hjd_head) + ' ' + str(rv_value) + ' ' \
                                               + str(rv_err_rel_dict['rv_err_{}'.format(ordnum)]) + ' ' + \
                                               str(rv_err_rel_dict['rv_rel_{}'.format(ordnum)]) + ' ' + str(v_obs) \
@@ -404,6 +418,7 @@ def split_rvs_tel(redmine_id):
         for linet in telluric_file:
             linet = linet.strip()
             bad_orders.append(int(linet))
+
     # order_limits = input('Please give the range of orders where you want RVs extracted: (e.g.: 105-136) ')
     # order_limits = order_limits.strip()
     # order_limits = order_limits.split('-')

@@ -187,12 +187,11 @@ if args.fxcor:
     print('List of frames for this object: {}'.format(pf.all_used_frames.format(args.redmine_id)))
     template = input('Please choose a template that should be used for the cross correlation: '
                      '(e.g.: 20190903_0114) ')
-    sf.make_template_list(template, args.redmine_id, used_orders)
+    template_orders = used_orders[template + '_phys_ords']
+    sf.make_template_list(template, args.redmine_id, template_orders)
     outname = input('Please give a name for the fxcor output file: (e.g.: RVs_200723) ')
-    shesm.script_fxcor_lists(args.redmine_id, template, outname)
-    subprocess.run(['dos2unix', str(pf.make_cl_fxcor.format(args.redmine_id))])
-    subprocess.run(['bash', str(pf.make_cl_fxcor.format(args.redmine_id))])
-    input('Want to cancel? ')
+    sf.make_script_fxcor(args.redmine_id, template, outname, template_orders)
+    # input('Want to cancel? ')
 
     print('Please open a terminal now and type "xterm". Then go to the new window.')
     print('Type the following command in the xterm window: \n')
@@ -202,8 +201,6 @@ if args.fxcor:
     input('vocl> rv')
     print('Now navigate to the folder containing the data: \n')
     input('rv> cd {}'.format(pf.iraf_output_folder.format(args.redmine_id)))
-    # print('make a list of all the spectra used as templates: \n')
-    # input('rv> files {}_*_A_*.fits > templates_ID{}.lis'.format(template, args.redmine_id))
     print('do the heliocentric correction for the template spectra: enter the given command or open '
           '"epar rvcorrect" and put the template filename list as entry for '
           '"images": "images = @templates_ID{}.lis"\n'.format(args.redmine_id))
@@ -214,11 +211,12 @@ if args.fxcor:
     input('cl < fxcor_with_lists.cl')
 
     # extract the RVs from the fxcor results
-    # outname = input('Tell me which fxcor output file to use: (e.g.: RVs_200723) ')
-    sf.get_rvs(args.redmine_id, outname)
+    sf.get_rvs(args.redmine_id, outname, template_orders)
     RVs_single, tels_single = sf.split_rvs_tel(args.redmine_id)
+    print(len(tels_single))
     RVs_single_med, RVerr_single_med = sf.rv_and_err_median(RVs_single, 'obj')
-    tels_single_med, telserr_single_med = sf.rv_and_err_median(tels_single, 'tel')
+    if len(tels_single) != 0:
+        tels_single_med, telserr_single_med = sf.rv_and_err_median(tels_single, 'tel')
 
     yn_plot_singleorders = input('Do you want to plot the RV results for the single orders?')
     if re.match(r'^y', yn_plot_singleorders, re.I) or re.match(r'^j', yn_plot_singleorders, re.I):
@@ -226,10 +224,11 @@ if args.fxcor:
         sf.plot_single_orders(args.redmine_id)
 
     RVs_stds = sf.rv_weightedmean(args.redmine_id, RVs_single, RVs_single_med, RVerr_single_med, 'obj')
-    tel_stds = sf.rv_weightedmean(args.redmine_id, tels_single, tels_single_med, telserr_single_med, 'tel')
     RVs_fixerr = sf.fix_missing_errors(args.redmine_id, 'obj', RVs_stds)
-    tel_fixerr = sf.fix_missing_errors(args.redmine_id, 'tel', tel_stds)
-    sf.get_tel_correction(args.redmine_id, RVs_fixerr, tel_fixerr)
+    if len(tels_single) != 0:
+        tel_stds = sf.rv_weightedmean(args.redmine_id, tels_single, tels_single_med, telserr_single_med, 'tel')
+        tel_fixerr = sf.fix_missing_errors(args.redmine_id, 'tel', tel_stds)
+        sf.get_tel_correction(args.redmine_id, RVs_fixerr, tel_fixerr)
 
 
 # make a plot of the literature values compared to the FOCES data

@@ -408,24 +408,24 @@ def script_sort_for_reduction(redmine_id, date, option):
     return
 
 
-# make a script to generate a input cl file for fxcor
-def script_fxcor_lists(redmine_id, template_name, output_name):
-    with open(pf.make_cl_fxcor.format(redmine_id), 'w') as scriptout_fx:
-        scriptout_fx.write('#!/usr/bin/bash\n')
-        scriptout_fx.write('\n')
-        scriptout_fx.write('rm -f fxcor_with_lists.cl\n')
-        scriptout_fx.write('name1="fxcor_ord"\n')
-        scriptout_fx.write('name2=".lis"\n')
-        scriptout_fx.write('for i in {1..84..1}\n')
-        scriptout_fx.write('do\n')
-        scriptout_fx.write('  let k=i+64\n')
-        scriptout_fx.write('  for j in `ls $name1$k$name2`\n')
-        scriptout_fx.write('  do\n')
-        scriptout_fx.write('    echo "fxcor @"$j "{}_ods_fred.fits["$i"] output={} osample=p150-1998 '
-                           'rsample=p150-1998" >> fxcor_with_lists.cl\n'.format(template_name, output_name))
-        scriptout_fx.write('  done\n')
-        scriptout_fx.write('done\n')
-
-    return
+# # make a script to generate a input cl file for fxcor
+# def script_fxcor_lists(redmine_id, template_name, output_name):
+#     with open(pf.make_cl_fxcor.format(redmine_id), 'w') as scriptout_fx:
+#         scriptout_fx.write('#!/usr/bin/bash\n')
+#         scriptout_fx.write('\n')
+#         scriptout_fx.write('rm -f fxcor_with_lists.cl\n')
+#         scriptout_fx.write('name1="fxcor_ord"\n')
+#         scriptout_fx.write('name2=".lis"\n')
+#         scriptout_fx.write('for i in {1..84..1}\n')
+#         scriptout_fx.write('do\n')
+#         scriptout_fx.write('  let k=i+64\n')
+#         scriptout_fx.write('  for j in `ls $name1$k$name2`\n')
+#         scriptout_fx.write('  do\n')
+#         scriptout_fx.write('    echo "fxcor @"$j "{}_ods_fred.fits["$i"] output={} osample=p150-1998 '
+#                            'rsample=p150-1998" >> fxcor_with_lists.cl\n'.format(template_name, output_name))
+#         scriptout_fx.write('  done\n')
+#         scriptout_fx.write('done\n')
+#
+#     return
 
 # script_fxcor_lists(2864, 'testwhatever')

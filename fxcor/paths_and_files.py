@@ -40,6 +40,7 @@ config_file_radvel = 'radvel_ID{}.py'
 nonRV_data = 'nonRVs_ID{}.txt'
 awk_logfiles = 'grep_redID.awk'
 templates_fxcor = 'templates_ID{}.lis'
+fxcor_script = 'fxcor_with_lists.cl'
 
 # initialize all paths and make them platform independent
 location = Path(__file__).parent
