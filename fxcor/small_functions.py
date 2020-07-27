@@ -204,10 +204,13 @@ def get_reductiondates(redmine_id):
 def script_copy_reduced_data(redmine_id):
     total_files_copied = 0
     # check if a folder with this redmine ID exists already in IRAF data input
-    if not os.path.exists(pf.iraf_data_folder.format(redmine_id)):
-        os.makedirs(pf.iraf_data_folder.format(redmine_id))
+    if not os.path.exists(pf.iraf_output_folder.format(redmine_id)):
+        print('Checked, but missing!')
+        os.makedirs(pf.iraf_output_folder.format(redmine_id))
+    else:
+        print('Checked, exists.')
 
-    with open(pf.frames_list.format(redmine_id), 'w') as framelist:
+    with open(pf.frames_list.format(redmine_id, redmine_id), 'w') as framelist:
         # read the results from the grep command
         with open(pf.grep_redID_out.format(redmine_id), 'r') as grepfile:
             for line in grepfile:

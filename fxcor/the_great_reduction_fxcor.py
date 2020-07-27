@@ -139,6 +139,7 @@ else:
 if args.gamse:
     # read the dates that should be reduced from the file
     use_only_these_reduction_dates = sf.get_reductiondates(args.redmine_id)
+    print(use_only_these_reduction_dates)
 
     print('\n')
     print('Started wavelength calibration...')
@@ -148,15 +149,16 @@ if args.gamse:
     for i in use_only_these_reduction_dates:
         red_folder_path = os.path.join(pf.abs_path_red_gamse, 'red_{}'.format(str(i)))
         # change the working directory to the data reduction folder, needed for GAMSE calls to work properly
-        os.chdir(str(red_folder_path))
+        # os.chdir(str(red_folder_path))
         print('\n')
         print('Data reduction started for : {}'.format(i))
+        input('Please use GAMSE in the folder "red_{}"'.format(i))
         # subprocess.run('bash -c "conda activate git-gamse"', shell=True)
         # subprocess.run(['conda activate git-gamse'], shell=True)
-        subprocess.run(['gamse', 'config'])
-        subprocess.run(['emacs', 'FOCES.*.cfg'])
-        subprocess.run(['gamse', 'list'])
-        subprocess.run(['gamse', 'reduce'])
+        # subprocess.run(['gamse', 'config'])
+        # subprocess.run(['emacs', 'FOCES.*.cfg'])
+        # subprocess.run(['gamse', 'list'])
+        # subprocess.run(['gamse', 'reduce'])
         # subprocess.run(['conda', 'deactivate'])
 
     sf.script_copy_reduced_data(args.redmine_id)
