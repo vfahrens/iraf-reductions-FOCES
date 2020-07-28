@@ -400,12 +400,13 @@ def get_rvs(redmine_id, fxcor_outname, template_orders):
                         hjd_head = head_ord['HJD']
 
                         # save all the results for the single orders to a file
-                        output_singleorders = str(date) + ' ' + str(hjd_head) + ' ' + str(rv_value) + ' ' \
-                                              + str(rv_err_rel_dict['rv_err_{}'.format(ordnum)]) + ' ' + \
-                                              str(rv_err_rel_dict['rv_rel_{}'.format(ordnum)]) + ' ' + str(v_obs) \
-                                              + ' ' + str(phys_ord) + '\n'
-                        # print(output_singleorders)
-                        outfile.write(output_singleorders)
+                        if 'rv_err_{}'.format(ordnum) in rv_err_rel_dict and 'rv_rel_{}'.format(ordnum) in rv_err_rel_dict:
+                            output_singleorders = str(date) + ' ' + str(hjd_head) + ' ' + str(rv_value) + ' ' \
+                                                  + str(rv_err_rel_dict['rv_err_{}'.format(ordnum)]) + ' ' + \
+                                                  str(rv_err_rel_dict['rv_rel_{}'.format(ordnum)]) + ' ' + str(v_obs) \
+                                                  + ' ' + str(phys_ord) + '\n'
+                            # print(output_singleorders)
+                            outfile.write(output_singleorders)
 
     return
 

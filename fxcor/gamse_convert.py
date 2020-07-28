@@ -55,8 +55,8 @@ def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
             if 'PERA2000' not in head or 'PEDE2000' not in head:
                 objname = input('Please give the name of the object for a coordinate search with SIMBAD: ')
                 radec_table = Simbad.query_object(objname)
-                objcoord_ra = radec_table['PERA2000'][0].replace(' ', ':')
-                objcoord_dec = radec_table['PEDE2000'][0].replace(' ', ':')
+                objcoord_ra = radec_table['RA'][0].replace(' ', ':')
+                objcoord_dec = radec_table['DEC'][0].replace(' ', ':')
                 head['PERA2000'] = (objcoord_ra, 'Right ascension coordinate')
                 head['PEDE2000'] = (objcoord_dec, 'Declination coordinate')
                 print('Ra/Dec coordinates added to header.')
