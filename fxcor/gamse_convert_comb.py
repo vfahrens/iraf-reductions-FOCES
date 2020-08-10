@@ -40,7 +40,7 @@ def iraf_converter_comb(infolder, redmine_id, calib_fiber=False, raw_flux=False)
             continue
         else:
             # read in the data from the comb correction file
-            fname_combcorr = fname[:-5] + '.txt'
+            fname_combcorr = fname[:-5] + '.fits_wl.txt'
             file_in_combcorr = os.path.join(path_in, fname_combcorr)
 
             # make a dictionary with a list of wavelengths per pixel for each order
