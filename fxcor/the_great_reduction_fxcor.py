@@ -215,8 +215,9 @@ if args.fxcor:
     # extract the RVs from the fxcor results
     sf.get_rvs(args.redmine_id, outname, template_orders)
     RVs_single, tels_single = sf.split_rvs_tel(args.redmine_id)
-    print(len(tels_single))
-    RVs_single_med, RVerr_single_med = sf.rv_and_err_median(RVs_single, 'obj')
+    RVs_single_abc = sf.do_barycorr(args.redmine_id, RVs_single)
+    RVs_single_abc_arr = sf.make_rv_array(RVs_single_abc)
+    RVs_single_med, RVerr_single_med = sf.rv_and_err_median(RVs_single_abc_arr, 'obj')
     if len(tels_single) != 0:
         tels_single_med, telserr_single_med = sf.rv_and_err_median(tels_single, 'tel')
 
@@ -225,7 +226,7 @@ if args.fxcor:
         print('\n')
         sf.plot_single_orders(args.redmine_id)
 
-    RVs_stds = sf.rv_weightedmean(args.redmine_id, RVs_single, RVs_single_med, RVerr_single_med, 'obj')
+    RVs_stds = sf.rv_weightedmean(args.redmine_id, RVs_single_abc_arr, RVs_single_med, RVerr_single_med, 'obj')
     RVs_fixerr = sf.fix_missing_errors(args.redmine_id, 'obj', RVs_stds)
     if len(tels_single) != 0:
         tel_stds = sf.rv_weightedmean(args.redmine_id, tels_single, tels_single_med, telserr_single_med, 'tel')

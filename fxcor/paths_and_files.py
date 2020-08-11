@@ -41,6 +41,7 @@ nonRV_data = 'nonRVs_ID{}.txt'
 awk_logfiles = 'grep_redID.awk'
 templates_fxcor = 'templates_ID{}.lis'
 fxcor_script = 'fxcor_with_lists.cl'
+barycorr_out = 'RVs_ID{}_abc_single.txt'
 
 # initialize all paths and make them platform independent
 location = Path(__file__).parent
@@ -86,6 +87,7 @@ radvel_config = os.path.join(abs_path_rvout, config_file_radvel)
 out_nonRV_data = os.path.join(abs_path_rvout, nonRV_data)
 awk_script = os.path.join(abs_path_scripts, awk_logfiles)
 template_list = os.path.join(iraf_output_folder, templates_fxcor)
+out_RVs_abc_single = os.path.join(abs_path_rvout, barycorr_out)
 
 # define the remote hosts and paths for rsync
 address_focespc = 'foces@195.37.68.140'

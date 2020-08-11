@@ -431,7 +431,7 @@ def split_rvs_tel(redmine_id):
     with open(pf.out_RVs_single.format(redmine_id), 'r') as infile:
         for line in infile:
             line = line.split()
-            # only use physical orders between the given limits and not 115, because that is bad
+            # # only use physical orders between the given limits and not 115, because that is bad
             # if int(line[-1]) in range(int(order_limits[0]), int(order_limits[1]) + 1) and int(line[-1]) != 115:
             if int(line[-1]) not in bad_orders:
                 # save the whole line in a larger array with all observation dates
@@ -458,12 +458,15 @@ def make_rv_array(rv_list):
 def rv_and_err_median(rvs_array, rv_type):
     # for normal RVs, use RV with heliocentric correction
     if rv_type != 'tel':
-        med_rv = np.median(rvs_array[2])
+        med_rv = np.median(rvs_array[1])
+        # use the fxcor error to get a median error of all RV values
+        med_err = np.median(rvs_array[2])
     # for tellurics, use relative velocity without heliocentric correction
     else:
         med_rv = np.median(rvs_array[4])
-    # for both cases use the fxcor error to get a median error of all RV values
-    med_err = np.median(rvs_array[3])
+        # use the fxcor error to get a median error of all RV values
+        med_err = np.median(rvs_array[3])
+
     return med_rv, med_err
 
 
@@ -484,16 +487,20 @@ def rv_weightedmean(redmine_id, rvs_array, med_rv, med_err, rv_type):
                 # only use the rows of the array that contain RV data from one observation date
                 if rvs_array[0, j] == date:
                     if rv_type != 'tel':
-                        vels_onedate.append(rvs_array[2, j])
+                        vels_onedate.append(rvs_array[1, j])
+                        # if the RV error given by fxcor is zero, use the median RV error instead
+                        if rvs_array[2, j] != 0.0:
+                            v_err.append(rvs_array[2, j])
+                        else:
+                            v_err.append(med_err)
                     else:
                         # for tellurics, use the relative RV without heliocentric correction
                         vels_onedate.append(rvs_array[4, j])
-
-                    # if the RV error given by fxcor is zero, use the median RV error instead
-                    if rvs_array[2, j] != 0.0:
-                        v_err.append(rvs_array[3, j])
-                    else:
-                        v_err.append(med_err)
+                        # if the RV error given by fxcor is zero, use the median RV error instead
+                        if rvs_array[2, j] != 0.0:
+                            v_err.append(rvs_array[3, j])
+                        else:
+                            v_err.append(med_err)
 
             # compute the weighted average for that date and use the median RV as zero-point correction
             rv_weightmean = np.average(vels_onedate, weights=(1/np.abs(v_err)))  # - med_rv
@@ -759,117 +766,122 @@ def date_iso_to_jd(date_iso):
     return date_jd
 
 
-# extract the values needed for the barycentric correction with barycorrpy from the header
-def extract_head_barycorr(redmine_id, template_orders):
-    # define the folder for reading the data
-    path = pf.iraf_output_folder.format(redmine_id)
-    fname_lst = sorted(os.listdir(path))
-
-    vrels_iraf = []
-    # read the results that were extracted from the IRAF results file
-    with open(pf.out_RVs_single.format(redmine_id), 'r') as vrelfile:
-        for line in vrelfile:
-            line = line.strip()
-            line = line.split()
-            # put the observation date (JD), the VREL value and the order number in a list
-            datavect = [line[0], line[3], line[-1]]
-            vrels_iraf.append(datavect)
-
-    results_strings = []
-
-    for fname in fname_lst:
-
-        # only use fits files
-        if fname[-5:] != '.fits':
-            continue
-
-        print(fname)
-
-        file_in = os.path.join(path, fname)
-        # open one of the fits files
-        with fits.open(file_in) as datei:
-            # read the header of the file
-            heady = datei[0].header
-
-        # get the observation timestamp from the header
-        date_mid_iso = heady['UTMID']
-        # exptime = heady['EXPTIME']
-
-        for indx, ordnum in enumerate(template_orders):
-            # for ordnum in range(1, 85):
-            head_ord = datei[indx + 1].header
-            phys_ord = head_ord['PHYSORD']
-            if phys_ord != ordnum:
-                print('WARNING: Something went wrong with the order identification during RV extraction! ')
-            else:
-                
-
-
-        order = heady['PHYSORD']
-        # convert the timestamp to a datetime object and calculate mid-time of observation
-        date_start_dt = date_iso_to_dt(date_start_iso)
-        date_mid_dt = date_start_dt + 0.5 * dt.timedelta(seconds=exptime)
-        date_mid_iso = dt.datetime.isoformat(date_mid_dt)
-        # convert the timestamps to JD
-        date_start_jd = date_iso_to_jd(date_start_iso)
-        date_mid_jd = date_iso_to_jd(date_mid_iso)
-
-        # get the geographic position of the observatory from the header
-        lasilla_lat = heady['HIERARCH ESO TEL GEOLAT']
-        lasilla_lon = heady['HIERARCH ESO TEL GEOLON']
-        lasilla_alt = heady['HIERARCH ESO TEL GEOELEV']
-        # get the systemic (radial) velocity of the object from the header in km/s
-        sys_vel = heady['HIERARCH ESO TEL TARG RADVEL']
-        # get the IRAF VOBS for that date and order in km/s
-        vobs_iraf_h = heady['VOBS']
-        # get the HARPS barycentric RV value in km/s
-        harps_berv = heady['HIERARCH ESO DRS BERV']
-
-        # get the relative velocity of the observation in m/s (IRAF VREL)
-        for i in range(len(vrels_iraf)):
-            date_diff = np.abs(float(date_mid_jd) - float(vrels_iraf[i][0]))
-            if date_diff < 0.000000002:
-                if int(vrels_iraf[i][-1]) == order:
-                    vrel_iraf_t = vrels_iraf[i][1]
-
-        results = str(date_start_jd) + ' ' + str(date_mid_jd) + ' ' + str(float(sys_vel) * 1000.0) + ' ' + \
-                  str(vrel_iraf_t) + ' ' + str(float(vobs_iraf_h) * 1000.0) + ' ' + str(float(harps_berv) * 1000.0) + \
-                  ' ' + str(lasilla_lat) + ' ' + str(lasilla_lon) + ' ' + str(lasilla_alt) + ' ' + str(order) + '\n'
-
-        results_strings.append(results)
-
-    with open(pf.params_barycorr.format(redmine_id, redmine_id), 'w') as savefile:
-        for res in range(len(results_strings)):
-            savefile.write(results_strings[res])
-
-    print('Finished extracting headers for barycorrpy.')
-
-    return
+# # extract the values needed for the barycentric correction with barycorrpy from the header
+# def extract_head_barycorr(redmine_id, template_orders):
+#
+#     # define the folder for reading the data
+#     path = pf.iraf_output_folder.format(redmine_id)
+#     fname_lst = sorted(os.listdir(path))
+#
+#     vrels_iraf = []
+#     # read the results that were extracted from the IRAF results file
+#     with open(pf.out_RVs_single.format(redmine_id), 'r') as vrelfile:
+#         for line in vrelfile:
+#             line = line.strip()
+#             line = line.split()
+#             # put the observation date (JD), the VREL value and the order number in a list
+#             datavect = [line[0], line[3], line[-1]]
+#             vrels_iraf.append(datavect)
+#
+#     print(vrels_iraf)
+#
+#     results_strings = []
+#
+#     for fname in fname_lst:
+#
+#         # only use fits files
+#         if fname[-5:] != '.fits':
+#             continue
+#
+#         print(fname)
+#
+#         file_in = os.path.join(path, fname)
+#         # open one of the fits files
+#         with fits.open(file_in) as datei:
+#             # read the header of the file
+#             heady = datei[0].header
+#
+#             # get the observation timestamp from the header
+#             date_mid_iso = heady['UTMID']
+#             # exptime = heady['EXPTIME']
+#             # # convert the timestamp to a datetime object and calculate mid-time of observation
+#             # date_mid_dt = date_iso_to_dt(date_mid_iso)
+#             # date_mid_dt = date_start_dt + 0.5 * dt.timedelta(seconds=exptime)
+#             # # convert the timestamps to JD
+#             # date_start_jd = date_iso_to_jd(date_start_iso)
+#             date_mid_jd = date_iso_to_jd(date_mid_iso)
+#
+#             for indx, ordnum in enumerate(template_orders):
+#                 head_ord = datei[indx + 1].header
+#                 phys_ord = head_ord['PHYSORD']
+#                 if phys_ord != ordnum:
+#                     print('WARNING: Something went wrong with the order identification during RV extraction! ')
+#                 else:
+#                     order = phys_ord
+#
+#                     # # get the systemic (radial) velocity of the object from the header in km/s
+#                     # sys_vel = heady['HIERARCH ESO TEL TARG RADVEL']
+#                     # # get the IRAF VOBS for that date and order in km/s
+#                     # vobs_iraf_h = heady['VOBS']
+#                     # # get the HARPS barycentric RV value in km/s
+#                     # harps_berv = heady['HIERARCH ESO DRS BERV']
+#
+#                     # get the relative velocity of the observation in m/s (IRAF VREL)
+#                     for i in range(len(vrels_iraf)):
+#                         date_diff = np.abs(float(date_mid_jd) - float(vrels_iraf[i][0]))
+#                         if date_diff < 0.000000002:
+#                             if int(vrels_iraf[i][-1]) == order:
+#                                 vrel_iraf_t = vrels_iraf[i][1]
+#
+#                     results = str(date_mid_jd) + ' ' + str(vrel_iraf_t) + ' ' + str(order) + '\n'
+#
+#                     results_strings.append(results)
+#
+#     with open(pf.params_barycorr.format(redmine_id, redmine_id), 'w') as savefile:
+#         for res in range(len(results_strings)):
+#             savefile.write(results_strings[res])
+#
+#     print('Finished extracting headers for barycorrpy.')
+#
+#     return
 
 
 # do the barycentric correction of the single order RVs with barycorrpy
-def do_barycorr(redmine_id):
-    all_bc_pars = []
-    # read the parameters needed from the file
-    with open(pf.params_barycorr.format(redmine_id, redmine_id), 'r') as bcfile:
-        for line in bcfile:
-            line = line.strip()
-            line = line.split()
-            all_bc_pars.append(line)
+def do_barycorr(redmine_id, RVs_single_array):
+    # define the geographic position of the observatory (Wendelstein 2m)
+    wst_lat = 47.7036388889
+    wst_lon = 12.0120555556
+    wst_alt = 1838
 
-    for k in range(len(all_bc_pars)):
-        date = float(all_bc_pars[k][0])
-        lat = float(all_bc_pars[k][-4])
-        lon = float(all_bc_pars[k][-3])
-        alt = float(all_bc_pars[k][-2])
-        vrel = float(all_bc_pars[k][3])
+    all_bc_pars = RVs_single_array
+    rvs_bc_out = []
+    rvs_bc_out_strings = []
 
-        result = barycorrpy.get_BC_vel(JDUTC=date, hip_id=113357, lat=lat, longi=lon, alt=alt, ephemeris='de430', zmeas=(vrel/299792458))
-        print(result[0])
+    for k in range(len(all_bc_pars[0])):
+        date = float(all_bc_pars[0][k])
+        vrel = float(all_bc_pars[4][k])
+        verr = float(all_bc_pars[3][k])
+        order = all_bc_pars[-1][k]
 
+        result = barycorrpy.get_BC_vel(JDUTC=date, starname='ups And', lat=wst_lat, longi=wst_lon, alt=wst_alt,
+                                       ephemeris='de430', zmeas=(vrel/299792458), leap_update=False)\
+            # , hip_id=7513
 
-extract_head_barycorr('5555', range(86, 107))
+        rvs_bc_out.append([date, result[0][0], verr, int(order)])
+        rv_bc_corr = str(date) + ' ' + str(result[0][0]) + ' ' + str(verr) + ' ' + str(int(order)) + '\n'
+        rvs_bc_out_strings.append(rv_bc_corr)
 
+    # save the corrected radial velocities to a file
+    with open(pf.out_RVs_abc_single.format(redmine_id), 'w') as outbcfile:
+        for single_res in range(len(rvs_bc_out_strings)):
+            outbcfile.write(rvs_bc_out_strings[single_res])
+
+    print('Results of barycentric correction written to {}'.format(pf.out_RVs_abc_single.format(redmine_id)))
+
+    return rvs_bc_out
+
+# extract_head_barycorr('9999', range(148, 65, -1))
+# do_barycorr('9999')
 
 
 # make a plot of the data, phase-folded with the literature orbit
