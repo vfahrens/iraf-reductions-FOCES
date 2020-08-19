@@ -203,10 +203,10 @@ if args.fxcor:
     input('vocl> rv')
     print('Now navigate to the folder containing the data: \n')
     input('rv> cd {}'.format(pf.iraf_output_folder.format(args.redmine_id)))
-    print('do the heliocentric correction for the template spectra: enter the given command or open '
-          '"epar rvcorrect" and put the template filename list as entry for '
-          '"images": "images = @templates_ID{}.lis"\n'.format(args.redmine_id))
-    input('rv> rvcorrect images=@templates_ID{}.lis'.format(args.redmine_id))
+    # print('do the heliocentric correction for the template spectra: enter the given command or open '
+    #       '"epar rvcorrect" and put the template filename list as entry for '
+    #       '"images": "images = @templates_ID{}.lis"\n'.format(args.redmine_id))
+    # input('rv> rvcorrect images=@templates_ID{}.lis'.format(args.redmine_id))
     print('please check with "epar fxcor" if the name of the save file ({}) and the CCF settings are '
           'correct'.format(outname))
     print('finally, execute fxcor: (may take a while, please hit ENTER here when finished)\n')
@@ -221,7 +221,7 @@ if args.fxcor:
     if len(tels_single) != 0:
         tels_single_med, telserr_single_med = sf.rv_and_err_median(tels_single, 'tel')
 
-    yn_plot_singleorders = input('Do you want to plot the RV results for the single orders?')
+    yn_plot_singleorders = input('Do you want to plot the RV results for the single orders? ')
     if re.match(r'^y', yn_plot_singleorders, re.I) or re.match(r'^j', yn_plot_singleorders, re.I):
         print('\n')
         sf.plot_single_orders(args.redmine_id)

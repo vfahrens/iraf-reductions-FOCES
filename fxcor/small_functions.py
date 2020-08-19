@@ -463,15 +463,21 @@ def rv_and_err_median(rvs_array, rv_type):
         med_err = np.median(rvs_array[2])
     # for tellurics, use relative velocity without heliocentric correction
     else:
-        med_rv = np.median(rvs_array[4])
+        med_rv = np.median(rvs_array[-3])
         # use the fxcor error to get a median error of all RV values
-        med_err = np.median(rvs_array[3])
+        med_err = np.median(rvs_array[-4])
 
     return med_rv, med_err
 
 
 # get the data for one specific observation date and compute the weighted mean of the RV and the RV error
 def rv_weightedmean(redmine_id, rvs_array, med_rv, med_err, rv_type):
+    if rv_type != 'tel':
+        rv_type_long = 'object'
+    else:
+        rv_type_long = 'telluric'
+    print('Computing weighted averages for {} orders:'.format(rv_type_long))
+
     all_stds = []
     error_limit = input('Please give a limit for the max. allowed RV error in m/s: (e.g.: 29.0) ')
 
@@ -495,15 +501,16 @@ def rv_weightedmean(redmine_id, rvs_array, med_rv, med_err, rv_type):
                             v_err.append(med_err)
                     else:
                         # for tellurics, use the relative RV without heliocentric correction
-                        vels_onedate.append(rvs_array[4, j])
+                        vels_onedate.append(rvs_array[-3, j])
                         # if the RV error given by fxcor is zero, use the median RV error instead
-                        if rvs_array[2, j] != 0.0:
-                            v_err.append(rvs_array[3, j])
+                        if rvs_array[-4, j] != 0.0:
+                            v_err.append(rvs_array[-4, j])
                         else:
                             v_err.append(med_err)
 
+            print(vels_onedate)
             # compute the weighted average for that date and use the median RV as zero-point correction
-            rv_weightmean = np.average(vels_onedate, weights=(1/np.abs(v_err)))  # - med_rv
+            rv_weightmean = np.average(vels_onedate, weights=(1/np.abs(v_err)))
             if rv_type != 'tel':
                 rv_weightmean = rv_weightmean - med_rv
             # compute the RV error across the orders and put it in a list of RV errors
@@ -573,14 +580,13 @@ def get_tel_correction(redmine_id, rvs_fixerr, tel_fixerr):
 def plot_single_orders(redmine_id):
     dates_rv_array = []
     # read the single order RVs from the file
-    with open(pf.out_RVs_single.format(redmine_id), 'r') as singleorderfile:
+    with open(pf.out_RVs_abc_single.format(redmine_id), 'r') as singleorderfile:
         for line in singleorderfile:
             line = line.split()
             dates_rv_array.append(line)
 
     # convert that array to a useful format
     dates_rv_array = make_rv_array(dates_rv_array)
-    print(dates_rv_array[0])
 
     # make a plot for each different date in the array
     for onedate in set(dates_rv_array[0]):
@@ -590,8 +596,8 @@ def plot_single_orders(redmine_id):
         for g in range(len(dates_rv_array[0])):
             if dates_rv_array[0, g] == onedate:
                 order_list.append(dates_rv_array[-1, g])
-                rv_list.append(dates_rv_array[2, g])
-                err_list.append(dates_rv_array[3, g])
+                rv_list.append(dates_rv_array[1, g])
+                err_list.append(dates_rv_array[2, g])
 
         onedate_norm = julian.from_jd(onedate, fmt='jd')
         date_out = dt.datetime.strftime(onedate_norm, '%m.%d_%H:%M:%S')
@@ -848,6 +854,7 @@ def date_iso_to_jd(date_iso):
 
 # do the barycentric correction of the single order RVs with barycorrpy
 def do_barycorr(redmine_id, RVs_single_array):
+    print('Doing the barycentric correction.')
     # define the geographic position of the observatory (Wendelstein 2m)
     wst_lat = 47.7036388889
     wst_lon = 12.0120555556
@@ -859,13 +866,13 @@ def do_barycorr(redmine_id, RVs_single_array):
 
     for k in range(len(all_bc_pars[0])):
         date = float(all_bc_pars[0][k])
-        vrel = float(all_bc_pars[4][k])
-        verr = float(all_bc_pars[3][k])
+        vrel = float(all_bc_pars[-3][k])
+        verr = float(all_bc_pars[-4][k])
         order = all_bc_pars[-1][k]
 
-        result = barycorrpy.get_BC_vel(JDUTC=date, starname='ups And', lat=wst_lat, longi=wst_lon, alt=wst_alt,
+        result = barycorrpy.get_BC_vel(JDUTC=date, hip_id=7513, lat=wst_lat, longi=wst_lon, alt=wst_alt,
                                        ephemeris='de430', zmeas=(vrel/299792458), leap_update=False)\
-            # , hip_id=7513
+            # , starname='ups And'
 
         rvs_bc_out.append([date, result[0][0], verr, int(order)])
         rv_bc_corr = str(date) + ' ' + str(result[0][0]) + ' ' + str(verr) + ' ' + str(int(order)) + '\n'
