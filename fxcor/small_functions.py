@@ -205,7 +205,14 @@ def get_reductiondates(redmine_id):
 # automatically copy the (sorted) wavelength calibrated data to the IRAF folder
 def script_copy_reduced_data(redmine_id):
     total_files_copied = 0
-    # check if a folder with this redmine ID exists already in IRAF data input
+    # check if a folder with this redmine ID exists already in the IRAF data folder
+    if not os.path.exists(pf.iraf_data_folder.format(redmine_id)):
+        print('Checked, but missing!')
+        os.makedirs(pf.iraf_data_folder.format(redmine_id))
+    else:
+        print('Checked, exists.')
+
+    # check if a folder with this redmine ID exists already in the IRAF output folder
     if not os.path.exists(pf.iraf_output_folder.format(redmine_id)):
         print('Checked, but missing!')
         os.makedirs(pf.iraf_output_folder.format(redmine_id))
@@ -251,7 +258,8 @@ def script_copy_reduced_data(redmine_id):
                     # generate the file name for the reduced frame and copy it
                     red_name = raw_name[:-5] + '_ods.fits'
                     result_file_path = os.path.join(pf.gamse_results_folder.format(folder_date), red_name)
-                    shutil.copy(result_file_path, pf.iraf_data_folder.format(redmine_id))
+                    copy_destination_path = os.path.join(pf.iraf_data_folder.format(redmine_id), red_name)
+                    shutil.copy(result_file_path, copy_destination_path)
                     total_files_copied += 1
                     framelist.write(str(filename_used[0]) + ' ' + str(filename_used[1]) + '\n')
         print('Successfully copied {} files!'.format(total_files_copied))
@@ -345,12 +353,12 @@ def make_script_fxcor(redmine_id, template_name, output_name, template_orders):
             if tempord == 89:
                 script_fxcor.write(
                     'fxcor @fxcor_ord{}.lis {}_ods_fred.fits[{}] output={} continuum=both rebin=template '
-                    'osample=p150-1998 rsample=p150-1998 function=gaussian width=15.0 interactive=yes'
+                    'osample=p150-1998 rsample=p150-1998 function=center1d width=15.0 interactive=yes'
                     '\n'.format(tempord, template_name, str(indx + 1), output_name))
             else:
                 script_fxcor.write(
                     'fxcor @fxcor_ord{}.lis {}_ods_fred.fits[{}] output={} continuum=both rebin=template '
-                    'osample=p150-1998 rsample=p150-1998 function=gaussian width=15.0 interactive=no'
+                    'osample=p150-1998 rsample=p150-1998 function=center1d width=15.0 interactive=no'
                     '\n'.format(tempord, template_name, str(indx + 1), output_name))
 
     return
@@ -380,6 +388,12 @@ def get_rvs(redmine_id, fxcor_outname, template_orders):
                             rv_rel = float(line[-3]) * 1000.0
                             rv_err_rel_dict['rv_err_{}'.format(ordnum)] = rv_err
                             rv_err_rel_dict['rv_rel_{}'.format(ordnum)] = rv_rel
+                        if fname_ord in line and line[4][-3:] == 'cen':
+                            rv_err = 1.0
+                            rv_rel = float(line[-3]) * 1000.0
+                            rv_err_rel_dict['rv_err_{}'.format(ordnum)] = rv_err
+                            rv_err_rel_dict['rv_rel_{}'.format(ordnum)] = rv_rel
+
 
             # get the RV (converted to m/s) and the physical order number from the header
             open_filepath = os.path.join(pf.iraf_output_folder.format(redmine_id), fname)
@@ -516,7 +530,6 @@ def rv_weightedmean(redmine_id, rvs_array, med_rv, med_err, rv_type):
                         else:
                             v_err.append(med_err)
 
-            print(vels_onedate)
             # compute the weighted average for that date and use the median RV as zero-point correction
             rv_weightmean = np.average(vels_onedate, weights=(1/np.abs(v_err)))
             if rv_type != 'tel':
@@ -596,6 +609,19 @@ def plot_single_orders(redmine_id):
     # convert that array to a useful format
     dates_rv_array = make_rv_array(dates_rv_array)
 
+    if '1111' in redmine_id:
+        redmine_id_ref = '1111'
+        dates_rv_array_ref = []
+        # read the single order RVs from the reference file
+        with open(pf.out_RVs_abc_single.format(redmine_id_ref), 'r') as singleorderfile_ref:
+            for line_ref in singleorderfile_ref:
+                line_ref = line_ref.split()
+                dates_rv_array_ref.append(line_ref)
+
+        # convert that array to a useful format
+        dates_rv_array_ref = make_rv_array(dates_rv_array_ref)
+
+
     # make a plot for each different date in the array
     for onedate in set(dates_rv_array[0]):
         order_list = []
@@ -606,12 +632,22 @@ def plot_single_orders(redmine_id):
                 order_list.append(dates_rv_array[-1, g])
                 rv_list.append(dates_rv_array[1, g])
                 err_list.append(dates_rv_array[2, g])
+        if '1111' in redmine_id:
+            order_list_ref = []
+            rv_list_ref = []
+            err_list_ref = []
+            for g_ref in range(len(dates_rv_array_ref[0])):
+                if dates_rv_array_ref[0, g_ref] == onedate:
+                    order_list_ref.append(dates_rv_array_ref[-1, g_ref])
+                    rv_list_ref.append(dates_rv_array_ref[1, g_ref])
+                    err_list_ref.append(dates_rv_array_ref[2, g_ref])
 
         onedate_norm = julian.from_jd(onedate, fmt='jd')
         date_out = dt.datetime.strftime(onedate_norm, '%m.%d_%H:%M:%S')
         # plot the whole thing
         fig = plt.figure()
         plt.errorbar(order_list, rv_list, yerr=err_list, fmt='o', label=date_out, alpha=0.5)
+        plt.errorbar(order_list_ref, rv_list_ref, yerr=err_list_ref, fmt='o', label=date_out, alpha=0.5)
         plt.hlines(np.median(rv_list), min(order_list), max(order_list), lw=2)
         plt.xlabel('# of physical order')
         plt.ylabel('RV in m/s')
@@ -895,14 +931,69 @@ def do_barycorr(redmine_id, RVs_single_array):
 
     return rvs_bc_out
 
-# extract_head_barycorr('9999', range(148, 65, -1))
-# do_barycorr('9999')
+
+def plot_weighted_RVs(redmine_id):
+    dates_rv_array = []
+    # read the weighted RVs from the file
+    with open(pf.out_RVs_weighted.format(redmine_id), 'r') as weightfile:
+        for line in weightfile:
+            line = line.split()
+            dates_rv_array.append(line)
+
+    # convert that array to a useful format
+    dates_rv_array = make_rv_array(dates_rv_array)
+
+    if '1111' in redmine_id:
+        redmine_id_ref = '1111b'
+        dates_rv_array_ref = []
+        # read the weighted RVs from the reference file
+        with open(pf.out_RVs_weighted.format(redmine_id_ref), 'r') as weightfile_ref:
+            for line_ref in weightfile_ref:
+                line_ref = line_ref.split()
+                dates_rv_array_ref.append(line_ref)
+
+        # convert that array to a useful format
+        dates_rv_array_ref = make_rv_array(dates_rv_array_ref)
+
+    # make a plot with all dates in the array
+    dates_list = []
+    rv_list = []
+    err_list = []
+    for g in range(len(dates_rv_array[0])):
+        dates_list.append(dates_rv_array[0, g])
+        rv_list.append(dates_rv_array[1, g])
+        err_list.append(dates_rv_array[2, g])
+    if '1111' in redmine_id:
+        dates_list_ref = []
+        rv_list_ref = []
+        err_list_ref = []
+        for g_ref in range(len(dates_rv_array_ref[0])):
+            dates_list_ref.append(dates_rv_array_ref[0, g_ref])
+            rv_list_ref.append(dates_rv_array_ref[1, g_ref])
+            err_list_ref.append(dates_rv_array_ref[2, g_ref])
+
+    # onedate_norm = julian.from_jd(onedate, fmt='jd')
+    # date_out = dt.datetime.strftime(onedate_norm, '%m.%d_%H:%M:%S')
+    std_rvs = np.std(rv_list)
+    med_rvs = np.median(rv_list)
+    mean_rvs = np.mean(rv_list)
+    std_rvs_ref = np.std(rv_list_ref)
+    med_rvs_ref = np.median(rv_list_ref)
+    mean_rvs_ref = np.mean(rv_list_ref)
+    label1 = redmine_id + ' std: {:.4} med: {:.4} mean: {:.4}'.format(std_rvs, med_rvs, mean_rvs)
+    label1_ref = redmine_id_ref + ' std: {:.4} med: {:.4} mean: {:.4}'.format(std_rvs_ref, med_rvs_ref, mean_rvs_ref)
+
+    # plot the whole thing
+    fig = plt.figure()
+    plt.errorbar(dates_list, rv_list, yerr=err_list, fmt='o', label=label1, alpha=0.5)
+    plt.errorbar(dates_list_ref, rv_list_ref, yerr=err_list_ref, fmt='o', label=label1_ref, alpha=0.5)
+    plt.hlines(np.median(rv_list), min(dates_list), max(dates_list), lw=2)
+    plt.xlabel('time of observation')
+    plt.ylabel('RV in m/s')
+    plt.legend()
+    plt.show()
+
+    return
 
 
-# make a plot of the data, phase-folded with the literature orbit
-
-# get_nonrv_type()
-
-# def plot_single_RVs():
-#
-#     return
+# plot_weighted_RVs('1111c')

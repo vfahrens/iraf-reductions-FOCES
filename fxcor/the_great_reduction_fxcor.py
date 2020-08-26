@@ -45,6 +45,10 @@ parser.add_argument('-i', '--iraf_conv', help='convert the gamse data to multi-e
 parser.add_argument('-fx', '--fxcor', help='compute RVs from wavelength calibrated data with IRAF\'s fxcor',
                     action='store_true')
 parser.add_argument('-c', '--comb', help='use the comb corrected wavelength calibration', action='store_true')
+parser.add_argument('-ex', '--extract', help='extract the RVs from the fxcor results and do the barycentric '
+                                                 'correction', action='store_true')
+parser.add_argument('-ps', '--plot_single', help='plot the RV results for the single orders', action='store_true')
+parser.add_argument('-pw', '--plot_weighted', help='plot the RV results of the weighted averages', action='store_true')
 # create a group of options that exclude their simultaneous usage
 processing_dates = parser.add_mutually_exclusive_group()
 processing_dates.add_argument('-o', '--only', help='process data only for the date specified, date format: YYYYMMDD or '
@@ -212,6 +216,7 @@ if args.fxcor:
     print('finally, execute fxcor: (may take a while, please hit ENTER here when finished)\n')
     input('cl < fxcor_with_lists.cl')
 
+if args.extract:
     # extract the RVs from the fxcor results
     sf.get_rvs(args.redmine_id, outname, template_orders)
     RVs_single, tels_single = sf.split_rvs_tel(args.redmine_id)
@@ -221,17 +226,22 @@ if args.fxcor:
     if len(tels_single) != 0:
         tels_single_med, telserr_single_med = sf.rv_and_err_median(tels_single, 'tel')
 
-    yn_plot_singleorders = input('Do you want to plot the RV results for the single orders? ')
-    if re.match(r'^y', yn_plot_singleorders, re.I) or re.match(r'^j', yn_plot_singleorders, re.I):
-        print('\n')
-        sf.plot_single_orders(args.redmine_id)
-
     RVs_stds = sf.rv_weightedmean(args.redmine_id, RVs_single_abc_arr, RVs_single_med, RVerr_single_med, 'obj')
     RVs_fixerr = sf.fix_missing_errors(args.redmine_id, 'obj', RVs_stds)
     if len(tels_single) != 0:
         tel_stds = sf.rv_weightedmean(args.redmine_id, tels_single, tels_single_med, telserr_single_med, 'tel')
         tel_fixerr = sf.fix_missing_errors(args.redmine_id, 'tel', tel_stds)
         sf.get_tel_correction(args.redmine_id, RVs_fixerr, tel_fixerr)
+
+if args.plot_single:
+    sf.plot_single_orders(args.redmine_id)
+    # yn_plot_singleorders = input('Do you want to plot the RV results for the single orders? ')
+    # if re.match(r'^y', yn_plot_singleorders, re.I) or re.match(r'^j', yn_plot_singleorders, re.I):
+    #     print('\n')
+    #     sf.plot_single_orders(args.redmine_id)
+
+if args.plot_weighted:
+    sf.plot_weighted_RVs(args.redmine_id)
 
 
 # make a plot of the literature values compared to the FOCES data
