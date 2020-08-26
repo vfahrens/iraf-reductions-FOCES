@@ -353,12 +353,12 @@ def make_script_fxcor(redmine_id, template_name, output_name, template_orders):
             if tempord == 89:
                 script_fxcor.write(
                     'fxcor @fxcor_ord{}.lis {}_ods_fred.fits[{}] output={} continuum=both rebin=template '
-                    'osample=p150-1998 rsample=p150-1998 function=center1d width=15.0 interactive=yes'
+                    'osample=p150-1998 rsample=p150-1998 function=gaussian width=15.0 interactive=yes'
                     '\n'.format(tempord, template_name, str(indx + 1), output_name))
             else:
                 script_fxcor.write(
                     'fxcor @fxcor_ord{}.lis {}_ods_fred.fits[{}] output={} continuum=both rebin=template '
-                    'osample=p150-1998 rsample=p150-1998 function=center1d width=15.0 interactive=no'
+                    'osample=p150-1998 rsample=p150-1998 function=gaussian width=15.0 interactive=no'
                     '\n'.format(tempord, template_name, str(indx + 1), output_name))
 
     return
@@ -601,7 +601,7 @@ def get_tel_correction(redmine_id, rvs_fixerr, tel_fixerr):
 def plot_single_orders(redmine_id):
     dates_rv_array = []
     # read the single order RVs from the file
-    with open(pf.out_RVs_abc_single.format(redmine_id), 'r') as singleorderfile:
+    with open(pf.out_RVs_single.format(redmine_id), 'r') as singleorderfile:
         for line in singleorderfile:
             line = line.split()
             dates_rv_array.append(line)
@@ -613,7 +613,7 @@ def plot_single_orders(redmine_id):
         redmine_id_ref = '1111'
         dates_rv_array_ref = []
         # read the single order RVs from the reference file
-        with open(pf.out_RVs_abc_single.format(redmine_id_ref), 'r') as singleorderfile_ref:
+        with open(pf.out_RVs_single.format(redmine_id_ref), 'r') as singleorderfile_ref:
             for line_ref in singleorderfile_ref:
                 line_ref = line_ref.split()
                 dates_rv_array_ref.append(line_ref)
@@ -630,8 +630,8 @@ def plot_single_orders(redmine_id):
         for g in range(len(dates_rv_array[0])):
             if dates_rv_array[0, g] == onedate:
                 order_list.append(dates_rv_array[-1, g])
-                rv_list.append(dates_rv_array[1, g])
-                err_list.append(dates_rv_array[2, g])
+                rv_list.append(dates_rv_array[-3, g])
+                err_list.append(dates_rv_array[-4, g])
         if '1111' in redmine_id:
             order_list_ref = []
             rv_list_ref = []
@@ -639,15 +639,16 @@ def plot_single_orders(redmine_id):
             for g_ref in range(len(dates_rv_array_ref[0])):
                 if dates_rv_array_ref[0, g_ref] == onedate:
                     order_list_ref.append(dates_rv_array_ref[-1, g_ref])
-                    rv_list_ref.append(dates_rv_array_ref[1, g_ref])
-                    err_list_ref.append(dates_rv_array_ref[2, g_ref])
+                    rv_list_ref.append(dates_rv_array_ref[-3, g_ref])
+                    err_list_ref.append(dates_rv_array_ref[-4, g_ref])
 
         onedate_norm = julian.from_jd(onedate, fmt='jd')
         date_out = dt.datetime.strftime(onedate_norm, '%m.%d_%H:%M:%S')
         # plot the whole thing
         fig = plt.figure()
         plt.errorbar(order_list, rv_list, yerr=err_list, fmt='o', label=date_out, alpha=0.5)
-        plt.errorbar(order_list_ref, rv_list_ref, yerr=err_list_ref, fmt='o', label=date_out, alpha=0.5)
+        if '1111' in redmine_id:
+            plt.errorbar(order_list_ref, rv_list_ref, yerr=err_list_ref, fmt='o', label=date_out, alpha=0.5)
         plt.hlines(np.median(rv_list), min(order_list), max(order_list), lw=2)
         plt.xlabel('# of physical order')
         plt.ylabel('RV in m/s')
@@ -971,22 +972,23 @@ def plot_weighted_RVs(redmine_id):
             dates_list_ref.append(dates_rv_array_ref[0, g_ref])
             rv_list_ref.append(dates_rv_array_ref[1, g_ref])
             err_list_ref.append(dates_rv_array_ref[2, g_ref])
+        std_rvs_ref = np.std(rv_list_ref)
+        med_rvs_ref = np.median(rv_list_ref)
+        mean_rvs_ref = np.mean(rv_list_ref)
+        label1_ref = redmine_id_ref + ' std: {:.4} med: {:.4} mean: {:.4}'.format(std_rvs_ref, med_rvs_ref, mean_rvs_ref)
 
     # onedate_norm = julian.from_jd(onedate, fmt='jd')
     # date_out = dt.datetime.strftime(onedate_norm, '%m.%d_%H:%M:%S')
     std_rvs = np.std(rv_list)
     med_rvs = np.median(rv_list)
     mean_rvs = np.mean(rv_list)
-    std_rvs_ref = np.std(rv_list_ref)
-    med_rvs_ref = np.median(rv_list_ref)
-    mean_rvs_ref = np.mean(rv_list_ref)
     label1 = redmine_id + ' std: {:.4} med: {:.4} mean: {:.4}'.format(std_rvs, med_rvs, mean_rvs)
-    label1_ref = redmine_id_ref + ' std: {:.4} med: {:.4} mean: {:.4}'.format(std_rvs_ref, med_rvs_ref, mean_rvs_ref)
 
     # plot the whole thing
     fig = plt.figure()
     plt.errorbar(dates_list, rv_list, yerr=err_list, fmt='o', label=label1, alpha=0.5)
-    plt.errorbar(dates_list_ref, rv_list_ref, yerr=err_list_ref, fmt='o', label=label1_ref, alpha=0.5)
+    if '1111' in redmine_id:
+        plt.errorbar(dates_list_ref, rv_list_ref, yerr=err_list_ref, fmt='o', label=label1_ref, alpha=0.5)
     plt.hlines(np.median(rv_list), min(dates_list), max(dates_list), lw=2)
     plt.xlabel('time of observation')
     plt.ylabel('RV in m/s')

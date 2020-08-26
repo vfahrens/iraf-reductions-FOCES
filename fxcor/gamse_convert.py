@@ -47,7 +47,7 @@ def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
             # calculate the midtime of observation
             # ATTENTION: the timestamp in the header is the time when the file is saved,
             # after exposure and readout time
-            exp_endtime = datetime.strptime(head['FRAME'], '%Y-%m-%dT%H:%M:%S.%f')
+            exp_endtime = datetime.strptime(head['FRAME'], '%Y-%m-%d %H:%M:%S.%f')
             exp_midtime = exp_endtime - 0.5 * dt.timedelta(seconds=head['EXPOSURE']) - \
                           dt.timedelta(seconds=ccd_readtime)
 
