@@ -398,11 +398,12 @@ def get_rvs(redmine_id, fxcor_outname, template_orders):
             # get the RV (converted to m/s) and the physical order number from the header
             open_filepath = os.path.join(pf.iraf_output_folder.format(redmine_id), fname)
             print('Extracting RVs from {}.'.format(fname))
+            frame_id = fname[:8] + fname[9:13]
+
             with fits.open(open_filepath) as datei:
                 header = datei[0].header
 
                 for indx, ordnum in enumerate(template_orders):
-                # for ordnum in range(1, 85):
                     head_ord = datei[indx + 1].header
                     phys_ord = head_ord['PHYSORD']
                     if phys_ord != ordnum:
@@ -424,9 +425,11 @@ def get_rvs(redmine_id, fxcor_outname, template_orders):
                         hjd_head = head_ord['HJD']
 
                         # save all the results for the single orders to a file
-                        if 'rv_err_{}'.format(ordnum) in rv_err_rel_dict and 'rv_rel_{}'.format(ordnum) in rv_err_rel_dict:
-                            output_singleorders = str(date) + ' ' + str(hjd_head) + ' ' + str(rv_value) + ' ' \
-                                                  + str(rv_err_rel_dict['rv_err_{}'.format(ordnum)]) + ' ' + \
+                        if 'rv_err_{}'.format(ordnum) in rv_err_rel_dict \
+                                and 'rv_rel_{}'.format(ordnum) in rv_err_rel_dict:
+                            output_singleorders = frame_id + ' ' + str(date) + ' ' + str(hjd_head) + ' ' + \
+                                                  str(rv_value) + ' ' + \
+                                                  str(rv_err_rel_dict['rv_err_{}'.format(ordnum)]) + ' ' + \
                                                   str(rv_err_rel_dict['rv_rel_{}'.format(ordnum)]) + ' ' + str(v_obs) \
                                                   + ' ' + str(phys_ord) + '\n'
                             # print(output_singleorders)
@@ -437,28 +440,26 @@ def get_rvs(redmine_id, fxcor_outname, template_orders):
 
 # get the radial velocities as object and telluric velocities
 def split_rvs_tel(redmine_id):
-    # read all RV results for a specific observation date (= 1 frame) from the single order file
+    # define the orders that should be used as telluric anchor
+    real_tellurics = [97, 83, 82, 79, 78, 70, 69]
     bad_orders = []
     rvs_fromfile = []
     tellurics_fromfile = []
 
+    # read all RV results for each frame from the single order file
     with open(pf.input_tel_orders, 'r') as telluric_file:
         for linet in telluric_file:
             linet = linet.strip()
             bad_orders.append(int(linet))
 
-    # order_limits = input('Please give the range of orders where you want RVs extracted: (e.g.: 105-136) ')
-    # order_limits = order_limits.strip()
-    # order_limits = order_limits.split('-')
     with open(pf.out_RVs_single.format(redmine_id), 'r') as infile:
         for line in infile:
             line = line.split()
-            # # only use physical orders between the given limits and not 115, because that is bad
-            # if int(line[-1]) in range(int(order_limits[0]), int(order_limits[1]) + 1) and int(line[-1]) != 115:
+            # only use physical orders that have not been excluded in the tellurics file
             if int(line[-1]) not in bad_orders:
                 # save the whole line in a larger array with all observation dates
                 rvs_fromfile.append(line)
-            if int(line[-1]) == 69 or int(line[-1]) == 70 or int(line[-1]) == 75 or int(line[-1]) == 83:
+            if int(line[-1]) in real_tellurics:
                 tellurics_fromfile.append(line)
 
     rvs_single_array = make_rv_array(rvs_fromfile)
@@ -480,9 +481,9 @@ def make_rv_array(rv_list):
 def rv_and_err_median(rvs_array, rv_type):
     # for normal RVs, use RV with heliocentric correction
     if rv_type != 'tel':
-        med_rv = np.median(rvs_array[1])
+        med_rv = np.median(rvs_array[2])
         # use the fxcor error to get a median error of all RV values
-        med_err = np.median(rvs_array[2])
+        med_err = np.median(rvs_array[3])
     # for tellurics, use relative velocity without heliocentric correction
     else:
         med_rv = np.median(rvs_array[-3])
@@ -508,17 +509,17 @@ def rv_weightedmean(redmine_id, rvs_array, med_rv, med_err, rv_type):
     else:
         output_file = pf.out_tels_weighted.format(redmine_id)
     with open(output_file, 'w') as out2file:
-        for date in set(rvs_array[0]):
+        for fileid in set(rvs_array[0]):
             vels_onedate = []
             v_err = []
             for j in range(len(rvs_array[0])):
                 # only use the rows of the array that contain RV data from one observation date
-                if rvs_array[0, j] == date:
+                if rvs_array[0, j] == fileid:
                     if rv_type != 'tel':
-                        vels_onedate.append(rvs_array[1, j])
+                        vels_onedate.append(rvs_array[2, j])
                         # if the RV error given by fxcor is zero, use the median RV error instead
-                        if rvs_array[2, j] != 0.0:
-                            v_err.append(rvs_array[2, j])
+                        if rvs_array[3, j] != 0.0:
+                            v_err.append(rvs_array[3, j])
                         else:
                             v_err.append(med_err)
                     else:
@@ -541,10 +542,10 @@ def rv_weightedmean(redmine_id, rvs_array, med_rv, med_err, rv_type):
             # write the results to a file, if the data point is good,
             # which means that the error is below a certain limit
             if rv_std < float(error_limit):
-                results = str(date) + ' ' + str(rv_weightmean) + ' ' + str(rv_std) + '\n'
+                results = str(int(fileid)) + ' ' + str(rvs_array[1, j]) + ' ' + str(rv_weightmean) + ' ' + str(rv_std) + '\n'
                 out2file.write(results)
             else:
-                date_norm = julian.from_jd(date, fmt='jd')
+                date_norm = julian.from_jd(rvs_array[1, j], fmt='jd')
                 print('WARNING: Date {} has larger errors than {} m/s.'.format(date_norm, error_limit))
 
     return all_stds
@@ -564,8 +565,8 @@ def fix_missing_errors(redmine_id, rv_type, all_stds):
             # check if the cross-order RV error has a reasonable value, this is not the case e.g. for the template
             # a value of 0.1 m/s cross-order RV error is probably never possible with FOCES
             # replace bad RV errors with the median of all other RV errors
-            if float(line2[2]) < 0.1:
-                line2[2] = str(np.median(all_stds))
+            if float(line2[3]) < 0.1:
+                line2[3] = str(np.median(all_stds))
                 rv_results.append(line2)
             else:
                 rv_results.append(line2)
@@ -580,7 +581,8 @@ def fix_missing_errors(redmine_id, rv_type, all_stds):
         out2_filepath = pf.out_tels_weighted.format(redmine_id)
     with open(out2_filepath, 'w') as out2file_corr:
         for m in range(len(rv_tofile[0])):
-            results_corr = str(rv_tofile[0, m]) + ' ' + str(rv_tofile[1, m]) + ' ' + str(rv_tofile[2, m]) + '\n'
+            results_corr = str(rv_tofile[0, m]) + ' ' + str(rv_tofile[1, m]) + ' ' + str(rv_tofile[2, m]) + ' ' + \
+                           str(rv_tofile[3, m]) + '\n'
             out2file_corr.write(results_corr)
 
     return rv_tofile
@@ -590,8 +592,8 @@ def fix_missing_errors(redmine_id, rv_type, all_stds):
 def get_tel_correction(redmine_id, rvs_fixerr, tel_fixerr):
     with open(pf.out_RVs_telcorr.format(redmine_id), 'w') as out4file_corr:
         for m in range(len(tel_fixerr[0])):
-            results_corr = str(tel_fixerr[0, m]) + ' ' + str(
-                np.float(rvs_fixerr[1, m]) - np.float(tel_fixerr[1, m])) + ' ' + str(tel_fixerr[2, m]) + '\n'
+            results_corr = str(tel_fixerr[0, m]) + ' ' + str(tel_fixerr[1, m]) + ' ' + str(
+                np.float(rvs_fixerr[2, m]) - np.float(tel_fixerr[2, m])) + ' ' + str(tel_fixerr[3, m]) + '\n'
             out4file_corr.write(results_corr)
 
     return
@@ -622,38 +624,53 @@ def plot_single_orders(redmine_id):
         dates_rv_array_ref = make_rv_array(dates_rv_array_ref)
 
 
-    # make a plot for each different date in the array
-    for onedate in set(dates_rv_array[0]):
+    # make a plot for each different frame in the array
+    for frameid in set(dates_rv_array[0]):
         order_list = []
         rv_list = []
         err_list = []
+        plots_list = []
+        labels_list = []
         for g in range(len(dates_rv_array[0])):
-            if dates_rv_array[0, g] == onedate:
+            if dates_rv_array[0, g] == frameid:
                 order_list.append(dates_rv_array[-1, g])
                 rv_list.append(dates_rv_array[-3, g])
                 err_list.append(dates_rv_array[-4, g])
+
+        plots_list.append([order_list, rv_list, err_list])
+        labels_list.append(str(int(frameid)) + ' med: {:.4}'.format(np.median(rv_list)))
+
         if '1111' in redmine_id:
             order_list_ref = []
             rv_list_ref = []
             err_list_ref = []
             for g_ref in range(len(dates_rv_array_ref[0])):
-                if dates_rv_array_ref[0, g_ref] == onedate:
+                if dates_rv_array_ref[0, g_ref] == frameid:
                     order_list_ref.append(dates_rv_array_ref[-1, g_ref])
                     rv_list_ref.append(dates_rv_array_ref[-3, g_ref])
                     err_list_ref.append(dates_rv_array_ref[-4, g_ref])
 
-        onedate_norm = julian.from_jd(onedate, fmt='jd')
-        date_out = dt.datetime.strftime(onedate_norm, '%m.%d_%H:%M:%S')
-        # plot the whole thing
-        fig = plt.figure()
-        plt.errorbar(order_list, rv_list, yerr=err_list, fmt='o', label=date_out, alpha=0.5)
-        if '1111' in redmine_id:
-            plt.errorbar(order_list_ref, rv_list_ref, yerr=err_list_ref, fmt='o', label=date_out, alpha=0.5)
-        plt.hlines(np.median(rv_list), min(order_list), max(order_list), lw=2)
-        plt.xlabel('# of physical order')
-        plt.ylabel('RV in m/s')
-        plt.legend()
-        plt.show()
+            label_med_ref = str(int(frameid)) + ' med: {:.4}'.format(np.median(rv_list_ref))
+
+        # onedate_norm = julian.from_jd(onedate, fmt='jd')
+        # date_out = dt.datetime.strftime(onedate_norm, '%m.%d_%H:%M:%S')
+
+    # plot the whole thing
+    fig = plt.figure()
+    # plt.errorbar(order_list, rv_list, yerr=err_list, fmt='o', label=label_med, alpha=0.5)
+    ax = fig.add_axes([0.1, 0.1, 0.6, 0.75])
+
+    for i in range(len(plots_list)):
+        print(plots_list[i][0])
+        ax.errorbar(plots_list[i][0], plots_list[i][1], yerr=plots_list[i][2], fmt='o', label=labels_list[i], alpha=0.5)
+
+    if '1111' in redmine_id:
+        plt.errorbar(order_list_ref, rv_list_ref, yerr=err_list_ref, fmt='o', label=label_med_ref, alpha=0.5)
+    # plt.hlines(np.median(rv_list), min(order_list), max(order_list), lw=2)
+    plt.xlabel('# of physical order')
+    plt.ylabel('RV in m/s')
+    plt.legend()
+    plt.show()
 
     return
 
@@ -910,7 +927,8 @@ def do_barycorr(redmine_id, RVs_single_array):
     rvs_bc_out_strings = []
 
     for k in range(len(all_bc_pars[0])):
-        date = float(all_bc_pars[0][k])
+        file_id = all_bc_pars[0][k]
+        date = float(all_bc_pars[1][k])
         vrel = float(all_bc_pars[-3][k])
         verr = float(all_bc_pars[-4][k])
         order = all_bc_pars[-1][k]
@@ -919,8 +937,9 @@ def do_barycorr(redmine_id, RVs_single_array):
                                        ephemeris='de430', zmeas=(vrel/299792458), leap_update=False)\
             # , starname='ups And'
 
-        rvs_bc_out.append([date, result[0][0], verr, int(order)])
-        rv_bc_corr = str(date) + ' ' + str(result[0][0]) + ' ' + str(verr) + ' ' + str(int(order)) + '\n'
+        rvs_bc_out.append([int(file_id), date, result[0][0], verr, int(order)])
+        rv_bc_corr = str(int(file_id)) + ' ' + str(date) + ' ' + str(result[0][0]) + ' ' + str(verr) + ' ' + \
+                     str(int(order)) + '\n'
         rvs_bc_out_strings.append(rv_bc_corr)
 
     # save the corrected radial velocities to a file

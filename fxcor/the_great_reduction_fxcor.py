@@ -217,6 +217,13 @@ if args.fxcor:
     input('cl < fxcor_with_lists.cl')
 
 if args.extract:
+    if not args.fxcor:
+        used_orders = sf.get_number_of_orders(args.redmine_id)
+        outname = input('Please give the name of the fxcor output file: (e.g.: RVs_200723) ')
+        template = input('Please choose a template that should be used for the cross correlation: '
+                         '(e.g.: 20190903_0114) ')
+        template_orders = used_orders[template + '_phys_ords']
+
     # extract the RVs from the fxcor results
     sf.get_rvs(args.redmine_id, outname, template_orders)
     RVs_single, tels_single = sf.split_rvs_tel(args.redmine_id)
