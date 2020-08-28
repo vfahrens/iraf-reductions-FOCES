@@ -623,22 +623,22 @@ def plot_single_orders(redmine_id):
         # convert that array to a useful format
         dates_rv_array_ref = make_rv_array(dates_rv_array_ref)
 
-
     # make a plot for each different frame in the array
+    plots_list = []
+    labels_list = []
     for frameid in set(dates_rv_array[0]):
         order_list = []
         rv_list = []
         err_list = []
-        plots_list = []
-        labels_list = []
         for g in range(len(dates_rv_array[0])):
             if dates_rv_array[0, g] == frameid:
                 order_list.append(dates_rv_array[-1, g])
                 rv_list.append(dates_rv_array[-3, g])
                 err_list.append(dates_rv_array[-4, g])
 
+        rv_rms = np.sqrt(np.mean(np.array(rv_list)**2))
         plots_list.append([order_list, rv_list, err_list])
-        labels_list.append(str(int(frameid)) + ' med: {:.4}'.format(np.median(rv_list)))
+        labels_list.append(str(frameid) + ' med: {:.4} rms: {:.4}'.format(np.median(rv_list), rv_rms))
 
         if '1111' in redmine_id:
             order_list_ref = []
@@ -658,11 +658,10 @@ def plot_single_orders(redmine_id):
     # plot the whole thing
     fig = plt.figure()
     # plt.errorbar(order_list, rv_list, yerr=err_list, fmt='o', label=label_med, alpha=0.5)
-    ax = fig.add_axes([0.1, 0.1, 0.6, 0.75])
 
     for i in range(len(plots_list)):
-        print(plots_list[i][0])
-        ax.errorbar(plots_list[i][0], plots_list[i][1], yerr=plots_list[i][2], fmt='o', label=labels_list[i], alpha=0.5)
+        plt.errorbar(plots_list[i][0], plots_list[i][1], yerr=plots_list[i][2], fmt='o', label=labels_list[i], alpha=0.5)
+        plt.hlines(np.median(plots_list[i][1]), min(plots_list[i][0]), max(plots_list[i][0]), lw=2, alpha=0.5, color=plt.gca().lines[-1].get_color())
 
     if '1111' in redmine_id:
         plt.errorbar(order_list_ref, rv_list_ref, yerr=err_list_ref, fmt='o', label=label_med_ref, alpha=0.5)
