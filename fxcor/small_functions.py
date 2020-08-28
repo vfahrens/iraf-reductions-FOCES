@@ -979,17 +979,17 @@ def plot_weighted_RVs(redmine_id):
     rv_list = []
     err_list = []
     for g in range(len(dates_rv_array[0])):
-        dates_list.append(dates_rv_array[0, g])
-        rv_list.append(dates_rv_array[1, g])
-        err_list.append(dates_rv_array[2, g])
+        dates_list.append(dates_rv_array[1, g])
+        rv_list.append(dates_rv_array[2, g])
+        err_list.append(dates_rv_array[3, g])
     if '1111' in redmine_id:
         dates_list_ref = []
         rv_list_ref = []
         err_list_ref = []
         for g_ref in range(len(dates_rv_array_ref[0])):
-            dates_list_ref.append(dates_rv_array_ref[0, g_ref])
-            rv_list_ref.append(dates_rv_array_ref[1, g_ref])
-            err_list_ref.append(dates_rv_array_ref[2, g_ref])
+            dates_list_ref.append(dates_rv_array_ref[1, g_ref])
+            rv_list_ref.append(dates_rv_array_ref[2, g_ref])
+            err_list_ref.append(dates_rv_array_ref[3, g_ref])
         std_rvs_ref = np.std(rv_list_ref)
         med_rvs_ref = np.median(rv_list_ref)
         mean_rvs_ref = np.mean(rv_list_ref)
