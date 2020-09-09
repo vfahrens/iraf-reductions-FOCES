@@ -350,15 +350,15 @@ def make_script_fxcor(redmine_id, template_name, output_name, template_orders):
 
     with open(fxcor_script_list, 'w') as script_fxcor:
         for indx, tempord in enumerate(template_orders):
-            if tempord == 89:
+            if tempord == 86:
                 script_fxcor.write(
-                    'fxcor @fxcor_ord{}.lis {}_ods_fred.fits[{}] output={} continuum=both rebin=template '
-                    'osample=p150-1998 rsample=p150-1998 function=gaussian width=15.0 interactive=yes'
+                    'fxcor @fxcor_ord{}.lis {}_ods_fred.fits[{}] output={} continuum=none rebin=template '
+                    'osample=p150-1998 rsample=p150-1998 function=gaussian width=11.0 interactive=yes'
                     '\n'.format(tempord, template_name, str(indx + 1), output_name))
             else:
                 script_fxcor.write(
-                    'fxcor @fxcor_ord{}.lis {}_ods_fred.fits[{}] output={} continuum=both rebin=template '
-                    'osample=p150-1998 rsample=p150-1998 function=gaussian width=15.0 interactive=no'
+                    'fxcor @fxcor_ord{}.lis {}_ods_fred.fits[{}] output={} continuum=none rebin=template '
+                    'osample=p150-1998 rsample=p150-1998 function=gaussian width=11.0 interactive=no'
                     '\n'.format(tempord, template_name, str(indx + 1), output_name))
 
     return
