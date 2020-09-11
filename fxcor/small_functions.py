@@ -515,6 +515,7 @@ def rv_weightedmean(redmine_id, rvs_array, med_rv, med_err, rv_type):
             for j in range(len(rvs_array[0])):
                 # only use the rows of the array that contain RV data from one observation date
                 if rvs_array[0, j] == fileid:
+                    date_jd = rvs_array[1, j]
                     if rv_type != 'tel':
                         vels_onedate.append(rvs_array[2, j])
                         # if the RV error given by fxcor is zero, use the median RV error instead
@@ -542,7 +543,7 @@ def rv_weightedmean(redmine_id, rvs_array, med_rv, med_err, rv_type):
             # write the results to a file, if the data point is good,
             # which means that the error is below a certain limit
             if rv_std < float(error_limit):
-                results = str(int(fileid)) + ' ' + str(rvs_array[1, j]) + ' ' + str(rv_weightmean) + ' ' + str(rv_std) + '\n'
+                results = str(int(fileid)) + ' ' + str(date_jd) + ' ' + str(rv_weightmean) + ' ' + str(rv_std) + '\n'
                 out2file.write(results)
             else:
                 date_norm = julian.from_jd(rvs_array[1, j], fmt='jd')
