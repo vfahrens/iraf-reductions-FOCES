@@ -6,8 +6,8 @@ import numpy as np
 redmine_id = 2864
 starname = 'ID2864'
 nplanets = 1
-instnames = ['foces', 'lick', 'elodie']
-ntels = 3
+instnames = ['foces', 'lick', 'elodie', 'elodie2', 'lick6', 'lick8', 'lick13', 'hires', 'harps']
+ntels = 9
 fitting_basis = 'per tc e w k'
 bjd0 = 0
 planet_letters = {}
