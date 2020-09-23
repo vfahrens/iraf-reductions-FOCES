@@ -6,8 +6,8 @@ import numpy as np
 redmine_id = 2864
 starname = 'ID2864'
 nplanets = 1
-instnames = ['foces', 'lick', 'elodie', 'elodie2', 'lick6', 'lick8', 'lick13', 'hires', 'harps']
-ntels = 9
+instnames = ['foces', 'harps', 'hires']
+ntels = 3
 fitting_basis = 'per tc e w k'
 bjd0 = 0
 planet_letters = {}
@@ -38,11 +38,11 @@ params = anybasis_params.basis.to_any_basis(anybasis_params, fitting_basis)
 params['dvdt'].vary = False
 params['curv'].vary = False
 for n in range(nplanets):
-    params['per{}'.format(str(n+1))].vary = False
+    params['per{}'.format(str(n+1))].vary = True
     params['tc{}'.format(str(n+1))].vary = True
-    params['e{}'.format(str(n+1))].vary = False
+    params['e{}'.format(str(n+1))].vary = True
     params['w{}'.format(str(n+1))].vary = True
-    params['k{}'.format(str(n+1))].vary = False
+    params['k{}'.format(str(n+1))].vary = True
 data = pd.read_csv(pf.out_RVs_compare.format(redmine_id), sep=' ')
 priors = [
     myradvel.prior.EccentricityPrior(nplanets),
