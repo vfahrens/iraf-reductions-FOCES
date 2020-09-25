@@ -933,9 +933,9 @@ def do_barycorr(redmine_id, RVs_single_array):
         verr = float(all_bc_pars[-4][k])
         order = all_bc_pars[-1][k]
 
-        result = barycorrpy.get_BC_vel(JDUTC=date, hip_id=7513, lat=wst_lat, longi=wst_lon, alt=wst_alt,
-                                       ephemeris='de430', zmeas=(vrel/299792458), leap_update=False)
-        # , hip_id=113357, starname='51 Peg'
+        result = barycorrpy.get_BC_vel(JDUTC=date, hip_id=113357, lat=wst_lat, longi=wst_lon, alt=wst_alt,
+                                       zmeas=(vrel/299792458), leap_update=False)
+        # , hip_id=7513, starname='ups And', ephemeris='de430',
         #
 
         rvs_bc_out.append([int(file_id), date, result[0][0], verr, int(order)])
