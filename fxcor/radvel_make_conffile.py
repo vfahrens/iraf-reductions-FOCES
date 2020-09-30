@@ -84,11 +84,11 @@ def make_radvel_conffile(redmine_id, n_cand, inst_list):
         conffile.write("params['dvdt'].vary = False\n")
         conffile.write("params['curv'].vary = False\n")
         conffile.write("for n in range(nplanets):\n")
-        conffile.write("    params['per{}'.format(str(n+1))].vary = True\n")
+        conffile.write("    params['per{}'.format(str(n+1))].vary = False\n")
         conffile.write("    params['tc{}'.format(str(n+1))].vary = True\n")
-        conffile.write("    params['e{}'.format(str(n+1))].vary = True\n")
+        conffile.write("    params['e{}'.format(str(n+1))].vary = False\n")
         conffile.write("    params['w{}'.format(str(n+1))].vary = True\n")
-        conffile.write("    params['k{}'.format(str(n+1))].vary = True\n")
+        conffile.write("    params['k{}'.format(str(n+1))].vary = False\n")
 
         # Load radial velocity data, the data is contained in an ASCII file,
         # must have 'time', 'mnvel', 'errvel', and 'tel' keys

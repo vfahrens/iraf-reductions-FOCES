@@ -259,9 +259,14 @@ def script_copy_reduced_data(redmine_id):
                     red_name = raw_name[:-5] + '_ods.fits'
                     result_file_path = os.path.join(pf.gamse_results_folder.format(folder_date), red_name)
                     copy_destination_path = os.path.join(pf.iraf_data_folder.format(redmine_id), red_name)
-                    shutil.copy(result_file_path, copy_destination_path)
-                    total_files_copied += 1
-                    framelist.write(str(filename_used[0]) + ' ' + str(filename_used[1]) + '\n')
+
+                    try:
+                        shutil.copy(result_file_path, copy_destination_path)
+                        total_files_copied += 1
+                        framelist.write(str(filename_used[0]) + ' ' + str(filename_used[1]) + '\n')
+                    except FileNotFoundError:
+                        print('WARNING: File {} does not exist in the onedspec result.'.format(raw_name))
+
         print('Successfully copied {} files!'.format(total_files_copied))
 
     return
