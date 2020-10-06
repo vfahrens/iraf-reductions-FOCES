@@ -11,20 +11,64 @@ from astroquery.simbad import Simbad
 import paths_and_files as pf
 
 
+# use an already GAMSE reduced frame to get the wavelength borders of each order
+def find_order_startend_wl():
+    infolder = '/mnt/e/GAMSE/red_20200904/onedspec/'
+    fname_lst = ['20200904_0131_FOC1903_SCI0_ods.fits']
+    infolder_templ = '/mnt/e/HARPS_data_51Peg'
+    fname_lst_templ = ['harps_mask_G2.dat', 'harps_mask_K5.mas', 'harps_mask_M2.mas']
+
+    # define the folders for reading the data and saving the new files
+    path_in = infolder
+
+    for fname in fname_lst:
+        file_in = os.path.join(path_in, fname)
+
+        # open the GAMSE fits file and read the general header and the data section
+        head = fits.getheader(file_in, 0)
+        data = fits.getdata(file_in)
+
+        with open('template_orders_startendwl_2.txt', 'w') as ordersborders_file:
+
+            # check if the data are single or multi fiber: it is required that the reduction was made with
+            # double-fiber configuration, even if the observation was without simultaneous calibration; this is
+            # only the case, if the keyword 'fiber' is present in the data frame
+            if 'fiber' in data.dtype.names:
+                # treat the results of fiber A and B separately and independently
+                for fiber in np.unique(data['fiber']):
+                    # make a mask that contains all apertures which contain light of either fiber A or B
+                    mask = data['fiber'] == fiber
+
+                    # read the data row by row (aperture by aperture)
+                    for row in data[mask]:
+                        order = row['order']  # physical order of the aperture
+                        wave = row['wavelength']  # all wavelength values for the current order (aperture)
+
+                        wl_gamse_start = wave[0]
+                        wl_gamse_end = wave[-1]
+                        wl_gamse_start_tol = wave[24]
+                        wl_gamse_end_tol = wave[-25]
+
+                        wl_templ_start = wl_gamse_start - np.abs(wl_gamse_start - wl_gamse_start_tol)
+                        wl_templ_end = wl_gamse_end + np.abs(wl_gamse_end - wl_gamse_end_tol)
+
+                        startend_str = str(order) + ' ' + str(wl_templ_start) + ' ' + str(wl_templ_end) + '\n'
+                        ordersborders_file.write(startend_str)
+
+        input('Do you want to cancel? ')
+
+    return
+
+
+find_order_startend_wl()
+
+
 # extract the single orders from the GAMSE result files, add header entries with wavelength calibration information
-def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
+def harps_template_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
     print('Started IRAF conversion for redmine project {}...'.format(redmine_id))
 
     # give the readout time of the camera for the calculation of the mid-time of observation
     ccd_readtime = 87.5
-
-    ########################
-    # take this out again
-    objname = '51 Peg'
-    radec_table = Simbad.query_object(objname)
-    objcoord_ra = radec_table['RA'][0].replace(' ', ':')
-    objcoord_dec = radec_table['DEC'][0].replace(' ', ':')
-    ########################
 
     # define the folders for reading the data and saving the new files
     path_in = infolder
@@ -55,19 +99,16 @@ def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
             # calculate the midtime of observation
             # ATTENTION: the timestamp in the header is the time when the file is saved,
             # after exposure and readout time
-            exp_endtime = datetime.strptime(head['FRAME'], '%Y-%m-%d %H:%M:%S.%f')
+            exp_endtime = datetime.strptime(head['FRAME'], '%Y-%m-%dT%H:%M:%S.%f')
             exp_midtime = exp_endtime - 0.5 * dt.timedelta(seconds=head['EXPOSURE']) - \
                           dt.timedelta(seconds=ccd_readtime)
 
             # add ra/dec coordinates to header if not present
             if 'PERA2000' not in head or 'PEDE2000' not in head:
-                ######################################
-                # put this in again!
-                # objname = input('Please give the name of the object for a coordinate search with SIMBAD: ')
-                # radec_table = Simbad.query_object(objname)
-                # objcoord_ra = radec_table['RA'][0].replace(' ', ':')
-                # objcoord_dec = radec_table['DEC'][0].replace(' ', ':')
-                ######################################
+                objname = input('Please give the name of the object for a coordinate search with SIMBAD: ')
+                radec_table = Simbad.query_object(objname)
+                objcoord_ra = radec_table['RA'][0].replace(' ', ':')
+                objcoord_dec = radec_table['DEC'][0].replace(' ', ':')
                 head['PERA2000'] = (objcoord_ra, 'Right ascension coordinate')
                 head['PEDE2000'] = (objcoord_dec, 'Declination coordinate')
                 print('Ra/Dec coordinates added to header.')
@@ -197,8 +238,7 @@ def iraf_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
                                 hdu_list_fraw.append(image_hdu_fraw)
 
                     # save the new IRAF compatible multi-extension FITS files with the reduced and raw flux
-                    # fname_fred = '{}_ods_fred.fits'.format(fname[:13])
-                    fname_fred = '{}_ods_fred.fits'.format(fname[:-5])
+                    fname_fred = '{}_ods_fred.fits'.format(fname[:13])
                     out_fred = os.path.join(path_out, fname_fred)
                     hdu_list_fred.writeto(out_fred, overwrite=True)
 

@@ -16,7 +16,6 @@ from gamse_convert import iraf_converter
 from gamse_convert_comb import iraf_converter_comb
 from radvel_make_conffile import make_radvel_conffile
 
-
 ##################################################################
 # general variables and option defaults
 
@@ -33,7 +32,7 @@ parser = argparse.ArgumentParser(description='RV calculation for FOCES with fxco
                                              'calibration with the GAMSE software, converts the files to MEF files and '
                                              'computes radial velocities by using IRAF\'s fxcor package. There are '
                                              'different options to choose which parts of the program should be '
-                                             'executed.')
+                                             'executed. Some other spectrographs are also (partly) supported.')
 
 # add optional command line arguments
 parser.add_argument('-fu', '--fitsupdate', help='update the local raw FITS files', action='store_true')
@@ -46,9 +45,10 @@ parser.add_argument('-fx', '--fxcor', help='compute RVs from wavelength calibrat
                     action='store_true')
 parser.add_argument('-c', '--comb', help='use the comb corrected wavelength calibration', action='store_true')
 parser.add_argument('-ex', '--extract', help='extract the RVs from the fxcor results and do the barycentric '
-                                                 'correction', action='store_true')
+                                             'correction', action='store_true')
 parser.add_argument('-ps', '--plot_single', help='plot the RV results for the single orders', action='store_true')
 parser.add_argument('-pw', '--plot_weighted', help='plot the RV results of the weighted averages', action='store_true')
+parser.add_argument('--harps', help='use this flag when working with HARPS data', action='store_true')  # not in use yet
 # create a group of options that exclude their simultaneous usage
 processing_dates = parser.add_mutually_exclusive_group()
 processing_dates.add_argument('-o', '--only', help='process data only for the date specified, date format: YYYYMMDD or '
@@ -74,7 +74,6 @@ if args.after is not None:
     in_opt = '-a'
     in_date = str(args.after)
 
-
 #####################################################################
 # actual calls of functions
 
@@ -90,7 +89,6 @@ else:
     print('\n')
     print('No FITS or log/comment files were updated.')
     print('\n')
-
 
 # # check whether an update of the data file headers is needed
 # print('\n')
@@ -139,7 +137,6 @@ else:
     print('No files were searched.')
     print('\n')
 
-
 if args.gamse:
     # read the dates that should be reduced from the file
     use_only_these_reduction_dates = sf.get_reductiondates(args.redmine_id)
@@ -171,7 +168,6 @@ else:
     print('No files were reduced with GAMSE and copied to the IRAF folder.')
     print('\n')
 
-
 # convert the GAMSE data to IRAF readable form if required
 if args.iraf_conv:
     if args.comb:
@@ -183,7 +179,6 @@ else:
     print('\n')
     print('No files were converted to IRAF format.')
     print('\n')
-
 
 # prepare data for fxcor and give instructions for IRAF execution
 if args.fxcor:
@@ -250,7 +245,6 @@ if args.plot_single:
 if args.plot_weighted:
     sf.plot_weighted_RVs(args.redmine_id)
 
-
 # make a plot of the literature values compared to the FOCES data
 print('\n')
 yn_RV_complit = input('Do you want to plot the RV results and compare them to the literature? ')
@@ -265,7 +259,6 @@ if re.match(r'^y', yn_RV_complit, re.I) or re.match(r'^j', yn_RV_complit, re.I):
     os.chdir(str(pf.location.resolve()))
     subprocess.call(['myradvel', 'fit', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
     subprocess.call(['myradvel', 'plot', '-t', 'rv', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
-
 
 # make a plot of the RV values compared to other data (e.g. airmass)
 print('\n')
@@ -284,7 +277,6 @@ if re.match(r'^y', yn_RV_nonRV, re.I) or re.match(r'^j', yn_RV_nonRV, re.I):
 # do the fxcor reduction manually
 print('\n')
 input('Please hit ENTER when finished.')
-
 
 # # plot the data produced by fxcor
 # print('\n')
