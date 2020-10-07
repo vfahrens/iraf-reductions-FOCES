@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# this script is for renaming the files with simulated poissonian noise to a format similar to the FOCES name pattern
+
 import os
 import sys
 import shutil

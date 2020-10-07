@@ -48,6 +48,8 @@ parser.add_argument('-ex', '--extract', help='extract the RVs from the fxcor res
                                              'correction', action='store_true')
 parser.add_argument('-ps', '--plot_single', help='plot the RV results for the single orders', action='store_true')
 parser.add_argument('-pw', '--plot_weighted', help='plot the RV results of the weighted averages', action='store_true')
+parser.add_argument('-ph', '--plot_histogram', help='plot histograms of the RV results of the single orders and '
+                                                    'weighted averages', action='store_true')
 parser.add_argument('--harps', help='use this flag when working with HARPS data', action='store_true')  # not in use yet
 # create a group of options that exclude their simultaneous usage
 processing_dates = parser.add_mutually_exclusive_group()
@@ -244,6 +246,9 @@ if args.plot_single:
 
 if args.plot_weighted:
     sf.plot_weighted_RVs(args.redmine_id)
+
+if args.plot_histogram:
+    sf.plot_histograms(args.redmine_id)
 
 # make a plot of the literature values compared to the FOCES data
 print('\n')

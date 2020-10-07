@@ -1023,4 +1023,76 @@ def plot_weighted_RVs(redmine_id):
     return
 
 
+def plot_histograms(redmine_id):
+    rvs_weight_array = []
+    # read the weighted RVs from the file
+    with open(pf.out_RVs_weighted.format(redmine_id), 'r') as weightfile:
+        for line in weightfile:
+            line = line.split()
+            rvs_weight_array.append(line)
+
+    # convert that array to a useful format
+    rvs_weight_array = make_rv_array(rvs_weight_array)
+
+    # make a plot with all dates in the array
+    rv_list = []
+    for g in range(len(rvs_weight_array[0])):
+        rv_list.append(rvs_weight_array[2, g])
+
+    std_rvs = np.std(rv_list)
+    med_rvs = np.median(rv_list)
+    mean_rvs = np.mean(rv_list)
+    label1 = redmine_id + ' std: {:.4} med: {:.4} mean: {:.4}'.format(std_rvs, med_rvs, mean_rvs)
+
+    # bins = 25
+    bins = range(int(min(rv_list) - 1), int(max(rv_list) + 1) + 1, 1)
+
+    # plot the whole thing
+    fig1 = plt.figure()
+    values, bins_w, rects = plt.hist(rv_list, bins, label=label1)
+    plt.vlines(np.median(rv_list), 0, max(values), lw=2)
+    plt.xlabel('RV in m/s')
+    plt.ylabel('number of results')
+    plt.legend()
+    fig1.savefig(os.path.join(pf.abs_path_rvplots, '51Peg_simpoiss_weighted_SN400.png'))
+    plt.show()
+
+    # here the plot of the dingle orders starts
+    rvs_single_array = []
+    # read the single order RVs from the file
+    with open(pf.out_RVs_single.format(redmine_id), 'r') as singleorderfile:
+        for line in singleorderfile:
+            line = line.split()
+            rvs_single_array.append(line)
+
+    # convert that array to a useful format
+    rvs_single_array = make_rv_array(rvs_single_array)
+
+    # make a plot for each different order
+    for physord in set(rvs_single_array[-1]):
+        frames_list = []
+        rv_single_list = []
+        for g in range(len(rvs_single_array[-1])):
+            if rvs_single_array[-1, g] == physord:
+                frames_list.append(rvs_single_array[0, g])
+                rv_single_list.append(rvs_single_array[-3, g])
+
+        rv_rms = np.sqrt(np.mean(np.array(rv_single_list)**2))
+        label_ord = 'Order: {} med: {:.4} rms: {:.4}'.format(int(physord), np.median(rv_single_list), rv_rms)
+
+        bins_single = range(int(min(rv_single_list) - 1), int(max(rv_single_list) + 1) + 1, 1)
+
+        # plot the whole thing
+        fig2 = plt.figure()
+
+        values_sing, bins_s, rects_s = plt.hist(rv_single_list, bins_single, label=label_ord, alpha=0.8)
+        plt.vlines(np.median(rv_single_list), 0, max(values_sing), lw=2)
+        plt.xlabel('RV in m/s')
+        plt.legend()
+        fig2.savefig(os.path.join(pf.abs_path_rvplots, '51Peg_simpoiss_ord{}_SN400.png'.format(int(physord))))
+        # plt.show()
+
+    return
+
+
 # plot_weighted_RVs('1111c')
