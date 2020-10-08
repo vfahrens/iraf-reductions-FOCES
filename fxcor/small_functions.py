@@ -1050,11 +1050,16 @@ def plot_histograms(redmine_id):
     # plot the whole thing
     fig1 = plt.figure()
     values, bins_w, rects = plt.hist(rv_list, bins, label=label1)
+
+    with open(os.path.join(pf.abs_path_rvplots, '51Peg_simpoiss_weighted_50_tempSN100.txt'), 'w') as datwsave:
+        for m in range(len(values)):
+            datwsave.write('{} {}\n'.format(values[m], bins_w[m]))
+
     plt.vlines(np.median(rv_list), 0, max(values), lw=2)
     plt.xlabel('RV in m/s')
     plt.ylabel('number of results')
     plt.legend()
-    fig1.savefig(os.path.join(pf.abs_path_rvplots, '51Peg_simpoiss_weighted_SN400.png'))
+    fig1.savefig(os.path.join(pf.abs_path_rvplots, '51Peg_simpoiss_weighted_50_tempSN100.png'))
     plt.show()
 
     # here the plot of the dingle orders starts
@@ -1086,10 +1091,16 @@ def plot_histograms(redmine_id):
         fig2 = plt.figure()
 
         values_sing, bins_s, rects_s = plt.hist(rv_single_list, bins_single, label=label_ord, alpha=0.8)
+
+        with open(os.path.join(pf.abs_path_rvplots, '51Peg_simpoiss_ord{}_50_tempSN100.txt'.format(int(physord))), 'w') as datsave:
+            for n in range(len(values_sing)):
+                datsave.write('{} {}\n'.format(values_sing[n], bins_s[n]))
+
+
         plt.vlines(np.median(rv_single_list), 0, max(values_sing), lw=2)
         plt.xlabel('RV in m/s')
         plt.legend()
-        fig2.savefig(os.path.join(pf.abs_path_rvplots, '51Peg_simpoiss_ord{}_SN400.png'.format(int(physord))))
+        fig2.savefig(os.path.join(pf.abs_path_rvplots, '51Peg_simpoiss_ord{}_50_tempSN100.png'.format(int(physord))))
         # plt.show()
 
     return
