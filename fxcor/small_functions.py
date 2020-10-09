@@ -41,7 +41,6 @@ def rsync_files_update(only, after, filetype):
 
 # make the rsync command line text and execute it
 def sync_fits(date, filetype):
-
     fits_update_cmd = 'rsync -avlu'  # {}:{} {}
 
     # subprocess needs a list of strings, so start with the base command
@@ -399,7 +398,6 @@ def get_rvs(redmine_id, fxcor_outname, template_orders):
                             rv_err_rel_dict['rv_err_{}'.format(ordnum)] = rv_err
                             rv_err_rel_dict['rv_rel_{}'.format(ordnum)] = rv_rel
 
-
             # get the RV (converted to m/s) and the physical order number from the header
             open_filepath = os.path.join(pf.iraf_output_folder.format(redmine_id), fname)
             print('Extracting RVs from {}.'.format(fname))
@@ -538,7 +536,7 @@ def rv_weightedmean(redmine_id, rvs_array, med_rv, med_err, rv_type):
                             v_err.append(med_err)
 
             # compute the weighted average for that date and use the median RV as zero-point correction
-            rv_weightmean = np.average(vels_onedate, weights=(1/np.abs(v_err)))
+            rv_weightmean = np.average(vels_onedate, weights=(1 / np.abs(v_err)))
             if rv_type != 'tel':
                 rv_weightmean = rv_weightmean - med_rv
             # compute the RV error across the orders and put it in a list of RV errors
@@ -642,7 +640,7 @@ def plot_single_orders(redmine_id):
                 rv_list.append(dates_rv_array[-3, g])
                 err_list.append(dates_rv_array[-4, g])
 
-        rv_rms = np.sqrt(np.mean(np.array(rv_list)**2))
+        rv_rms = np.sqrt(np.mean(np.array(rv_list) ** 2))
         plots_list.append([order_list, rv_list, err_list])
         labels_list.append(str(frameid) + ' med: {:.4} rms: {:.4}'.format(np.median(rv_list), rv_rms))
 
@@ -666,8 +664,10 @@ def plot_single_orders(redmine_id):
     # plt.errorbar(order_list, rv_list, yerr=err_list, fmt='o', label=label_med, alpha=0.5)
 
     for i in range(len(plots_list)):
-        plt.errorbar(plots_list[i][0], plots_list[i][1], yerr=plots_list[i][2], fmt='o', label=labels_list[i], alpha=0.5)
-        plt.hlines(np.median(plots_list[i][1]), min(plots_list[i][0]), max(plots_list[i][0]), lw=2, alpha=0.5, color=plt.gca().lines[-1].get_color())
+        plt.errorbar(plots_list[i][0], plots_list[i][1], yerr=plots_list[i][2], fmt='o', label=labels_list[i],
+                     alpha=0.5)
+        plt.hlines(np.median(plots_list[i][1]), min(plots_list[i][0]), max(plots_list[i][0]), lw=2, alpha=0.5,
+                   color=plt.gca().lines[-1].get_color())
 
     if '1111' in redmine_id:
         plt.errorbar(order_list_ref, rv_list_ref, yerr=err_list_ref, fmt='o', label=label_med_ref, alpha=0.5)
@@ -682,7 +682,6 @@ def plot_single_orders(redmine_id):
 
 # extract a specific value from the logfile for plotting against RVs
 def extract_nonrv_data(redmine_id, want_value, pos, filetype):
-
     # read the results from the grep command
     with open(pf.grep_redID_out.format(redmine_id), 'r') as grepfile:
         string_with_value = []
@@ -743,7 +742,6 @@ def extract_nonrv_data(redmine_id, want_value, pos, filetype):
         for i in range(len(julian_dates)):
             string_out = julian_dates[i] + ' ' + str(string_with_value[i][1]) + '\n'
             nonrv_out.write(string_out)
-
 
     return
 
@@ -927,6 +925,14 @@ def do_barycorr(redmine_id, RVs_single_array):
     wst_lon = 12.0120555556
     wst_alt = 1838
 
+    # ask which object is analyzed
+    obj_name = input('Please give the name of the object for the barycentric correction: ')
+    # define a catalog of objects for which the HIP ID numbers are known
+    obj_catalog = {'ups And': 7513, '51 Peg': 113357}
+    # use the HIP ID of the object instead of the string name if it is in this catalog
+    if obj_name in obj_catalog:
+        obj_name = obj_catalog[obj_name]
+
     all_bc_pars = RVs_single_array
     rvs_bc_out = []
     rvs_bc_out_strings = []
@@ -938,10 +944,15 @@ def do_barycorr(redmine_id, RVs_single_array):
         verr = float(all_bc_pars[-4][k])
         order = all_bc_pars[-1][k]
 
-        result = barycorrpy.get_BC_vel(JDUTC=date, hip_id=113357, lat=wst_lat, longi=wst_lon, alt=wst_alt,
-                                       zmeas=(vrel/299792458), leap_update=False)
-        # , hip_id=7513, starname='ups And', ephemeris='de430',
-        #
+        if isinstance(obj_name, int):
+            result = barycorrpy.get_BC_vel(JDUTC=date, hip_id=obj_name, lat=wst_lat, longi=wst_lon, alt=wst_alt,
+                                           zmeas=(vrel / 299792458), leap_update=False)
+        elif isinstance(obj_name, str):
+            result = barycorrpy.get_BC_vel(JDUTC=date, starname=obj_name, lat=wst_lat, longi=wst_lon, alt=wst_alt,
+                                           zmeas=(vrel / 299792458), leap_update=False)
+        else:
+            print('WARNING: Unexpected format of object ID. Please check the input for the object name. ')
+        #  ephemeris='de430',
 
         rvs_bc_out.append([int(file_id), date, result[0][0], verr, int(order)])
         rv_bc_corr = str(int(file_id)) + ' ' + str(date) + ' ' + str(result[0][0]) + ' ' + str(verr) + ' ' + \
@@ -1000,7 +1011,8 @@ def plot_weighted_RVs(redmine_id):
         std_rvs_ref = np.std(rv_list_ref)
         med_rvs_ref = np.median(rv_list_ref)
         mean_rvs_ref = np.mean(rv_list_ref)
-        label1_ref = redmine_id_ref + ' std: {:.4} med: {:.4} mean: {:.4}'.format(std_rvs_ref, med_rvs_ref, mean_rvs_ref)
+        label1_ref = redmine_id_ref + ' std: {:.4} med: {:.4} mean: {:.4}'.format(std_rvs_ref, med_rvs_ref,
+                                                                                  mean_rvs_ref)
 
     # onedate_norm = julian.from_jd(onedate, fmt='jd')
     # date_out = dt.datetime.strftime(onedate_norm, '%m.%d_%H:%M:%S')
@@ -1082,7 +1094,7 @@ def plot_histograms(redmine_id):
                 frames_list.append(rvs_single_array[0, g])
                 rv_single_list.append(rvs_single_array[-3, g])
 
-        rv_rms = np.sqrt(np.mean(np.array(rv_single_list)**2))
+        rv_rms = np.sqrt(np.mean(np.array(rv_single_list) ** 2))
         label_ord = 'Order: {} med: {:.4} rms: {:.4}'.format(int(physord), np.median(rv_single_list), rv_rms)
 
         bins_single = range(int(min(rv_single_list) - 1), int(max(rv_single_list) + 1) + 1, 1)
@@ -1092,10 +1104,10 @@ def plot_histograms(redmine_id):
 
         values_sing, bins_s, rects_s = plt.hist(rv_single_list, bins_single, label=label_ord, alpha=0.8)
 
-        with open(os.path.join(pf.abs_path_rvplots, '51Peg_simpoiss_ord{}_50_tempSN100.txt'.format(int(physord))), 'w') as datsave:
+        with open(os.path.join(pf.abs_path_rvplots, '51Peg_simpoiss_ord{}_50_tempSN100.txt'.format(int(physord))),
+                  'w') as datsave:
             for n in range(len(values_sing)):
                 datsave.write('{} {}\n'.format(values_sing[n], bins_s[n]))
-
 
         plt.vlines(np.median(rv_single_list), 0, max(values_sing), lw=2)
         plt.xlabel('RV in m/s')
@@ -1104,6 +1116,5 @@ def plot_histograms(redmine_id):
         # plt.show()
 
     return
-
 
 # plot_weighted_RVs('1111c')

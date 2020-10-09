@@ -15,8 +15,6 @@ import paths_and_files as pf
 def find_order_startend_wl():
     infolder = '/mnt/e/GAMSE/red_20200904/onedspec/'
     fname_lst = ['20200904_0131_FOC1903_SCI0_ods.fits']
-    infolder_templ = '/mnt/e/HARPS_data_51Peg'
-    fname_lst_templ = ['harps_mask_G2.dat', 'harps_mask_K5.mas', 'harps_mask_M2.mas']
 
     # define the folders for reading the data and saving the new files
     path_in = infolder
@@ -24,11 +22,10 @@ def find_order_startend_wl():
     for fname in fname_lst:
         file_in = os.path.join(path_in, fname)
 
-        # open the GAMSE fits file and read the general header and the data section
-        head = fits.getheader(file_in, 0)
+        # open the GAMSE fits file and read the data section
         data = fits.getdata(file_in)
 
-        with open('template_orders_startendwl_2.txt', 'w') as ordersborders_file:
+        with open('template_orders_startendwl.txt', 'w') as ordersborders_file:
 
             # check if the data are single or multi fiber: it is required that the reduction was made with
             # double-fiber configuration, even if the observation was without simultaneous calibration; this is
@@ -60,17 +57,13 @@ def find_order_startend_wl():
     return
 
 
-find_order_startend_wl()
-
-
 # extract the single orders from the GAMSE result files, add header entries with wavelength calibration information
 def harps_template_converter(infolder, redmine_id, calib_fiber=False, raw_flux=False):
     print('Started IRAF conversion for redmine project {}...'.format(redmine_id))
 
-    # give the readout time of the camera for the calculation of the mid-time of observation
-    ccd_readtime = 87.5
-
     # define the folders for reading the data and saving the new files
+    infolder_templ = '/mnt/e/HARPS_data_51Peg'
+    fname_lst_templ = ['harps_mask_G2.dat', 'harps_mask_K5.mas', 'harps_mask_M2.mas']
     path_in = infolder
     path_out = pf.iraf_output_folder.format(redmine_id)
 
@@ -253,3 +246,6 @@ def harps_template_converter(infolder, redmine_id, calib_fiber=False, raw_flux=F
 
     print('IRAF conversion completed.')
     return
+
+
+# find_order_startend_wl()
