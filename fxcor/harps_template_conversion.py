@@ -143,32 +143,138 @@ def harps_template_converter():
                 physord = int(line_b[0])
                 wl_temp_start = float(line_b[1])
                 wl_temp_end = float(line_b[2])
+                wl_temp_center = (wl_temp_end - wl_temp_start) / 2
 
                 # from the mask data, get the part which is between the start and end wavelength of this order
-                templ_order_chunk = np.where((mask_data[0] > wl_temp_start) & (mask_data[0] < wl_temp_end))
+                templ_order_chunk = np.where((mask_data[0] >= wl_temp_start) & (mask_data[0] <= wl_temp_end))
                 templ_order_chunk = np.transpose(templ_order_chunk)
-                templ_wave = []
-                for index in range(len(templ_order_chunk)):
-                    templ_wave.append([float(mask_data[0][templ_order_chunk][index]),
-                                       float(mask_data[1][templ_order_chunk][index]),
-                                       float(mask_data[2][templ_order_chunk][index])])
-                print(templ_wave[0])
 
-                # check if there are any "half" lines at the beginning or end of the wavelength range
-                # and add their data to the array, with dummy values for the line start/end wavelength
-                ind_before = int(templ_order_chunk[0]) - 1
-                ind_after = int(templ_order_chunk[-1]) + 1
-                if mask_data[1][ind_before] >= wl_temp_start:
-                    templ_wave.insert(0, [0.0, mask_data[1][ind_before], mask_data[2][ind_before]])
-                if mask_data[0][ind_after] <= wl_temp_end:
-                    templ_wave.append([mask_data[0][ind_after], 10000.0, mask_data[2][ind_after]])
-                input('Hi there! ')
+                templ_wave = []
+                # if there are no lines in the template for this order, use dummy values to get 1 everywhere
+                if len(templ_order_chunk) == 0:
+                    templ_wave.append([wl_temp_start, wl_temp_center - 0.00002, 1.0])
+                    templ_wave.append([wl_temp_center + 0.00002, wl_temp_end, 1.0])
+                # otherwise, take the lines from the template spectrum
+                else:
+                    for index in range(len(templ_order_chunk)):
+                        templ_wave.append([float(mask_data[0][templ_order_chunk][index]),
+                                           float(mask_data[1][templ_order_chunk][index]),
+                                           float(mask_data[2][templ_order_chunk][index])])
+
+                    # check if there are any "half" lines at the beginning or end of the wavelength range
+                    # and add their data to the array, with dummy values for the line start/end wavelength
+                    ind_before = int(templ_order_chunk[0]) - 1
+                    ind_after = int(templ_order_chunk[-1]) + 1
+                    # deal with the special case that the "after" index can be out of range at the end of the mask_data array
+                    if ind_after >= len(mask_data[0]):
+                        ind_after = len(mask_data[0]) - 1
+
+                    if mask_data[1][ind_before] >= wl_temp_start:
+                        templ_wave.insert(0, [0.0, mask_data[1][ind_before], mask_data[2][ind_before]])
+                    if mask_data[0][ind_after] <= wl_temp_end:
+                        templ_wave.append([mask_data[0][ind_after], 10000.0, mask_data[2][ind_after]])
 
                 # each order has to be stored in a separate extension, so in each extension the
                 # data is in aperture 1
                 aperture = 1
-                wave = row['wavelength']  # all wavelength values for the current order (aperture)
-                flux_reduced = row['flux_sum']  # all flux values as produced by GAMSE
+
+                wave = []  # this will contain all wavelength values for the current order (aperture)
+                flux = []  # this will contain all flux values as given in the HARPS template
+
+                # check where the first spectral line starts and use all information of the first wavelength entry
+                # this is if the order starts inside a line
+                if templ_wave[0][0] == 0.0:
+                    # the first wl data point is inside a line
+                    wave.append(wl_temp_start)
+                    flux.append(templ_wave[0][2])
+                    # the second one is the edge of this line
+                    wave.append(templ_wave[0][1])
+                    flux.append(templ_wave[0][2])
+                    # the third one is a value just outside of the line
+                    wave.append(templ_wave[0][1] + 0.00001)
+                    flux.append(1.0)
+                # this is if the order starts outside of a line
+                elif templ_wave[0][0] != 0.0 and templ_wave[0][0] > wl_temp_start:
+                    # the first point is somewhere outside a line
+                    wave.append(wl_temp_start)
+                    flux.append(1.0)
+                    # the second one is right at the edge of the line
+                    wave.append(templ_wave[0][0] - 0.00001)
+                    flux.append(1.0)
+                    # then just inside the line
+                    wave.append(templ_wave[0][0])
+                    flux.append(templ_wave[0][2])
+                    # this is the other edge of the line
+                    wave.append(templ_wave[0][1])
+                    flux.append(templ_wave[0][2])
+                    # and finally just outside of that line
+                    wave.append(templ_wave[0][1] + 0.00001)
+                    flux.append(1.0)
+                # this is if the border of the line coincides with the start of the order
+                elif templ_wave[0][0] != 0.0 and templ_wave[0][0] == wl_temp_start:
+                    # the first value is exactly on the edge of the line
+                    wave.append(templ_wave[0][0])
+                    flux.append(templ_wave[0][2])
+                    # this is the other edge of the line
+                    wave.append(templ_wave[0][1])
+                    flux.append(templ_wave[0][2])
+                    # and finally just outside of that line
+                    wave.append(templ_wave[0][1] + 0.00001)
+                    flux.append(1.0)
+
+                # add all the lines between the start and the end of this order
+                for pnt in range(len(templ_wave) - 2):
+                    # we begin with the point just outside of the edge of the line
+                    wave.append(templ_wave[pnt + 1][0] - 0.00001)
+                    flux.append(1.0)
+                    # then just inside the line
+                    wave.append(templ_wave[pnt + 1][0])
+                    flux.append(templ_wave[pnt + 1][2])
+                    # this is the other edge of the line
+                    wave.append(templ_wave[pnt + 1][1])
+                    flux.append(templ_wave[pnt + 1][2])
+                    # and finally just outside of that line
+                    wave.append(templ_wave[pnt + 1][1] + 0.00001)
+                    flux.append(1.0)
+
+                # now check how to proceed with the end of the order
+                # this is if the order ends inside of a line
+                if templ_wave[-1][1] == 10000.0:
+                    # the first wl data point is just outside a line
+                    wave.append(templ_wave[-1][0] - 0.00001)
+                    flux.append(1.0)
+                    # the second one is the edge of this line
+                    wave.append(templ_wave[-1][0])
+                    flux.append(templ_wave[-1][2])
+                    # the third one is a value inside of the line
+                    wave.append(wl_temp_end)
+                    flux.append(templ_wave[-1][2])
+                elif templ_wave[-1][1] != 10000.0 and templ_wave[-1][0] < wl_temp_end:
+                    # the first wl data point is just outside a line
+                    wave.append(templ_wave[-1][0] - 0.00001)
+                    flux.append(1.0)
+                    # the second one is the edge of this line
+                    wave.append(templ_wave[-1][0])
+                    flux.append(templ_wave[-1][2])
+                    # the third one is on the other edge of the line
+                    wave.append(templ_wave[-1][1])
+                    flux.append(templ_wave[-1][2])
+                    # then there is one just outside of the line
+                    wave.append(templ_wave[-1][1] + 0.00001)
+                    flux.append(1.0)
+                    # and the last one is somewhere outside of lines
+                    wave.append(wl_temp_end)
+                    flux.append(1.0)
+                elif templ_wave[-1][1] != 10000.0 and templ_wave[-1][0] == wl_temp_end:
+                    # the first wl data point is just outside a line
+                    wave.append(templ_wave[-1][0] - 0.00001)
+                    flux.append(1.0)
+                    # the second one is the edge of this line
+                    wave.append(templ_wave[-1][0])
+                    flux.append(templ_wave[-1][2])
+                    # the third and last one is exactly on the other edge of the line
+                    wave.append(templ_wave[-1][1])
+                    flux.append(templ_wave[-1][2])
 
                 # add the physical order number to the header
                 ext_head_temp['PHYSORD'] = (physord, 'Physical order of aperture')
@@ -220,16 +326,17 @@ def harps_template_converter():
                         break
 
                 # convert the flux values to arrays for saving in a FITS file
-                flux_np = np.array(flux_reduced)
+                flux_np = np.array(flux)
 
                 # create multi-extension FITS files, one for the reduced and one for the raw flux
                 image_hdu_fred = fits.ImageHDU(data=flux_np, header=ext_head_temp)
                 hdu_list_temp.append(image_hdu_fred)
 
         # save the new IRAF compatible multi-extension FITS files with the reduced and raw flux
-        fname_fred = '{}_ods_fred.fits'.format(fname_templ[:-4])
+        fname_fred = '20200101_0000_{}_ods_fred.fits'.format(fname_templ[:-4])
         out_fred = os.path.join(path_out_templ, fname_fred)
         hdu_list_temp.writeto(out_fred, overwrite=True)
+        print('Saved FITS. ')
 
     print('IRAF conversion completed.')
     return
