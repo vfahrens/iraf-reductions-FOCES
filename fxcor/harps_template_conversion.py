@@ -108,32 +108,6 @@ def harps_template_converter():
         empty_primary_temp = fits.PrimaryHDU(header=head_temp)
         hdu_list_temp = fits.HDUList([empty_primary_temp])
 
-        # make a new (empty) header for the extensions, add the physical order number
-        ext_head_temp = fits.Header()
-
-        # add all the header entries required for the CCF calculation
-        ext_head_temp['PERA2000'] = head_temp['PERA2000']
-        ext_head_temp['PEDE2000'] = head_temp['PEDE2000']
-        ext_head_temp['FRAME'] = head_temp['FRAME']
-        ext_head_temp['UTMID'] = head_temp['UTMID']
-        ext_head_temp['EXPOSURE'] = head_temp['EXPOSURE']
-        ext_head_temp['EQUINOX'] = head_temp['EQUINOX']
-
-        # add the required standard header entries for IRAF wavelength calibration
-        ext_head_temp['WCSDIM'] = 2
-        ext_head_temp['CTYPE1'] = 'MULTISPE'
-        ext_head_temp['CTYPE2'] = 'MULTISPE'
-        ext_head_temp['CDELT1'] = 1.
-        ext_head_temp['CDELT2'] = 1.
-        ext_head_temp['CD1_1'] = 1.
-        ext_head_temp['CD2_2'] = 1.
-        ext_head_temp['LTM1_1'] = 1.
-        ext_head_temp['LTM2_2'] = 1.
-        ext_head_temp['WAXMAP01'] = '1 0 0 0 '
-        ext_head_temp['WAT0_001'] = 'system=multispec'
-        # only this way of writing works with fxcor!
-        ext_head_temp['WAT1_001'] = 'wtype=multispec label=Wavelength units=angstroms'
-
         # read the individual order borders from the file
         with open('template_orders_startendwl.txt', 'r') as ordersborders_infile:
             # each line corresponds to a physical order
@@ -141,9 +115,38 @@ def harps_template_converter():
                 line_b = line_b.strip()
                 line_b = line_b.split(' ')
                 physord = int(line_b[0])
+
+                # make a new (empty) header for the extensions, add the physical order number
+                ext_head_temp = fits.Header()
+
+                # add all the header entries required for the CCF calculation
+                ext_head_temp['PERA2000'] = head_temp['PERA2000']
+                ext_head_temp['PEDE2000'] = head_temp['PEDE2000']
+                ext_head_temp['FRAME'] = head_temp['FRAME']
+                ext_head_temp['UTMID'] = head_temp['UTMID']
+                ext_head_temp['EXPOSURE'] = head_temp['EXPOSURE']
+                ext_head_temp['EQUINOX'] = head_temp['EQUINOX']
+
+                # add the required standard header entries for IRAF wavelength calibration
+                ext_head_temp['WCSDIM'] = 2
+                ext_head_temp['CTYPE1'] = 'MULTISPE'
+                ext_head_temp['CTYPE2'] = 'MULTISPE'
+                ext_head_temp['CDELT1'] = 1.
+                ext_head_temp['CDELT2'] = 1.
+                ext_head_temp['CD1_1'] = 1.
+                ext_head_temp['CD2_2'] = 1.
+                ext_head_temp['LTM1_1'] = 1.
+                ext_head_temp['LTM2_2'] = 1.
+                ext_head_temp['WAXMAP01'] = '1 0 0 0 '
+                ext_head_temp['WAT0_001'] = 'system=multispec'
+                # only this way of writing works with fxcor!
+                ext_head_temp['WAT1_001'] = 'wtype=multispec label=Wavelength units=angstroms'
+                
                 wl_temp_start = float(line_b[1])
                 wl_temp_end = float(line_b[2])
                 wl_temp_center = (wl_temp_end - wl_temp_start) / 2
+
+                templ_order_chunk = []
 
                 # from the mask data, get the part which is between the start and end wavelength of this order
                 templ_order_chunk = np.where((mask_data[0] >= wl_temp_start) & (mask_data[0] <= wl_temp_end))
@@ -293,12 +296,15 @@ def harps_template_converter():
                 ftype_i = 5  # pixel coordinate array is used as dispersion information
 
                 # put the whole string together
+                wave_str = ''
+                wlcalib_str = ''
                 separ = ' '
                 wave_str = separ.join(str(wl) for wl in wave)  # converts the wave array to a string
                 wlcalib_paramlst = [aperture, physord, dtype, wave1, delta_wave, num_pix, z_corr, aplow,
                                     aphigh, weight_i, zero_off_i, ftype_i, num_pix, wave_str]
                 wlcalib_str = separ.join(str(item) for item in wlcalib_paramlst)
 
+                longstring = ''
                 longstring = 'wtype=multispec spec{} = "{}" '.format(aperture, wlcalib_str)
 
                 # define the keyword for each header entry and fill it with the corresponding
