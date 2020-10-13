@@ -356,25 +356,31 @@ def make_script_fxcor(redmine_id, template_name, output_name, template_orders, t
     contin_opt = 'both'
     rebin_opt = 'template'
     rsample_opt = 'p150-1998'
+    window_opt = 'INDEF'
+    wincenter_opt = 'INDEF'
 
     # define the CCF options needed to use the HARPS mask templates
     if template_harps:
         contin_opt = 'object'
         rebin_opt = 'object'
         rsample_opt = '*'
+        window_opt = '200.0'
+        wincenter_opt = '0.0'
 
     with open(fxcor_script_list, 'w') as script_fxcor:
         for indx, tempord in enumerate(template_orders):
             if tempord == 86:
                 script_fxcor.write(
                     'fxcor @fxcor_ord{}.lis {}_ods_fred.fits[{}] output={} continuum={} rebin={} '
-                    'osample=p150-1998 rsample={} function=gaussian width=15.0 interactive=no'
-                    '\n'.format(tempord, template_name, str(indx + 1), output_name, contin_opt, rebin_opt, rsample_opt))
+                    'osample=p150-1998 rsample={} function=gaussian width=15.0 window={} wincenter={} interactive=no'
+                    '\n'.format(tempord, template_name, str(indx + 1), output_name, contin_opt, rebin_opt, rsample_opt,
+                                window_opt, wincenter_opt))
             else:
                 script_fxcor.write(
                     'fxcor @fxcor_ord{}.lis {}_ods_fred.fits[{}] output={} continuum={} rebin={} '
-                    'osample=p150-1998 rsample={} function=gaussian width=15.0 interactive=no'
-                    '\n'.format(tempord, template_name, str(indx + 1), output_name, contin_opt, rebin_opt, rsample_opt))
+                    'osample=p150-1998 rsample={} function=gaussian width=15.0 window={} wincenter={} interactive=no'
+                    '\n'.format(tempord, template_name, str(indx + 1), output_name, contin_opt, rebin_opt, rsample_opt,
+                                window_opt, wincenter_opt))
 
     return
 
