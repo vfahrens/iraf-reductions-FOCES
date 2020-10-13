@@ -349,27 +349,38 @@ def make_orderlists(redmine_id, used_orders_dict):
 
 
 # make a script to generate a input cl file for fxcor
-def make_script_fxcor(redmine_id, template_name, output_name, template_orders):
+def make_script_fxcor(redmine_id, template_name, output_name, template_orders, template_harps=False):
     fxcor_script_list = os.path.join(pf.iraf_output_folder.format(redmine_id), pf.fxcor_script)
+
+    # define the default CCF options when using a template observed with FOCES
+    contin_opt = 'both'
+    rebin_opt = 'template'
+    rsample_opt = 'p150-1998'
+
+    # define the CCF options needed to use the HARPS mask templates
+    if template_harps:
+        contin_opt = 'object'
+        rebin_opt = 'object'
+        rsample_opt = '*'
 
     with open(fxcor_script_list, 'w') as script_fxcor:
         for indx, tempord in enumerate(template_orders):
             if tempord == 86:
                 script_fxcor.write(
-                    'fxcor @fxcor_ord{}.lis {}_ods_fred.fits[{}] output={} continuum=both rebin=template '
-                    'osample=p150-1998 rsample=p150-1998 function=gaussian width=15.0 interactive=no'
-                    '\n'.format(tempord, template_name, str(indx + 1), output_name))
+                    'fxcor @fxcor_ord{}.lis {}_ods_fred.fits[{}] output={} continuum={} rebin={} '
+                    'osample=p150-1998 rsample={} function=gaussian width=15.0 interactive=no'
+                    '\n'.format(tempord, template_name, str(indx + 1), output_name, contin_opt, rebin_opt, rsample_opt))
             else:
                 script_fxcor.write(
-                    'fxcor @fxcor_ord{}.lis {}_ods_fred.fits[{}] output={} continuum=both rebin=template '
-                    'osample=p150-1998 rsample=p150-1998 function=gaussian width=15.0 interactive=no'
-                    '\n'.format(tempord, template_name, str(indx + 1), output_name))
+                    'fxcor @fxcor_ord{}.lis {}_ods_fred.fits[{}] output={} continuum={} rebin={} '
+                    'osample=p150-1998 rsample={} function=gaussian width=15.0 interactive=no'
+                    '\n'.format(tempord, template_name, str(indx + 1), output_name, contin_opt, rebin_opt, rsample_opt))
 
     return
 
 
 # get the RVs (VHELIO, VREL) and RVerrs from the image header and fxcor result file
-def get_rvs(redmine_id, fxcor_outname, template_orders):
+def get_rvs(redmine_id, fxcor_outname, template_orders, object_orders_dict):
     fname_lst = sorted(os.listdir(pf.iraf_output_folder.format(redmine_id)))
     # get all physical orders for which a template spectrum exists and therefore a CCF was calculated
 
@@ -385,7 +396,14 @@ def get_rvs(redmine_id, fxcor_outname, template_orders):
                 rv_err_rel_dict = {}
                 for line in fxfile:
                     line = line.split()
-                    for indx, ordnum in enumerate(template_orders):
+                    # for each order of the template, get the CCF result
+                    for ordnum in template_orders:
+                        # find the correct index for this physical order in the object MEF file
+                        try:
+                            indx = object_orders_dict[fname[:-14] + '_phys_ords'].index(ordnum)
+                        except ValueError:
+                            print('No object order exists for this template order. ')
+
                         fname_ord = fname + '[{}]'.format(str(indx + 1))
                         if fname_ord in line and line[-1] != 'INDEF':
                             rv_err = float(line[-1]) * 1000.0
@@ -406,7 +424,13 @@ def get_rvs(redmine_id, fxcor_outname, template_orders):
             with fits.open(open_filepath) as datei:
                 header = datei[0].header
 
-                for indx, ordnum in enumerate(template_orders):
+                for ordnum in template_orders:
+                    # find the correct index for this physical order in the object MEF file
+                    try:
+                        indx = object_orders_dict[fname[:-14] + '_phys_ords'].index(ordnum)
+                    except ValueError:
+                        print('No object order exists for this template order. ')
+
                     head_ord = datei[indx + 1].header
                     phys_ord = head_ord['PHYSORD']
                     if phys_ord != ordnum:

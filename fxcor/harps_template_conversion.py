@@ -141,7 +141,7 @@ def harps_template_converter():
                 ext_head_temp['WAT0_001'] = 'system=multispec'
                 # only this way of writing works with fxcor!
                 ext_head_temp['WAT1_001'] = 'wtype=multispec label=Wavelength units=angstroms'
-                
+
                 wl_temp_start = float(line_b[1])
                 wl_temp_end = float(line_b[2])
                 wl_temp_center = (wl_temp_end - wl_temp_start) / 2
@@ -153,12 +153,8 @@ def harps_template_converter():
                 templ_order_chunk = np.transpose(templ_order_chunk)
 
                 templ_wave = []
-                # if there are no lines in the template for this order, use dummy values to get 1 everywhere
-                if len(templ_order_chunk) == 0:
-                    templ_wave.append([wl_temp_start, wl_temp_center - 0.00002, 1.0])
-                    templ_wave.append([wl_temp_center + 0.00002, wl_temp_end, 1.0])
-                # otherwise, take the lines from the template spectrum
-                else:
+                # if there are lines in the template for this order, make a FITS extension, otherwise do nothing
+                if len(templ_order_chunk) > 0:
                     for index in range(len(templ_order_chunk)):
                         templ_wave.append([float(mask_data[0][templ_order_chunk][index]),
                                            float(mask_data[1][templ_order_chunk][index]),
@@ -177,166 +173,166 @@ def harps_template_converter():
                     if mask_data[0][ind_after] <= wl_temp_end:
                         templ_wave.append([mask_data[0][ind_after], 10000.0, mask_data[2][ind_after]])
 
-                # each order has to be stored in a separate extension, so in each extension the
-                # data is in aperture 1
-                aperture = 1
+                    # each order has to be stored in a separate extension, so in each extension the
+                    # data is in aperture 1
+                    aperture = 1
 
-                wave = []  # this will contain all wavelength values for the current order (aperture)
-                flux = []  # this will contain all flux values as given in the HARPS template
+                    wave = []  # this will contain all wavelength values for the current order (aperture)
+                    flux = []  # this will contain all flux values as given in the HARPS template
 
-                # check where the first spectral line starts and use all information of the first wavelength entry
-                # this is if the order starts inside a line
-                if templ_wave[0][0] == 0.0:
-                    # the first wl data point is inside a line
-                    wave.append(wl_temp_start)
-                    flux.append(templ_wave[0][2])
-                    # the second one is the edge of this line
-                    wave.append(templ_wave[0][1])
-                    flux.append(templ_wave[0][2])
-                    # the third one is a value just outside of the line
-                    wave.append(templ_wave[0][1] + 0.00001)
-                    flux.append(1.0)
-                # this is if the order starts outside of a line
-                elif templ_wave[0][0] != 0.0 and templ_wave[0][0] > wl_temp_start:
-                    # the first point is somewhere outside a line
-                    wave.append(wl_temp_start)
-                    flux.append(1.0)
-                    # the second one is right at the edge of the line
-                    wave.append(templ_wave[0][0] - 0.00001)
-                    flux.append(1.0)
-                    # then just inside the line
-                    wave.append(templ_wave[0][0])
-                    flux.append(templ_wave[0][2])
-                    # this is the other edge of the line
-                    wave.append(templ_wave[0][1])
-                    flux.append(templ_wave[0][2])
-                    # and finally just outside of that line
-                    wave.append(templ_wave[0][1] + 0.00001)
-                    flux.append(1.0)
-                # this is if the border of the line coincides with the start of the order
-                elif templ_wave[0][0] != 0.0 and templ_wave[0][0] == wl_temp_start:
-                    # the first value is exactly on the edge of the line
-                    wave.append(templ_wave[0][0])
-                    flux.append(templ_wave[0][2])
-                    # this is the other edge of the line
-                    wave.append(templ_wave[0][1])
-                    flux.append(templ_wave[0][2])
-                    # and finally just outside of that line
-                    wave.append(templ_wave[0][1] + 0.00001)
-                    flux.append(1.0)
+                    # check where the first spectral line starts and use all information of the first wavelength entry
+                    # this is if the order starts inside a line
+                    if templ_wave[0][0] == 0.0:
+                        # the first wl data point is inside a line
+                        wave.append(wl_temp_start)
+                        flux.append(templ_wave[0][2])
+                        # the second one is the edge of this line
+                        wave.append(templ_wave[0][1])
+                        flux.append(templ_wave[0][2])
+                        # the third one is a value just outside of the line
+                        wave.append(templ_wave[0][1] + 0.00001)
+                        flux.append(1.0)
+                    # this is if the order starts outside of a line
+                    elif templ_wave[0][0] != 0.0 and templ_wave[0][0] > wl_temp_start:
+                        # the first point is somewhere outside a line
+                        wave.append(wl_temp_start)
+                        flux.append(1.0)
+                        # the second one is right at the edge of the line
+                        wave.append(templ_wave[0][0] - 0.00001)
+                        flux.append(1.0)
+                        # then just inside the line
+                        wave.append(templ_wave[0][0])
+                        flux.append(templ_wave[0][2])
+                        # this is the other edge of the line
+                        wave.append(templ_wave[0][1])
+                        flux.append(templ_wave[0][2])
+                        # and finally just outside of that line
+                        wave.append(templ_wave[0][1] + 0.00001)
+                        flux.append(1.0)
+                    # this is if the border of the line coincides with the start of the order
+                    elif templ_wave[0][0] != 0.0 and templ_wave[0][0] == wl_temp_start:
+                        # the first value is exactly on the edge of the line
+                        wave.append(templ_wave[0][0])
+                        flux.append(templ_wave[0][2])
+                        # this is the other edge of the line
+                        wave.append(templ_wave[0][1])
+                        flux.append(templ_wave[0][2])
+                        # and finally just outside of that line
+                        wave.append(templ_wave[0][1] + 0.00001)
+                        flux.append(1.0)
 
-                # add all the lines between the start and the end of this order
-                for pnt in range(len(templ_wave) - 2):
-                    # we begin with the point just outside of the edge of the line
-                    wave.append(templ_wave[pnt + 1][0] - 0.00001)
-                    flux.append(1.0)
-                    # then just inside the line
-                    wave.append(templ_wave[pnt + 1][0])
-                    flux.append(templ_wave[pnt + 1][2])
-                    # this is the other edge of the line
-                    wave.append(templ_wave[pnt + 1][1])
-                    flux.append(templ_wave[pnt + 1][2])
-                    # and finally just outside of that line
-                    wave.append(templ_wave[pnt + 1][1] + 0.00001)
-                    flux.append(1.0)
+                    # add all the lines between the start and the end of this order
+                    for pnt in range(len(templ_wave) - 2):
+                        # we begin with the point just outside of the edge of the line
+                        wave.append(templ_wave[pnt + 1][0] - 0.00001)
+                        flux.append(1.0)
+                        # then just inside the line
+                        wave.append(templ_wave[pnt + 1][0])
+                        flux.append(templ_wave[pnt + 1][2])
+                        # this is the other edge of the line
+                        wave.append(templ_wave[pnt + 1][1])
+                        flux.append(templ_wave[pnt + 1][2])
+                        # and finally just outside of that line
+                        wave.append(templ_wave[pnt + 1][1] + 0.00001)
+                        flux.append(1.0)
 
-                # now check how to proceed with the end of the order
-                # this is if the order ends inside of a line
-                if templ_wave[-1][1] == 10000.0:
-                    # the first wl data point is just outside a line
-                    wave.append(templ_wave[-1][0] - 0.00001)
-                    flux.append(1.0)
-                    # the second one is the edge of this line
-                    wave.append(templ_wave[-1][0])
-                    flux.append(templ_wave[-1][2])
-                    # the third one is a value inside of the line
-                    wave.append(wl_temp_end)
-                    flux.append(templ_wave[-1][2])
-                elif templ_wave[-1][1] != 10000.0 and templ_wave[-1][0] < wl_temp_end:
-                    # the first wl data point is just outside a line
-                    wave.append(templ_wave[-1][0] - 0.00001)
-                    flux.append(1.0)
-                    # the second one is the edge of this line
-                    wave.append(templ_wave[-1][0])
-                    flux.append(templ_wave[-1][2])
-                    # the third one is on the other edge of the line
-                    wave.append(templ_wave[-1][1])
-                    flux.append(templ_wave[-1][2])
-                    # then there is one just outside of the line
-                    wave.append(templ_wave[-1][1] + 0.00001)
-                    flux.append(1.0)
-                    # and the last one is somewhere outside of lines
-                    wave.append(wl_temp_end)
-                    flux.append(1.0)
-                elif templ_wave[-1][1] != 10000.0 and templ_wave[-1][0] == wl_temp_end:
-                    # the first wl data point is just outside a line
-                    wave.append(templ_wave[-1][0] - 0.00001)
-                    flux.append(1.0)
-                    # the second one is the edge of this line
-                    wave.append(templ_wave[-1][0])
-                    flux.append(templ_wave[-1][2])
-                    # the third and last one is exactly on the other edge of the line
-                    wave.append(templ_wave[-1][1])
-                    flux.append(templ_wave[-1][2])
+                    # now check how to proceed with the end of the order
+                    # this is if the order ends inside of a line
+                    if templ_wave[-1][1] == 10000.0:
+                        # the first wl data point is just outside a line
+                        wave.append(templ_wave[-1][0] - 0.00001)
+                        flux.append(1.0)
+                        # the second one is the edge of this line
+                        wave.append(templ_wave[-1][0])
+                        flux.append(templ_wave[-1][2])
+                        # the third one is a value inside of the line
+                        wave.append(wl_temp_end)
+                        flux.append(templ_wave[-1][2])
+                    elif templ_wave[-1][1] != 10000.0 and templ_wave[-1][0] < wl_temp_end:
+                        # the first wl data point is just outside a line
+                        wave.append(templ_wave[-1][0] - 0.00001)
+                        flux.append(1.0)
+                        # the second one is the edge of this line
+                        wave.append(templ_wave[-1][0])
+                        flux.append(templ_wave[-1][2])
+                        # the third one is on the other edge of the line
+                        wave.append(templ_wave[-1][1])
+                        flux.append(templ_wave[-1][2])
+                        # then there is one just outside of the line
+                        wave.append(templ_wave[-1][1] + 0.00001)
+                        flux.append(1.0)
+                        # and the last one is somewhere outside of lines
+                        wave.append(wl_temp_end)
+                        flux.append(1.0)
+                    elif templ_wave[-1][1] != 10000.0 and templ_wave[-1][0] == wl_temp_end:
+                        # the first wl data point is just outside a line
+                        wave.append(templ_wave[-1][0] - 0.00001)
+                        flux.append(1.0)
+                        # the second one is the edge of this line
+                        wave.append(templ_wave[-1][0])
+                        flux.append(templ_wave[-1][2])
+                        # the third and last one is exactly on the other edge of the line
+                        wave.append(templ_wave[-1][1])
+                        flux.append(templ_wave[-1][2])
 
-                # add the physical order number to the header
-                ext_head_temp['PHYSORD'] = (physord, 'Physical order of aperture')
+                    # add the physical order number to the header
+                    ext_head_temp['PHYSORD'] = (physord, 'Physical order of aperture')
 
-                # definition of other parameters that IRAF needs for correct interpretation
-                # of the wavelength calibration
-                dtype = 2  # non-linear dispersion function
-                wave1 = wave[0]  # wavelength coordinate of the first pixel
-                delta_wave = (wave[-1] - wave[0]) / len(wave)  # average dispersion interval per pixel
-                num_pix = len(wave)  # number of valid pixels
-                z_corr = 0.  # Doppler correction factor
-                aplow = 0.0  # dummy value for the lower aperture extraction limit
-                aphigh = 0.0  # dummy value for the upper aperture extraction limit
-                weight_i = 1.  # weight of this dispersion function
-                zero_off_i = 0.  # zero point offset of this dispersion function
-                ftype_i = 5  # pixel coordinate array is used as dispersion information
+                    # definition of other parameters that IRAF needs for correct interpretation
+                    # of the wavelength calibration
+                    dtype = 2  # non-linear dispersion function
+                    wave1 = wave[0]  # wavelength coordinate of the first pixel
+                    delta_wave = (wave[-1] - wave[0]) / len(wave)  # average dispersion interval per pixel
+                    num_pix = len(wave)  # number of valid pixels
+                    z_corr = 0.  # Doppler correction factor
+                    aplow = 0.0  # dummy value for the lower aperture extraction limit
+                    aphigh = 0.0  # dummy value for the upper aperture extraction limit
+                    weight_i = 1.  # weight of this dispersion function
+                    zero_off_i = 0.  # zero point offset of this dispersion function
+                    ftype_i = 5  # pixel coordinate array is used as dispersion information
 
-                # put the whole string together
-                wave_str = ''
-                wlcalib_str = ''
-                separ = ' '
-                wave_str = separ.join(str(wl) for wl in wave)  # converts the wave array to a string
-                wlcalib_paramlst = [aperture, physord, dtype, wave1, delta_wave, num_pix, z_corr, aplow,
-                                    aphigh, weight_i, zero_off_i, ftype_i, num_pix, wave_str]
-                wlcalib_str = separ.join(str(item) for item in wlcalib_paramlst)
+                    # put the whole string together
+                    wave_str = ''
+                    wlcalib_str = ''
+                    separ = ' '
+                    wave_str = separ.join(str(wl) for wl in wave)  # converts the wave array to a string
+                    wlcalib_paramlst = [aperture, physord, dtype, wave1, delta_wave, num_pix, z_corr, aplow,
+                                        aphigh, weight_i, zero_off_i, ftype_i, num_pix, wave_str]
+                    wlcalib_str = separ.join(str(item) for item in wlcalib_paramlst)
 
-                longstring = ''
-                longstring = 'wtype=multispec spec{} = "{}" '.format(aperture, wlcalib_str)
+                    longstring = ''
+                    longstring = 'wtype=multispec spec{} = "{}" '.format(aperture, wlcalib_str)
 
-                # define the keyword for each header entry and fill it with the corresponding
-                # part of the long string
-                head_key = 'WAT2_{:03d}'
-                i = 0
-                new_str_start = 0
-                for x in range(len(longstring)):
-                    i += 1
-                    head_key_num = head_key.format(i)
-                    # calculate the maximum length of the string in the header
-                    longstr_len = 81 - len(head_key_num) - 5
+                    # define the keyword for each header entry and fill it with the corresponding
+                    # part of the long string
+                    head_key = 'WAT2_{:03d}'
+                    i = 0
+                    new_str_start = 0
+                    for x in range(len(longstring)):
+                        i += 1
+                        head_key_num = head_key.format(i)
+                        # calculate the maximum length of the string in the header
+                        longstr_len = 81 - len(head_key_num) - 5
 
-                    # find the right part of the string to write into the header
-                    if new_str_start <= len(longstring) \
-                            and len(longstring) - new_str_start > 81 - 5 - len(head_key.format(i + 1)):
-                        string_part = longstring[new_str_start:new_str_start + longstr_len]
-                        new_str_start = new_str_start + longstr_len
-                        ext_head_temp[head_key_num] = string_part
+                        # find the right part of the string to write into the header
+                        if new_str_start <= len(longstring) \
+                                and len(longstring) - new_str_start > 81 - 5 - len(head_key.format(i + 1)):
+                            string_part = longstring[new_str_start:new_str_start + longstr_len]
+                            new_str_start = new_str_start + longstr_len
+                            ext_head_temp[head_key_num] = string_part
 
-                    # at the end of the string, use the rest and leave the for loop
-                    else:
-                        string_part = longstring[new_str_start:]
-                        ext_head_temp[head_key_num] = string_part
-                        break
+                        # at the end of the string, use the rest and leave the for loop
+                        else:
+                            string_part = longstring[new_str_start:]
+                            ext_head_temp[head_key_num] = string_part
+                            break
 
-                # convert the flux values to arrays for saving in a FITS file
-                flux_np = np.array(flux)
+                    # convert the flux values to arrays for saving in a FITS file
+                    flux_np = np.array(flux)
 
-                # create multi-extension FITS files, one for the reduced and one for the raw flux
-                image_hdu_fred = fits.ImageHDU(data=flux_np, header=ext_head_temp)
-                hdu_list_temp.append(image_hdu_fred)
+                    # create multi-extension FITS files, one for the reduced and one for the raw flux
+                    image_hdu_fred = fits.ImageHDU(data=flux_np, header=ext_head_temp)
+                    hdu_list_temp.append(image_hdu_fred)
 
         # save the new IRAF compatible multi-extension FITS files with the reduced and raw flux
         fname_fred = '20200101_0000_{}_ods_fred.fits'.format(fname_templ[:-4])

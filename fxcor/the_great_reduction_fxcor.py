@@ -51,6 +51,8 @@ parser.add_argument('-pw', '--plot_weighted', help='plot the RV results of the w
 parser.add_argument('-ph', '--plot_histogram', help='plot histograms of the RV results of the single orders and '
                                                     'weighted averages', action='store_true')
 parser.add_argument('--harps', help='use this flag when working with HARPS data', action='store_true')  # not in use yet
+parser.add_argument('-th', '--template_harps', help='use one of the HARPS masks as template for the CCF',
+                    action='store_true')
 # create a group of options that exclude their simultaneous usage
 processing_dates = parser.add_mutually_exclusive_group()
 processing_dates.add_argument('-o', '--only', help='process data only for the date specified, date format: YYYYMMDD or '
@@ -184,16 +186,17 @@ else:
 
 # prepare data for fxcor and give instructions for IRAF execution
 if args.fxcor:
-    used_orders = sf.get_number_of_orders(args.redmine_id)
-    sf.make_orderlists(args.redmine_id, used_orders)
-
     print('List of frames for this object: {}'.format(pf.all_used_frames.format(args.redmine_id)))
     template = input('Please choose a template that should be used for the cross correlation: '
                      '(e.g.: 20190903_0114) ')
+    outname = input('Please give a name for the fxcor output file: (e.g.: RVs_200723) ')
+
+    used_orders = sf.get_number_of_orders(args.redmine_id)
+    sf.make_orderlists(args.redmine_id, used_orders)
+
     template_orders = used_orders[template + '_phys_ords']
     sf.make_template_list(template, args.redmine_id, template_orders)
-    outname = input('Please give a name for the fxcor output file: (e.g.: RVs_200723) ')
-    sf.make_script_fxcor(args.redmine_id, template, outname, template_orders)
+    sf.make_script_fxcor(args.redmine_id, template, outname, template_orders, args.template_harps)
     # input('Want to cancel? ')
 
     print('Please open a terminal now and type "xterm". Then go to the new window.')
@@ -222,7 +225,7 @@ if args.extract:
         template_orders = used_orders[template + '_phys_ords']
 
     # extract the RVs from the fxcor results
-    sf.get_rvs(args.redmine_id, outname, template_orders)
+    sf.get_rvs(args.redmine_id, outname, template_orders, used_orders)
     RVs_single, tels_single = sf.split_rvs_tel(args.redmine_id)
     RVs_single_abc = sf.do_barycorr(args.redmine_id, RVs_single)
     RVs_single_abc_arr = sf.make_rv_array(RVs_single_abc)
