@@ -12,6 +12,7 @@ path_gamse_results = 'onedspec'
 path_gamse_reduce = 'red_{}'
 path_rv_results = 'rv_results/'
 path_rv_plots = 'RV_plots/'
+path_smd = 'ID{}_same_min_diff/'
 
 # definition of many filenames
 file_script_USM = 'sync_obslogfiles_USM.sh'
@@ -37,6 +38,10 @@ RVs_compare = 'RVs_ID{}_telcorr_compare.txt'
 literature_params = 'ID{}_literature_params.txt'
 config_file_radvel = 'radvel_ID{}.py'
 nonRV_data = 'nonRVs_ID{}.txt'
+awk_logfiles = 'grep_redID.awk'
+templates_fxcor = 'templates_ID{}.lis'
+fxcor_script = 'fxcor_with_lists.cl'
+barycorr_out = 'RVs_ID{}_abc_single.txt'
 
 # initialize all paths and make them platform independent
 location = Path(__file__).parent
@@ -54,6 +59,7 @@ gamse_reduce_folder = os.path.join(abs_path_red_gamse, path_gamse_reduce)
 gamse_results_folder = os.path.join(gamse_reduce_folder, path_gamse_results)
 iraf_data_folder = os.path.join(abs_path_IRAF, 'ID{}')
 iraf_output_folder = os.path.join(abs_path_output, 'ID{}')
+iraf_smd_folder = os.path.join(abs_path_output, path_smd)
 
 # make absolute paths to the files
 script_USM = os.path.join(abs_path_scripts, file_script_USM)
@@ -69,7 +75,7 @@ out_gamse_copy = os.path.join(abs_path_output, copy_dates_gamse)
 copy_reduced_cmd = os.path.join(abs_path_scripts, copy_wvcal_script)
 make_orderlists = os.path.join(abs_path_scripts, recipe_orderlists)
 make_cl_fxcor = os.path.join(iraf_output_folder, recipe_cl_fxcor)
-frames_list = os.path.join(abs_path_output, all_used_frames)
+frames_list = os.path.join(iraf_output_folder, all_used_frames)
 out_RVs_single = os.path.join(abs_path_rvout, RVs_single_orders)
 out_RVs_weighted = os.path.join(abs_path_rvout, RVs_weighted)
 out_tels_weighted = os.path.join(abs_path_rvout, tels_weighted)
@@ -79,3 +85,13 @@ out_RVs_compare = os.path.join(abs_path_rvout, RVs_compare)
 lit_planet_params = os.path.join(abs_path_rvout, literature_params)
 radvel_config = os.path.join(abs_path_rvout, config_file_radvel)
 out_nonRV_data = os.path.join(abs_path_rvout, nonRV_data)
+awk_script = os.path.join(abs_path_scripts, awk_logfiles)
+template_list = os.path.join(iraf_output_folder, templates_fxcor)
+out_RVs_abc_single = os.path.join(abs_path_rvout, barycorr_out)
+
+# define the remote hosts and paths for rsync
+address_focespc = 'foces@195.37.68.140'
+address_ohiaaipc = 'wstobserver@195.37.68.19'
+# fits_path_focespc = '/data/FOCES/{}'
+fcslinks_path_focespc = '/data/fcs_links/{}'
+log_path_ohiaaipc = '/data/3kk/{}'

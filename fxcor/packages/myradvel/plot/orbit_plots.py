@@ -82,9 +82,9 @@ class MultipanelPlot(object):
         telfmts = {'foces': dict(fmt='o', label='FOCES', color='purple'),
                    'elodie': dict(fmt='s', label='ELODIE', color='forestgreen'),
                    'lick': dict(fmt='d', label='Lick', color='chocolate'),
-                   'hires': dict(fmt='o', fillstyle='none', label='HIRES', color='steelblue'),
-                   'harps-n': dict(fmt='s', fillstyle='none', label='HARPS-N', color='lightseagreen'),
-                   'harps': dict(fmt='d', fillstyle='none', label='HARPS', color='darkred'),
+                   'hires': dict(fmt='o', label='HIRES', color='steelblue'),
+                   'harps-n': dict(fmt='s', label='HARPS-N', color='lightseagreen'),
+                   'harps': dict(fmt='d', label='HARPS', color='darkred'),
                    'mcdonald': dict(fmt='*', label='McDonald2.7', color='navy'),
                    'tillinghast': dict(fmt='X', label='Tillinghast', color='red')}
 

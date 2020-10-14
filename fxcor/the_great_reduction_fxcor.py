@@ -6,158 +6,145 @@ import subprocess
 import re  # module for regular expressions
 import datetime as dt
 import shutil
+import argparse
 
 # import statements for other python scripts
 import shell_script_maker as shesm
 import paths_and_files as pf
 import small_functions as sf
-from gamse_to_iraf_converter_with_interpol import iraf_converter
+from gamse_convert import iraf_converter
+from gamse_convert_comb import iraf_converter_comb
 from radvel_make_conffile import make_radvel_conffile
 
+##################################################################
+# general variables and option defaults
 
-in_date = dt.datetime.strftime(dt.datetime.now(), '%Y%m%d')
-in_opt1 = '-o'
-in_opt2 = '-ld'
+# in_date = dt.datetime.strftime(dt.datetime.now(), '%Y%m%d')
+# in_opt1 = '-o'
+# in_opt2 = '-ld'
+
+###################################################################
+# argument parser definitions
+
+# create command line argument parser
+parser = argparse.ArgumentParser(description='RV calculation for FOCES with fxcor: This program takes raw frames for '
+                                             'a certain object of the FOCES spectrograph, performs a wacelength '
+                                             'calibration with the GAMSE software, converts the files to MEF files and '
+                                             'computes radial velocities by using IRAF\'s fxcor package. There are '
+                                             'different options to choose which parts of the program should be '
+                                             'executed. Some other spectrographs are also (partly) supported.')
+
+# add optional command line arguments
+parser.add_argument('-fu', '--fitsupdate', help='update the local raw FITS files', action='store_true')
+parser.add_argument('-lu', '--logsupdate', help='update the local observation logfiles', action='store_true')
+parser.add_argument('-id', '--redmine_id', help='redmine ID of the object/project that should be analyzed', type=str)
+parser.add_argument('-g', '--gamse', help='perform the wavelength calibration with GAMSE', action='store_true')
+parser.add_argument('-i', '--iraf_conv', help='convert the gamse data to multi-extension FITS for use with IRAF',
+                    action='store_true')
+parser.add_argument('-fx', '--fxcor', help='compute RVs from wavelength calibrated data with IRAF\'s fxcor',
+                    action='store_true')
+parser.add_argument('-c', '--comb', help='use the comb corrected wavelength calibration', action='store_true')
+parser.add_argument('-ex', '--extract', help='extract the RVs from the fxcor results and do the barycentric '
+                                             'correction', action='store_true')
+parser.add_argument('-ps', '--plot_single', help='plot the RV results for the single orders', action='store_true')
+parser.add_argument('-pw', '--plot_weighted', help='plot the RV results of the weighted averages', action='store_true')
+parser.add_argument('-ph', '--plot_histogram', help='plot histograms of the RV results of the single orders and '
+                                                    'weighted averages', action='store_true')
+parser.add_argument('--harps', help='use this flag when working with HARPS data', action='store_true')  # not in use yet
+parser.add_argument('-th', '--template_harps', help='use one of the HARPS masks as template for the CCF',
+                    action='store_true')
+# create a group of options that exclude their simultaneous usage
+processing_dates = parser.add_mutually_exclusive_group()
+processing_dates.add_argument('-o', '--only', help='process data only for the date specified, date format: YYYYMMDD or '
+                                                   '"today"', type=str)
+processing_dates.add_argument('-a', '--after', help='process data for all dates starting with and after the one '
+                                                    'specified, date format: YYYYMMDD', type=str)
+
+# actually parse the arguments given in the command line in the current execution of this script
+args = parser.parse_args()
+
+if args.only is None and args.after is None:
+    in_opt = '-e'
+    in_date = '20200101'
+if args.only == 'today':
+    in_opt = '-o'
+    now = dt.datetime.now()
+    in_date = dt.datetime.strftime(now, '%Y%m%d')
+    print(in_date)
+elif args.only is not None:
+    in_opt = '-o'
+    in_date = str(args.only)
+if args.after is not None:
+    in_opt = '-a'
+    in_date = str(args.after)
+
+#####################################################################
+# actual calls of functions
 
 # Welcome message for the user
 print('Hello! I see you want to reduce some data.')
 
 # check whether an update of the data and logfiles is needed
-print('\n')
-yn_update = input('Do you want to update the data and logfile directories? ')
-
-# if update is needed, execute shell scripts
-# regular expressions: check if string starts with y/j (re.I = ignore case)
-if re.match(r'^y', yn_update, re.I) or re.match(r'^j', yn_update, re.I):
-    # ask the user for the desired date and options
-    print('\n')
-    print('Please enter "today" or specify a date:')
-    date_restrict = input('(yyyymmdd; option1: -a = after, -o = only, -e = everything; '
-                          'option2: -lo = logs/comments only, -do = data frames only, -ld = both)\n')
-    if date_restrict != 'today':
-        # split the input into its parts
-        in_date = date_restrict[:8]
-        in_opt1 = date_restrict[-6:-4]
-        in_opt2 = date_restrict[-3:]
-
-    # create a script for syncing the desired dates
-    if re.search(r'-lo', date_restrict, re.I):
-        file_script_USM, file_script_local = shesm.script_logs_update(in_date, in_opt1)
-        subprocess.call(['dos2unix', str(pf.script_USM)])
-        subprocess.call(['dos2unix', str(pf.script_local)])
-        print('\n')
-        print('Successfully created bash scripts. Starting to sync now...')
-        subprocess.call(['bash', str(pf.script_local)])
-    if re.search(r'-do', date_restrict, re.I):
-        data_script_USM, data_script_local = shesm.script_data_update(in_date, in_opt1)
-        subprocess.call(['dos2unix', str(pf.script2_USM)])
-        subprocess.call(['dos2unix', str(pf.script2_local)])
-        print('\n')
-        print('Successfully created bash scripts. Starting to sync now...')
-        subprocess.call(['bash', str(pf.script2_local)])
-    if re.search(r'-ld', date_restrict, re.I):
-        file_script_USM, file_script_local = shesm.script_logs_update(in_date, in_opt1)
-        data_script_USM, data_script_local = shesm.script_data_update(in_date, in_opt1)
-        subprocess.call(['dos2unix', str(pf.script_USM)])
-        subprocess.call(['dos2unix', str(pf.script_local)])
-        subprocess.call(['dos2unix', str(pf.script2_USM)])
-        subprocess.call(['dos2unix', str(pf.script2_local)])
-        print('\n')
-        print('Successfully created bash scripts. Starting to sync now...')
-        subprocess.call(['bash', str(pf.script_local)])
-        subprocess.call(['bash', str(pf.script2_local)])
-
+if args.fitsupdate:
+    sf.rsync_files_update(args.only, args.after, filetype='fits')
+if args.logsupdate:
+    sf.rsync_files_update(args.only, args.after, filetype='logs')
 else:
     print('\n')
-    print('No files were updated.')
+    print('No FITS or log/comment files were updated.')
     print('\n')
 
+# # check whether an update of the data file headers is needed
+# print('\n')
+# yn_header = input('Do you also want to update the data file headers? ')
+# if re.match(r'^y', yn_header, re.I) or re.match(r'^j', yn_header, re.I):
+#     print('\n')
+#     print('Please enter a date and option:')
+#     date_restrict_head = input('(yyyymmdd; option: -a = after, -o = only, -e = everything)\n')
+#     # split the input into its parts
+#     in_date_head = date_restrict_head[:8]
+#     in_opt_head = date_restrict_head[-2:]
+#
+#     script_add = shesm.script_add_radec(in_date_head, in_opt_head)
+#     subprocess.call(['dos2unix', str(pf.script_add)])
+#     print('\n')
+#     print('Starting to update the headers now...')
+#     subprocess.call(['bash', str(pf.script_add)])
+#
+# else:
+#     print('\n')
+#     print('No headers were updated.')
+#     print('\n')
 
-# check whether an update of the data file headers is needed
-print('\n')
-yn_header = input('Do you also want to update the data file headers? ')
-if re.match(r'^y', yn_header, re.I) or re.match(r'^j', yn_header, re.I):
-    print('\n')
-    print('Please enter a date and option:')
-    date_restrict_head = input('(yyyymmdd; option: -a = after, -o = only, -e = everything)\n')
-    # split the input into its parts
-    in_date_head = date_restrict_head[:8]
-    in_opt_head = date_restrict_head[-2:]
-
-    script_add = shesm.script_add_radec(in_date_head, in_opt_head)
-    subprocess.call(['dos2unix', str(pf.script_add)])
-    print('\n')
-    print('Starting to update the headers now...')
-    subprocess.call(['bash', str(pf.script_add)])
-
-else:
-    print('\n')
-    print('No headers were updated.')
-    print('\n')
-
-
-# ask if the data should be sorted for a specific observation project
-print('\n')
-yn_sortproject = input('Do you want to get the data of a specific redmine project? ')
-
-if re.match(r'^y', yn_sortproject, re.I) or re.match(r'^j', yn_sortproject, re.I):
-    print('\n')
-    redmine_id = input('Please provide the desired redmine project ID: ')
-    print('\n')
-    print('Please enter a date and option:')
-    date_restrict_redID = input('(yyyymmdd; option: -a = after, -o = only, -e = everything)\n')
-    # split the input into its parts
-    in_date_red = date_restrict_redID[:8]
-    in_opt_red = date_restrict_redID[-2:]
-
+if args.redmine_id is not None:
     # create and execute a script for searching the redmine ID
-    script_grep_ID = shesm.script_grep_redmineid(redmine_id, in_date_red, in_opt_red)
-    subprocess.call(['dos2unix', str(script_grep_ID)])
+    script_grep_ID = shesm.script_grep_redmineid(args.redmine_id, in_date, in_opt)
+    subprocess.run(['dos2unix', str(script_grep_ID)])
     print('\n')
     print('Successfully created bash script for grep. Starting to search now...')
-    subprocess.call(['bash', str(script_grep_ID)])
+    subprocess.run(['bash', str(script_grep_ID)])
 
     # write all observation dates to a file
-    sf.get_obsnights(redmine_id)
+    sf.get_obsnights(args.redmine_id)
+
+    # create and execute a script for copying the required raw data to the reduction folders
+    shesm.script_sort_for_reduction(args.redmine_id, in_date, in_opt)
+    subprocess.run(['dos2unix', str(pf.sort_copy_cmd.format(args.redmine_id))])
+    print('\n')
+    print('Successfully created bash script for copy. Starting to copy now...')
+    subprocess.run(['bash', str(pf.sort_copy_cmd.format(args.redmine_id))])
+    print('\n')
+    print('Finished copying the files to the reduction folders.')
 
 else:
     print('\n')
     print('No files were searched.')
     print('\n')
 
-# ask if data of a certain project should be copied to the gamse reduction folders
-print('\n')
-yn_copytogamse = input('Do you want to copy the data of a specific redmine project to the GAMSE reduction folders? ')
-
-if re.match(r'^y', yn_copytogamse, re.I) or re.match(r'^j', yn_copytogamse, re.I):
-    print('\n')
-    redmine_id = input('Please provide the desired redmine project ID: ')
-    print('\n')
-    print('Please enter a date and option:')
-    date_restrict_copy = input('(yyyymmdd; option: -a = after, -o = only, -e = everything)\n')
-    # split the input into its parts
-    in_date_copy = date_restrict_copy[:8]
-    in_opt_copy = date_restrict_copy[-2:]
-
-    # create and execute a script for copying the required raw data to the reduction folders
-    shesm.script_sort_for_reduction(redmine_id, in_date_copy, in_opt_copy)
-    subprocess.call(['dos2unix', str(pf.sort_copy_cmd.format(redmine_id))])
-    print('\n')
-    print('Successfully created bash script for copy. Starting to copy now...')
-    subprocess.call(['bash', str(pf.sort_copy_cmd.format(redmine_id))])
-    print('\n')
-    print('Finished copying the files to the reduction folders.')
-
-
-# ask if the data should be wavelength calibrated with GAMSE
-print('\n')
-yn_wvcal = input('Do you want to do the wavelength calibration with GAMSE? ')
-
-if re.match(r'^y', yn_wvcal, re.I) or re.match(r'^j', yn_wvcal, re.I):
-    print('\n')
-    redmine_id = input('Please give the redmine ID once again: ')
+if args.gamse:
     # read the dates that should be reduced from the file
-    use_only_these_reduction_dates = sf.get_reductiondates(redmine_id)
+    use_only_these_reduction_dates = sf.get_reductiondates(args.redmine_id)
+    print(use_only_these_reduction_dates)
 
     print('\n')
     print('Started wavelength calibration...')
@@ -167,68 +154,50 @@ if re.match(r'^y', yn_wvcal, re.I) or re.match(r'^j', yn_wvcal, re.I):
     for i in use_only_these_reduction_dates:
         red_folder_path = os.path.join(pf.abs_path_red_gamse, 'red_{}'.format(str(i)))
         # change the working directory to the data reduction folder, needed for GAMSE calls to work properly
-        os.chdir(str(red_folder_path))
+        # os.chdir(str(red_folder_path))
         print('\n')
         print('Data reduction started for : {}'.format(i))
-        subprocess.call(['gamse', 'config'])
-        subprocess.call(['gamse', 'list'])
-        subprocess.call(['gamse', 'reduce'])
+        input('Please use GAMSE in the folder "red_{}"'.format(i))
+        # subprocess.run('bash -c "conda activate git-gamse"', shell=True)
+        # subprocess.run(['conda activate git-gamse'], shell=True)
+        # subprocess.run(['gamse', 'config'])
+        # subprocess.run(['emacs', 'FOCES.*.cfg'])
+        # subprocess.run(['gamse', 'list'])
+        # subprocess.run(['gamse', 'reduce'])
+        # subprocess.run(['conda', 'deactivate'])
 
-
-# ask if the data with wavelength calibration should be copied to the IRAF folder
-print('\n')
-yn_wvcal_copy = input('Do you want to copy the wavelength calibrated data to the IRAF folder? ')
-
-if re.match(r'^y', yn_wvcal_copy, re.I) or re.match(r'^j', yn_wvcal_copy, re.I):
-    print('\n')
-    redmine_id = input('Just to be sure, enter the redmine ID one last time: ')
-    sf.script_copy_reduced_data(redmine_id)
+    sf.script_copy_reduced_data(args.redmine_id)
 else:
     print('\n')
-    print('No files were copied to the IRAF folder.')
+    print('No files were reduced with GAMSE and copied to the IRAF folder.')
     print('\n')
 
-
-# convert the GAMSE data to IRAF readable form if desired
-print('\n')
-yn_iraf_convert = input('Do you want to convert the wavelength calibrated data to IRAF readable form? ')
-
-if re.match(r'^y', yn_iraf_convert, re.I) or re.match(r'^j', yn_iraf_convert, re.I):
-    print('\n')
-    str_redmine_id = input('Please enter the redmine ID and the name of the object (format: XXXX identifierforSIMBAD): ')
-    str_redmine_id = str_redmine_id.strip()
-    str_redmine_id = str_redmine_id.split()
-    redmine_id = str_redmine_id[0]
-    objname = str_redmine_id[1]
-    iraf_converter(redmine_id, objname)
+# convert the GAMSE data to IRAF readable form if required
+if args.iraf_conv:
+    if args.comb:
+        iraf_converter_comb(pf.iraf_data_folder.format(args.redmine_id), args.redmine_id)
+    else:
+        iraf_converter(pf.iraf_data_folder.format(args.redmine_id), args.redmine_id)
 
 else:
     print('\n')
-    print('No files were converted.')
+    print('No files were converted to IRAF format.')
     print('\n')
-
 
 # prepare data for fxcor and give instructions for IRAF execution
-print('\n')
-yn_iraf_execute = input('Do you want to do the cross-correlation function for all data with IRAF? ')
-
-if re.match(r'^y', yn_iraf_execute, re.I) or re.match(r'^j', yn_iraf_execute, re.I):
-    print('\n')
-    redmine_id = input('Surprise: I need the redmine ID again: ')
-    shutil.copy(pf.make_orderlists, pf.iraf_output_folder.format(redmine_id))
-    # subprocess.call(['cp', pf.make_orderlists, pf.iraf_output_folder.format(redmine_id)])
-    orderlists_path = os.path.join(pf.iraf_output_folder.format(redmine_id), pf.recipe_orderlists)
-    os.chdir(str(pf.iraf_output_folder.format(redmine_id)))
-    subprocess.call(['dos2unix', str(orderlists_path)])
-    subprocess.call(['bash', str(orderlists_path)])
-
-    print('List of frames for this object: {}'.format(pf.all_used_frames.format(redmine_id)))
+if args.fxcor:
+    print('List of frames for this object: {}'.format(pf.all_used_frames.format(args.redmine_id)))
     template = input('Please choose a template that should be used for the cross correlation: '
-                     '(e.g.: 20190903_0114_FOC1903_SCI0) ')
-    outname = input('Please give a name for the fxcor output file: (e.g.: out_allRVs_200319) ')
-    shesm.script_fxcor_lists(redmine_id, template, outname)
-    subprocess.call(['dos2unix', str(pf.make_cl_fxcor.format(redmine_id))])
-    subprocess.call(['bash', str(pf.make_cl_fxcor.format(redmine_id))])
+                     '(e.g.: 20190903_0114) ')
+    outname = input('Please give a name for the fxcor output file: (e.g.: RVs_200723) ')
+
+    used_orders = sf.get_number_of_orders(args.redmine_id)
+    sf.make_orderlists(args.redmine_id, used_orders)
+
+    template_orders = used_orders[template + '_phys_ords']
+    sf.make_template_list(template, args.redmine_id, template_orders)
+    sf.make_script_fxcor(args.redmine_id, template, outname, template_orders, args.template_harps)
+    # input('Want to cancel? ')
 
     print('Please open a terminal now and type "xterm". Then go to the new window.')
     print('Type the following command in the xterm window: \n')
@@ -237,41 +206,52 @@ if re.match(r'^y', yn_iraf_execute, re.I) or re.match(r'^j', yn_iraf_execute, re
     print('vocl> reset obsdb=home$obsdb.dat')
     input('vocl> rv')
     print('Now navigate to the folder containing the data: \n')
-    input('rv> cd {}'.format(pf.iraf_output_folder))
-    print('make a list of all the spectra used as templates: \n')
-    input('rv> files {}_*_A_*.fits > templates_ID{}.lis'.format(template, redmine_id))
-    print('now do the heliocentric correction for the template spectra: enter the given command or open '
-          '"epar rvcorrect" and put the template list as entry for '
-          '"images": "images = @templates_ID{}.lis"\n'.format(redmine_id))
-    input('rv> rvcorrect images=@templates_ID{}.lis'.format(redmine_id))
+    input('rv> cd {}'.format(pf.iraf_output_folder.format(args.redmine_id)))
+    # print('do the heliocentric correction for the template spectra: enter the given command or open '
+    #       '"epar rvcorrect" and put the template filename list as entry for '
+    #       '"images": "images = @templates_ID{}.lis"\n'.format(args.redmine_id))
+    # input('rv> rvcorrect images=@templates_ID{}.lis'.format(args.redmine_id))
+    print('please check with "epar fxcor" if the name of the save file ({}) and the CCF settings are '
+          'correct'.format(outname))
     print('finally, execute fxcor: (may take a while, please hit ENTER here when finished)\n')
     input('cl < fxcor_with_lists.cl')
 
+if args.extract:
+    if not args.fxcor:
+        used_orders = sf.get_number_of_orders(args.redmine_id)
+        outname = input('Please give the name of the fxcor output file: (e.g.: RVs_200723) ')
+        template = input('Please choose a template that should be used for the cross correlation: '
+                         '(e.g.: 20190903_0114) ')
+        template_orders = used_orders[template + '_phys_ords']
 
-# extract the RVs from the fxcor results
-print('\n')
-yn_RV_extract = input('Do you want to extract the RV values you got from fxcor? ')
+    # extract the RVs from the fxcor results
+    sf.get_rvs(args.redmine_id, outname, template_orders, used_orders)
+    RVs_single, tels_single = sf.split_rvs_tel(args.redmine_id)
+    RVs_single_abc = sf.do_barycorr(args.redmine_id, RVs_single)
+    RVs_single_abc_arr = sf.make_rv_array(RVs_single_abc)
+    RVs_single_med, RVerr_single_med = sf.rv_and_err_median(RVs_single_abc_arr, 'obj')
+    if len(tels_single) != 0:
+        tels_single_med, telserr_single_med = sf.rv_and_err_median(tels_single, 'tel')
 
-if re.match(r'^y', yn_RV_extract, re.I) or re.match(r'^j', yn_RV_extract, re.I):
-    print('\n')
-    redmine_id = input('The redmine ID is needed once again: ')
-    fxcor_outfile = input('Tell me which fxcor output file to use: (e.g.: out_allRVs_200319) ')
-    sf.get_rvs(redmine_id, fxcor_outfile)
-    RVs_single, tels_single = sf.split_rvs_tel(redmine_id)
-    RVs_single_med, RVerr_single_med = sf.rv_and_err_median(RVs_single, 'obj')
-    tels_single_med, telserr_single_med = sf.rv_and_err_median(tels_single, 'tel')
+    RVs_stds = sf.rv_weightedmean(args.redmine_id, RVs_single_abc_arr, RVs_single_med, RVerr_single_med, 'obj')
+    RVs_fixerr = sf.fix_missing_errors(args.redmine_id, 'obj', RVs_stds)
+    if len(tels_single) != 0:
+        tel_stds = sf.rv_weightedmean(args.redmine_id, tels_single, tels_single_med, telserr_single_med, 'tel')
+        tel_fixerr = sf.fix_missing_errors(args.redmine_id, 'tel', tel_stds)
+        sf.get_tel_correction(args.redmine_id, RVs_fixerr, tel_fixerr)
 
-    yn_plot_singleorders = input('Do you want to plot the RV results for the single orders?')
-    if re.match(r'^y', yn_plot_singleorders, re.I) or re.match(r'^j', yn_plot_singleorders, re.I):
-        print('\n')
-        sf.plot_single_orders(redmine_id)
+if args.plot_single:
+    sf.plot_single_orders(args.redmine_id)
+    # yn_plot_singleorders = input('Do you want to plot the RV results for the single orders? ')
+    # if re.match(r'^y', yn_plot_singleorders, re.I) or re.match(r'^j', yn_plot_singleorders, re.I):
+    #     print('\n')
+    #     sf.plot_single_orders(args.redmine_id)
 
-    RVs_stds = sf.rv_weightedmean(redmine_id, RVs_single, RVs_single_med, RVerr_single_med, 'obj')
-    tel_stds = sf.rv_weightedmean(redmine_id, tels_single, tels_single_med, telserr_single_med, 'tel')
-    RVs_fixerr = sf.fix_missing_errors(redmine_id, 'obj', RVs_stds)
-    tel_fixerr = sf.fix_missing_errors(redmine_id, 'tel', tel_stds)
-    sf.get_tel_correction(redmine_id, RVs_fixerr, tel_fixerr)
+if args.plot_weighted:
+    sf.plot_weighted_RVs(args.redmine_id)
 
+if args.plot_histogram:
+    sf.plot_histograms(args.redmine_id)
 
 # make a plot of the literature values compared to the FOCES data
 print('\n')
@@ -284,9 +264,9 @@ if re.match(r'^y', yn_RV_complit, re.I) or re.match(r'^j', yn_RV_complit, re.I):
     inst_list = input('Give a list of the instruments that were used (separate with space): ')
     inst_list = inst_list.split(' ')
     config_file = make_radvel_conffile(redmine_id, n_cand, inst_list)
+    os.chdir(str(pf.location.resolve()))
     subprocess.call(['myradvel', 'fit', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
     subprocess.call(['myradvel', 'plot', '-t', 'rv', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
-
 
 # make a plot of the RV values compared to other data (e.g. airmass)
 print('\n')
@@ -295,16 +275,16 @@ yn_RV_nonRV = input('Do you want to plot the RV results and compare them to some
 if re.match(r'^y', yn_RV_nonRV, re.I) or re.match(r'^j', yn_RV_nonRV, re.I):
     print('\n')
     redmine_id = input('The redmine ID is needed once again: ')
-    want_value, pos = sf.get_nonrv_type()
-    sf.extract_nonrv_data(redmine_id, want_value, pos)
+    want_value, pos, filetype = sf.get_nonrv_type()
+    sf.extract_nonrv_data(redmine_id, want_value, pos, filetype)
     config_file = pf.radvel_config.format(redmine_id)
+    os.chdir(str(pf.location.resolve()))
     subprocess.call(['myradvel', 'fit', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
     subprocess.call(['myradvel', 'plot', '-t', 'nonrv', '-s', str(config_file), '-d', str(pf.abs_path_rvplots)])
 
 # do the fxcor reduction manually
 print('\n')
 input('Please hit ENTER when finished.')
-
 
 # # plot the data produced by fxcor
 # print('\n')

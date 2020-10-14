@@ -19,6 +19,7 @@ telfmts_default = {
     'h': dict(color='firebrick', fmt="s", label='HARPS'),
     'harps-n': dict(color='firebrick', fmt='^', label='HARPS-N'),
     'l': dict(color='g', fmt='*', label='LICK'),
+    'foc': dict(color='blue', fmt='*', label='FOCES'),
 }
 telfmts_default['lick'] = telfmts_default['l']
 telfmts_default['hires_rj'] = telfmts_default['j']
@@ -34,6 +35,7 @@ telfmts_default['APF'] = telfmts_default['a']
 telfmts_default['HARPS'] = telfmts_default['h']
 telfmts_default['HARPS-N'] = telfmts_default['harps-n']
 telfmts_default['PFS'] = telfmts_default['pfs']
+telfmts_default['foces'] = telfmts_default['foc']
 
 
 cmap = nipy_spectral
